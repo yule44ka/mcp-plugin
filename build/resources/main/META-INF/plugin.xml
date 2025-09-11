@@ -1,0 +1,24 @@
+<idea-plugin>
+  <version>1.0-SNAPSHOT</version>
+  <idea-version since-build="233" until-build="241.*" />
+  <id>com.example.mcp-inspector-lite</id>
+  <name>MCP Inspector Lite</name>
+  <vendor email="support@example.com" url="https://www.example.com">Example Company</vendor>
+  <description><![CDATA[A minimal IntelliJ/PyCharm plugin that connects to Model Context Protocol (MCP) servers,
+    lists available tools, and allows users to invoke tools with parameters.
+    
+    Features:
+    - Connect to MCP servers
+    - Browse available tools
+    - Invoke tools with custom parameters
+    - View tool execution results]]></description>
+  <!-- Product and plugin compatibility requirements -->
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Tool window registration -->
+    <toolWindow id="MCP Inspector Lite" secondary="true" icon="/icons/mcp-icon.svg" anchor="right" factoryClass="com.example.mcpinspector.ui.McpToolWindowFactory" />
+  </extensions>
+  <applicationListeners>
+    <!-- Add any application listeners here if needed -->
+  </applicationListeners>
+</idea-plugin>
