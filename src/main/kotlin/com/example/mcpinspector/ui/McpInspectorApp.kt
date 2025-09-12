@@ -3,8 +3,6 @@ package com.example.mcpinspector.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -404,19 +402,8 @@ fun DetailsAndResultsPane(
     onToggleInputMode: () -> Unit,
     onInvokeTool: () -> Unit
 ) {
-    val scrollState = rememberScrollState()
-    
-    // Auto-scroll to bottom when result appears
-    LaunchedEffect(toolResult) {
-        if (toolResult != null) {
-            scrollState.animateScrollTo(scrollState.maxValue)
-        }
-    }
-    
     Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .verticalScroll(scrollState),
+        modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
@@ -549,60 +536,33 @@ fun DetailsAndResultsPane(
             
             // Results
             toolResult?.let { result ->
-                Spacer(modifier = Modifier.height(24.dp))
-                
-                // Result header with icon
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    Icon(
-                        imageVector = if (result.startsWith("Error:")) {
-                            Icons.Default.Error
-                        } else {
-                            Icons.Default.CheckCircle
-                        },
-                        contentDescription = null,
-                        tint = if (result.startsWith("Error:")) {
-                            MaterialTheme.colorScheme.error
-                        } else {
-                            MaterialTheme.colorScheme.primary
-                        }
-                    )
-                    Text(
-                        text = "Result:",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = "Result:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Medium
+                )
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
                         containerColor = if (result.startsWith("Error:")) {
                             MaterialTheme.colorScheme.errorContainer
                         } else {
-                            MaterialTheme.colorScheme.primaryContainer
+                            MaterialTheme.colorScheme.surfaceVariant
                         }
-                    ),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    )
                 ) {
                     Text(
                         text = result,
-                        modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(12.dp),
+                        style = MaterialTheme.typography.bodyMedium,
                         color = if (result.startsWith("Error:")) {
                             MaterialTheme.colorScheme.onErrorContainer
                         } else {
-                            MaterialTheme.colorScheme.onPrimaryContainer
+                            MaterialTheme.colorScheme.onSurfaceVariant
                         }
                     )
                 }
-                
-                // Add some bottom padding to ensure result is fully visible
-                Spacer(modifier = Modifier.height(32.dp))
             }
         } ?: run {
             Box(
