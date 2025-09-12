@@ -80,8 +80,39 @@ class MCPServer:
                     },
                     "required": ["text"]
                 }
+            ),
+            MCPTool(
+                name="server_info",
+                description="Returns information about the MCP server",
+                input_schema={
+                    "type": "object",
+                    "properties": {}
+                }
+            ),
+            MCPTool(
+                name="calculate",
+                description="Performs basic mathematical calculations",
+                input_schema={
+                    "type": "object",
+                    "properties": {
+                        "expression": {
+                            "type": "string",
+                            "description": "Mathematical expression to evaluate (e.g., '2 + 3 * 4')"
+                        }
+                    },
+                    "required": ["expression"]
+                }
+            ),
+            MCPTool(
+                name="generate_uuid",
+                description="Generates a random UUID",
+                input_schema={
+                    "type": "object",
+                    "properties": {}
+                }
             )
         ]
+        self.start_time = None
     
     def handle_tools_list(self, request_id: str) -> Dict[str, Any]:
         """Handle tools/list request"""
@@ -108,15 +139,49 @@ class MCPServer:
                     }]
                 }
             elif tool_name == "add_numbers":
-                a = arguments.get("a", 0)
-                b = arguments.get("b", 0)
-                sum_result = a + b
-                result = {
-                    "content": [{
-                        "type": "text",
-                        "text": f"The sum of {a} and {b} is {sum_result}"
-                    }]
-                }
+                try:
+                    a = arguments.get("a")
+                    b = arguments.get("b")
+                    
+                    # Validate that both parameters are provided
+                    if a is None or b is None:
+                        return {
+                            "jsonrpc": "2.0",
+                            "id": request_id,
+                            "error": {
+                                "code": -32602,
+                                "message": "Invalid params: Both 'a' and 'b' parameters are required"
+                            }
+                        }
+                    else:
+                        # Validate that both parameters are numbers (but not booleans)
+                        if (not isinstance(a, (int, float)) or isinstance(a, bool) or 
+                            not isinstance(b, (int, float)) or isinstance(b, bool)):
+                            return {
+                                "jsonrpc": "2.0",
+                                "id": request_id,
+                                "error": {
+                                    "code": -32602,
+                                    "message": f"Invalid params: Both parameters must be numbers. Got a={type(a).__name__}({a}), b={type(b).__name__}({b})"
+                                }
+                            }
+                        else:
+                            sum_result = a + b
+                            result = {
+                                "content": [{
+                                    "type": "text",
+                                    "text": f"The sum of {a} and {b} is {sum_result}"
+                                }]
+                            }
+                except Exception as e:
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "error": {
+                            "code": -32603,
+                            "message": f"Internal error in add_numbers: {str(e)}"
+                        }
+                    }
             elif tool_name == "get_time":
                 import datetime
                 current_time = datetime.datetime.now().isoformat()
@@ -133,6 +198,83 @@ class MCPServer:
                     "content": [{
                         "type": "text",
                         "text": f"Reversed: {reversed_text}"
+                    }]
+                }
+            elif tool_name == "server_info":
+                import datetime
+                import os
+                uptime = ""
+                if self.start_time:
+                    uptime_seconds = (datetime.datetime.now() - self.start_time).total_seconds()
+                    uptime = f"{uptime_seconds:.1f} seconds"
+                
+                result = {
+                    "content": [{
+                        "type": "text",
+                        "text": f"MCP Test Server Info:\n"
+                               f"- Version: 1.0.0\n"
+                               f"- Protocol: 2024-11-05\n"
+                               f"- Tools: {len(self.tools)}\n"
+                               f"- Uptime: {uptime}\n"
+                               f"- PID: {os.getpid()}\n"
+                               f"- Python: {sys.version.split()[0]}"
+                    }]
+                }
+            elif tool_name == "calculate":
+                expression = arguments.get("expression", "")
+                try:
+                    # Safe evaluation of mathematical expressions
+                    import ast
+                    import operator
+                    
+                    # Allowed operations
+                    ops = {
+                        ast.Add: operator.add,
+                        ast.Sub: operator.sub,
+                        ast.Mult: operator.mul,
+                        ast.Div: operator.truediv,
+                        ast.Pow: operator.pow,
+                        ast.Mod: operator.mod,
+                        ast.USub: operator.neg,
+                        ast.UAdd: operator.pos,
+                    }
+                    
+                    def eval_expr(node):
+                        if isinstance(node, ast.Num):  # number
+                            return node.n
+                        elif isinstance(node, ast.Constant):  # Python 3.8+
+                            return node.value
+                        elif isinstance(node, ast.BinOp):  # binary operation
+                            return ops[type(node.op)](eval_expr(node.left), eval_expr(node.right))
+                        elif isinstance(node, ast.UnaryOp):  # unary operation
+                            return ops[type(node.op)](eval_expr(node.operand))
+                        else:
+                            raise TypeError(f"Unsupported operation: {type(node)}")
+                    
+                    tree = ast.parse(expression, mode='eval')
+                    calc_result = eval_expr(tree.body)
+                    
+                    result = {
+                        "content": [{
+                            "type": "text",
+                            "text": f"Expression: {expression}\nResult: {calc_result}"
+                        }]
+                    }
+                except Exception as e:
+                    return {
+                        "jsonrpc": "2.0",
+                        "id": request_id,
+                        "error": {
+                            "code": -32602,
+                            "message": f"Invalid expression '{expression}': {str(e)}"
+                        }
+                    }
+            elif tool_name == "generate_uuid":
+                new_uuid = str(uuid.uuid4())
+                result = {
+                    "content": [{
+                        "type": "text",
+                        "text": f"Generated UUID: {new_uuid}"
                     }]
                 }
             else:
@@ -260,6 +402,9 @@ def main():
     args = parser.parse_args()
     
     mcp_server = MCPServer()
+    # Set start time for uptime tracking
+    import datetime
+    mcp_server.start_time = datetime.datetime.now()
     
     def handler(*args, **kwargs):
         return MCPRequestHandler(*args, mcp_server=mcp_server, **kwargs)
@@ -267,10 +412,11 @@ def main():
     server = HTTPServer((args.host, args.port), handler)
     
     print(f"MCP Test Server starting on {args.host}:{args.port}")
-    print("Available tools:")
+    print(f"Available tools ({len(mcp_server.tools)}):")
     for tool in mcp_server.tools:
         print(f"  - {tool.name}: {tool.description}")
-    print("\nPress Ctrl+C to stop the server")
+    print(f"\nServer URL: http://{args.host}:{args.port}")
+    print("Press Ctrl+C to stop the server")
     
     try:
         server.serve_forever()

@@ -84,11 +84,41 @@ class McpClient {
             }
         } catch (e: Exception) {
             _connectionState.value = ConnectionState.ERROR
-            _lastError.value = e.message ?: "Unknown error"
+            
+            // Enhanced error message based on exception type
+            val errorMessage = when {
+                e.message?.contains("timeout", ignoreCase = true) == true ||
+                e.message?.contains("timed out", ignoreCase = true) == true -> {
+                    "Connection timeout. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("connection", ignoreCase = true) == true ||
+                e.message?.contains("connect", ignoreCase = true) == true -> {
+                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("refused", ignoreCase = true) == true -> {
+                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server\n" +
+                    "💡 Check server status: ./dev-start.sh status"
+                }
+                e.message?.contains("host", ignoreCase = true) == true ||
+                e.message?.contains("resolve", ignoreCase = true) == true -> {
+                    "Cannot resolve host. Check the server URL: ${serverConfig.url}\n" +
+                    "💡 Default server URL should be: http://localhost:3000"
+                }
+                else -> {
+                    "Connection error: ${e.message}\n" +
+                    "💡 Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+            }
+            
+            _lastError.value = errorMessage
             addNotification(
                 NotificationType.ERROR,
                 "Connection Error",
-                "Connection error: ${e.message}"
+                errorMessage
             )
             Result.failure(e)
         }
@@ -160,7 +190,25 @@ class McpClient {
                 Result.success(toolsResponse.tools)
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            // Enhanced error message for tool listing failures
+            val enhancedMessage = when {
+                e.message?.contains("timeout", ignoreCase = true) == true ||
+                e.message?.contains("timed out", ignoreCase = true) == true -> {
+                    "Request timeout. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("connection", ignoreCase = true) == true ||
+                e.message?.contains("connect", ignoreCase = true) == true -> {
+                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("refused", ignoreCase = true) == true -> {
+                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                else -> e.message ?: "Unknown error"
+            }
+            Result.failure(Exception(enhancedMessage, e))
         }
     }
     
@@ -236,8 +284,27 @@ class McpClient {
             
             Result.success(historyEntry)
         } catch (e: Exception) {
+            // Enhanced error message for tool invocation failures
+            val enhancedMessage = when {
+                e.message?.contains("timeout", ignoreCase = true) == true ||
+                e.message?.contains("timed out", ignoreCase = true) == true -> {
+                    "Request timeout. Check if your server is running at ${currentServerConfig?.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("connection", ignoreCase = true) == true ||
+                e.message?.contains("connect", ignoreCase = true) == true -> {
+                    "Cannot connect to server. Check if your server is running at ${currentServerConfig?.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("refused", ignoreCase = true) == true -> {
+                    "Connection refused. Check if your server is running at ${currentServerConfig?.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                else -> e.message ?: "Unknown error"
+            }
+            
             val errorResult = ToolInvocationResult.Error(
-                message = e.message ?: "Unknown error",
+                message = enhancedMessage,
                 details = e.stackTraceToString()
             )
             
@@ -290,7 +357,25 @@ class McpClient {
                 Result.success(response.result ?: JsonObject(emptyMap()))
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            // Enhanced error message for initialization failures
+            val enhancedMessage = when {
+                e.message?.contains("timeout", ignoreCase = true) == true ||
+                e.message?.contains("timed out", ignoreCase = true) == true -> {
+                    "Initialization timeout. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("connection", ignoreCase = true) == true ||
+                e.message?.contains("connect", ignoreCase = true) == true -> {
+                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                e.message?.contains("refused", ignoreCase = true) == true -> {
+                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
+                    "💡 To start the server: ./dev-start.sh server"
+                }
+                else -> e.message ?: "Unknown error"
+            }
+            Result.failure(Exception(enhancedMessage, e))
         }
     }
     

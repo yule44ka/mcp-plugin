@@ -35,36 +35,101 @@ The plugin is structured with the following components:
 - JDK 17 or higher
 - Python 3.7+ (for running the test server)
 
-## Running the MCP Test Server
+## Development Quick Start
 
-The project includes a simple Python-based MCP server for testing purposes.
+The project now includes convenient scripts for development workflow:
 
-### 1. Navigate to the test server directory
+### 🚀 Recommended Development Workflow
 
+For the best development experience, use separate terminals:
+
+**Terminal 1 - Start MCP server with auto-reload:**
 ```bash
-cd test-server
+./dev-start.sh server-watch
 ```
 
-### 2. Run the server
-
+**Terminal 2 - Start IntelliJ plugin:**
 ```bash
-python3 mcp_server.py --port 3000 --host localhost
+./dev-start.sh inspector
 ```
 
-The server will start on `http://localhost:3000` and provide the following test tools:
+This allows you to:
+- Edit server code and see changes automatically
+- Restart the inspector independently
+- View server logs in real-time
+
+### 📋 Available Development Commands
+
+```bash
+./dev-start.sh <command>
+```
+
+Commands:
+- `server` - Start MCP server only
+- `server-watch` - Start MCP server with auto-reload (recommended for development)
+- `inspector` - Start IntelliJ plugin only
+- `both` - Start both server and inspector (legacy mode)
+- `stop` - Stop running MCP server
+- `status` - Check server status
+- `logs` - Show server logs
+- `clean` - Clean build and start inspector
+
+### 🛠️ Individual Script Usage
+
+You can also use the individual scripts directly:
+
+**MCP Server Management:**
+```bash
+# Start server normally
+./start-mcp-server.sh
+
+# Start with auto-reload for development
+./start-mcp-server.sh --watch
+
+# Check server status
+./start-mcp-server.sh --status
+
+# View server logs
+./start-mcp-server.sh --logs
+
+# Stop server
+./start-mcp-server.sh --stop
+```
+
+**IntelliJ Plugin:**
+```bash
+# Start inspector normally
+./start-inspector.sh
+
+# Start with clean build
+./start-inspector.sh --clean
+
+# Check server connection first
+./start-inspector.sh --check-server
+```
+
+## MCP Test Server
+
+The project includes a Python-based MCP server with the following tools:
 
 - **echo**: Echoes back input text
 - **add_numbers**: Adds two numbers together
 - **get_time**: Returns current server time
 - **reverse_string**: Reverses a string
+- **server_info**: Returns server information and uptime
+- **calculate**: Performs mathematical calculations
+- **generate_uuid**: Generates random UUIDs
 
-### 3. Server Options
+### Manual Server Setup
+
+If you prefer to run the server manually:
 
 ```bash
-python3 mcp_server.py --help
+cd test-server
+python3 mcp_server.py --port 3000 --host localhost
 ```
 
-Options:
+Server options:
 - `--port`: Port to run the server on (default: 3000)
 - `--host`: Host to bind the server to (default: localhost)
 
@@ -154,18 +219,27 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 
 ## Example Usage
 
-### Quick Start
-1. Run the automated script: `./run-plugin-with-server.sh`
+### 🚀 Quick Development Start
+1. **Terminal 1**: `./dev-start.sh server-watch` (starts server with auto-reload)
+2. **Terminal 2**: `./dev-start.sh inspector` (starts IntelliJ plugin)
+3. Open MCP Inspector Lite tool window in the launched IDE
+4. Connect to `http://localhost:3000`
+5. Try the tools:
+   - **echo**: `{"text": "Hello MCP!"}`
+   - **calculate**: `{"expression": "2 + 3 * 4"}`
+   - **server_info**: `{}` (no parameters needed)
+
+### 🔄 Development Workflow
+1. Edit server code in `test-server/mcp_server.py`
+2. Server automatically restarts (if using `--watch`)
+3. Test changes immediately in the inspector
+4. No need to restart IntelliJ
+
+### 📊 Legacy Single-Command Start
+1. Run: `./run-plugin-with-server.sh`
 2. Open MCP Inspector Lite tool window in the launched IDE
 3. Connect to `http://localhost:3000`
-4. Try the "echo" tool with Simple Form mode or JSON: `{"text": "Hello MCP!"}`
-
-### Manual Start
-1. Start the test server: `python3 test-server/mcp_server.py`
-2. Run the plugin: `./gradlew runIde`
-3. Open MCP Inspector Lite tool window
-4. Connect to `http://localhost:3000`
-5. Try the "echo" tool with parameters: `{"text": "Hello MCP!"}`
+4. Try the "echo" tool with parameters: `{"text": "Hello MCP!"}`
 
 ## Development
 
@@ -174,7 +248,10 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 ```
 mcp-plugin/
 ├── build.gradle.kts                    # Gradle build configuration
-├── run-plugin-with-server.sh           # Quick start script
+├── dev-start.sh                        # Development quick start script
+├── start-mcp-server.sh                 # MCP server launcher with auto-reload
+├── start-inspector.sh                  # IntelliJ plugin launcher
+├── run-plugin-with-server.sh           # Legacy: combined launcher
 ├── src/main/
 │   ├── kotlin/com/example/mcpinspector/
 │   │   ├── mcp/
@@ -190,9 +267,9 @@ mcp-plugin/
 │       ├── META-INF/plugin.xml   # Plugin configuration
 │       └── icons/mcp-icon.svg    # Plugin icon
 ├── test-server/
-│   ├── mcp_server.py            # Test MCP server
+│   ├── mcp_server.py            # Enhanced MCP test server (7 tools)
 │   ├── test_mcp_server.py       # Server test client
-│   ├── start_server.sh          # Server startup script
+│   ├── start_server.sh          # Simple server startup script
 │   └── requirements.txt         # Python dependencies
 └── README.md
 ```
