@@ -6,19 +6,26 @@ A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Proto
 
 - **Connection Management**: Connect to and disconnect from MCP servers
 - **Tool Discovery**: Browse available tools from connected MCP servers
+- **Smart Parameter Input**: Two input modes for maximum convenience:
+  - **Simple Form Mode**: Auto-generated forms based on tool schema with proper field types
+  - **JSON Mode**: Direct JSON input for advanced users
 - **Tool Invocation**: Execute tools with custom parameters and view results
 - **Modern UI**: Built with Compose Multiplatform for a responsive interface
 - **Three-Pane Layout**: 
   - Connection Pane: Server connection management
   - Tools Pane: Available tools listing
-  - Details & Results Pane: Tool details, parameter input, and execution results
+  - Details & Results Pane: Tool details, smart parameter input, and execution results
 
 ## Architecture
 
 The plugin is structured with the following components:
 
 - **MCP Client** (`McpClient.kt`): Handles JSON-RPC communication with MCP servers
-- **UI Components** (`McpInspectorApp.kt`): Compose-based user interface
+- **UI Components** (`McpInspectorApp.kt`): Main Compose-based user interface
+- **Parameter Input System**: Smart parameter handling with dual input modes
+  - **Schema Parser** (`ParameterInputHelper.kt`): Parses JSON schema to extract field definitions
+  - **Parameter Manager** (`ParameterInputHelper.kt`): Manages parameter values and JSON conversion
+  - **Input Components** (`ParameterInputComponents.kt`): Compose UI components for different field types
 - **Tool Window Factory** (`McpToolWindowFactory.kt`): IntelliJ plugin integration
 - **Data Models** (`McpModels.kt`): MCP protocol data structures
 
@@ -62,6 +69,27 @@ Options:
 - `--host`: Host to bind the server to (default: localhost)
 
 ## Building and Running the Plugin
+
+### Quick Start (Recommended)
+
+The easiest way to run the plugin with the test server:
+
+**Linux/macOS:**
+```bash
+./run-plugin-with-server.sh
+```
+
+**Windows:**
+```cmd
+run-plugin-with-server.bat
+```
+
+This script will:
+1. Start the MCP test server automatically
+2. Build and run the plugin in IntelliJ IDEA
+3. Clean up the server when you close the IDE
+
+### Manual Setup
 
 ### 1. Clone the repository
 
@@ -116,12 +144,29 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 
 1. Once connected, available tools will appear in the Tools Pane
 2. Click on a tool to see its details in the Details & Results Pane
-3. Enter parameters in JSON format (e.g., `{"text": "Hello World"}`)
-4. Click **Invoke Tool** to execute the tool
-5. View the results in the same pane
+3. **Choose your input method**:
+   - **Simple Form Mode** (default): Use auto-generated forms with proper field types
+   - **JSON Mode**: Toggle the switch to enter parameters in JSON format
+4. **Simple Form Mode**:
+   - Fill out the form fields based on the tool's schema
+   - Required fields are marked with an asterisk (*)
+   - Different input types: text fields, numbers, dropdowns, switches for booleans
+   - Parameter summary shows your current inputs
+5. **JSON Mode**:
+   - Enter parameters in JSON format (e.g., `{"text": "Hello World"}`)
+   - Schema reference is shown for guidance
+6. Click **Invoke Tool** to execute the tool
+7. View the results in the same pane
 
 ## Example Usage
 
+### Quick Start
+1. Run the automated script: `./run-plugin-with-server.sh` (Linux/macOS) or `run-plugin-with-server.bat` (Windows)
+2. Open MCP Inspector Lite tool window in the launched IDE
+3. Connect to `http://localhost:3000`
+4. Try the "echo" tool with Simple Form mode or JSON: `{"text": "Hello MCP!"}`
+
+### Manual Start
 1. Start the test server: `python3 test-server/mcp_server.py`
 2. Run the plugin: `./gradlew runIde`
 3. Open MCP Inspector Lite tool window
@@ -134,7 +179,9 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 
 ```
 mcp-plugin/
-├── build.gradle.kts              # Gradle build configuration
+├── build.gradle.kts                    # Gradle build configuration
+├── run-plugin-with-server.sh           # Quick start script (Linux/macOS)
+├── run-plugin-with-server.bat          # Quick start script (Windows)
 ├── src/main/
 │   ├── kotlin/com/example/mcpinspector/
 │   │   ├── mcp/
@@ -142,13 +189,17 @@ mcp-plugin/
 │   │   ├── model/
 │   │   │   └── McpModels.kt      # Data models
 │   │   └── ui/
-│   │       ├── McpInspectorApp.kt        # Main Compose UI
-│   │       └── McpToolWindowFactory.kt   # Plugin integration
+│   │       ├── McpInspectorApp.kt           # Main Compose UI
+│   │       ├── McpToolWindowFactory.kt      # Plugin integration
+│   │       ├── ParameterInputHelper.kt      # Schema parsing & parameter management
+│   │       └── ParameterInputComponents.kt  # Smart input UI components
 │   └── resources/
 │       ├── META-INF/plugin.xml   # Plugin configuration
 │       └── icons/mcp-icon.svg    # Plugin icon
 ├── test-server/
 │   ├── mcp_server.py            # Test MCP server
+│   ├── test_mcp_server.py       # Server test client
+│   ├── start_server.sh          # Server startup script
 │   └── requirements.txt         # Python dependencies
 └── README.md
 ```
@@ -222,14 +273,3 @@ This plugin implements basic MCP (Model Context Protocol) support:
 ## License
 
 This project is provided as an example implementation for educational purposes.
-
-## AI Assistant Usage
-
-This project was developed with assistance from AI coding assistants. All interactions and decisions made during development have been documented to demonstrate the collaborative workflow between human developers and AI tools.
-
-The AI assistants helped with:
-- Project structure and best practices
-- Kotlin and Compose implementation
-- MCP protocol understanding
-- Error handling and debugging
-- Documentation and README creation

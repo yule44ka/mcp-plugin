@@ -34,6 +34,21 @@ fun McpInspectorApp() {
     var toolParameters by remember { mutableStateOf("{}") }
     var toolResult by remember { mutableStateOf<String?>(null) }
     
+    // Parameter management
+    val schemaParser = remember { SchemaParser() }
+    val parameterManager = remember { ParameterManager() }
+    var parameterFields by remember { mutableStateOf<List<ParameterField>>(emptyList()) }
+    var useSimpleInput by remember { mutableStateOf(true) }
+    
+    // Update parameter fields when tool changes
+    LaunchedEffect(selectedTool) {
+        selectedTool?.let { tool ->
+            parameterFields = schemaParser.parseSchema(tool.inputSchema)
+            parameterManager.clear()
+            useSimpleInput = parameterFields.isNotEmpty()
+        }
+    }
+    
     // Clean up on disposal
     DisposableEffect(mcpClient) {
         onDispose {
@@ -98,15 +113,22 @@ fun McpInspectorApp() {
                     toolParameters = toolParameters,
                     onParametersChange = { toolParameters = it },
                     toolResult = toolResult,
+                    parameterFields = parameterFields,
+                    parameterManager = parameterManager,
+                    useSimpleInput = useSimpleInput,
+                    onToggleInputMode = { useSimpleInput = !useSimpleInput },
                     onInvokeTool = {
                         selectedTool?.let { tool ->
                             scope.launch {
                                 try {
-                                    val params = if (toolParameters.isBlank()) {
+                                    val params = if (useSimpleInput && parameterFields.isNotEmpty()) {
+                                        parameterManager.toJsonElement(parameterFields)
+                                    } else if (toolParameters.isBlank()) {
                                         null
                                     } else {
                                         Json.parseToJsonElement(toolParameters)
                                     }
+                                    
                                     val result = mcpClient.callTool(tool.name, params)
                                     toolResult = if (result.isSuccess) {
                                         Json.encodeToString(
@@ -363,6 +385,10 @@ fun DetailsAndResultsPane(
     toolParameters: String,
     onParametersChange: (String) -> Unit,
     toolResult: String?,
+    parameterFields: List<ParameterField>,
+    parameterManager: ParameterManager,
+    useSimpleInput: Boolean,
+    onToggleInputMode: () -> Unit,
     onInvokeTool: () -> Unit
 ) {
     Column(
@@ -396,39 +422,96 @@ fun DetailsAndResultsPane(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
+                }
+            }
+            
+            // Input mode toggle (if schema is available)
+            if (parameterFields.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Input Mode:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Medium
+                    )
                     
-                    // Input schema (if available)
-                    tool.inputSchema?.let { schema ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         Text(
-                            text = "Input Schema:",
-                            style = MaterialTheme.typography.labelMedium,
-                            fontWeight = FontWeight.Medium
+                            text = if (useSimpleInput) "Simple Form" else "JSON",
+                            style = MaterialTheme.typography.bodyMedium
                         )
-                        Card(
-                            colors = CardDefaults.cardColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceVariant
-                            )
-                        ) {
-                            Text(
-                                text = schema.toString(),
-                                modifier = Modifier.padding(8.dp),
-                                style = MaterialTheme.typography.bodySmall,
-                                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
-                            )
-                        }
+                        Switch(
+                            checked = useSimpleInput,
+                            onCheckedChange = { onToggleInputMode() }
+                        )
                     }
                 }
             }
             
             // Parameters input
-            OutlinedTextField(
-                value = toolParameters,
-                onValueChange = onParametersChange,
-                label = { Text("Parameters (JSON)") },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3,
-                maxLines = 6
-            )
+            if (useSimpleInput && parameterFields.isNotEmpty()) {
+                // Simple form input
+                Text(
+                    text = "Parameters:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                Card(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    ParameterInputForm(
+                        fields = parameterFields,
+                        parameterManager = parameterManager,
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+                
+                // Parameter summary
+                if (parameterFields.any { parameterManager.getValue(it.name).isNotBlank() }) {
+                    ParameterSummaryCard(
+                        fields = parameterFields,
+                        parameterManager = parameterManager
+                    )
+                }
+            } else {
+                // JSON input
+                OutlinedTextField(
+                    value = toolParameters,
+                    onValueChange = onParametersChange,
+                    label = { Text("Parameters (JSON)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3,
+                    maxLines = 6
+                )
+                
+                // Show schema for reference
+                tool.inputSchema?.let { schema ->
+                    Text(
+                        text = "Schema Reference:",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        )
+                    ) {
+                        Text(
+                            text = schema.toString(),
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.bodySmall,
+                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                        )
+                    }
+                }
+            }
             
             // Invoke button
             Button(

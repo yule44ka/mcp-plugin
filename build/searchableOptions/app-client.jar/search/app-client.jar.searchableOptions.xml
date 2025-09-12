@@ -10279,6 +10279,20 @@
     <option name="tab" hit="When navigating to a file, prefer selecting existing tab in inactive split pane" />
     <option name="to" hit="When navigating to a file, prefer selecting existing tab in inactive split pane" />
     <option name="when" hit="When navigating to a file, prefer selecting existing tab in inactive split pane" />
+    <option name="a" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="class" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="do" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="in" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="it" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="library" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="navigating" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="not" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="project" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="select" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="the" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="to" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="tree" hit="When navigating to a library class, do not select it in the project tree" />
+    <option name="when" hit="When navigating to a library class, do not select it in the project tree" />
     <option name="a" hit="When pasting a line copied with no selection:" />
     <option name="copied" hit="When pasting a line copied with no selection:" />
     <option name="line" hit="When pasting a line copied with no selection:" />

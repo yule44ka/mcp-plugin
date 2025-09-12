@@ -16,13 +16,13 @@ shared.index.file.content.hash.forward.index.sih.javafx.custom.component:2
 shared.index.file.content.hash.forward.index.sih.DomFileIndex:2
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionByPackageIndex:1
 shared.index.file.content.hash.forward.index.sih.java.class.extlist:1
-shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeShortNameIndex:1
 shared.index.file.content.hash.forward.index.sih.jvm.static.member.type:1
+shared.index.file.content.hash.forward.index.sih.kotlin.primeIndexKey:1
 shared.index.file.content.hash.forward.index.sih.properties.index:1
 shared.index.file.content.hash.forward.index.sih.XmlNamespaces:2
 shared.index.file.content.hash.forward.index.sih.jvm.static.member.name:1
+shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeShortNameIndex:1
 shared.index.file.content.hash.forward.index.sih.gr.class.super:1
-shared.index.file.content.hash.forward.index.sih.kotlin.primeIndexKey:1
 shared.index.file.content.hash.forward.index.sih.dom.elementClass:1
 shared.index.file.content.hash.forward.index.sih.gr.script.fqn.s:1
 shared.index.file.content.hash.forward.index.sih.java.source.module.name:2
@@ -30,10 +30,10 @@ shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubi
 shared.index.file.content.hash.forward.index.sih.markdown.header:1
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinProbablyContractedFunctionShortNameIndex:1
 shared.index.file.content.hash.forward.index.base:15542
+shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeFqNameIndex:1
 shared.index.file.content.hash.forward.index.sih.java.method.name:1
 shared.index.file.content.hash.forward.index.sih.gr.annot.method.name:1
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelExtensionsByReceiverTypeIndex:1
-shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeFqNameIndex:1
 shared.index.file.content.hash.forward.index.sih.java.class.shortname:1
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFileIndex:2
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFilePackageIndex:2
@@ -52,7 +52,7 @@ shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.vfile
 shared.index.file.content.hash.forward.index.sih.editorconfig.index.name:2
 shared.index.file.content.hash.forward.index.sih.XmlTagNames:2
 shared.index.file.content.hash.forward.index.sih.java.class.fqn:1
-shared.index.file.content.hash.forward.index.sih.FilenameIndex:1
+shared.index.file.content.hash.forward.index.sih.FilenameIndex:2
 shared.index.file.content.hash.forward.index.sih.IdIndex:2
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.vfilefinder.KotlinPartialPackageNamesIndex:2
 shared.index.file.content.hash.forward.index.sih.markdown.header.anchor:1
@@ -99,6 +99,6 @@ shared.index.file.content.hash.forward.index.sih.com.intellij.uiDesigner.FormCla
 shared.index.file.content.hash.forward.index.sih.Trigram.Index:2
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.versions.KotlinJsMetadataVersionIndex:2
 shared.index.file.content.hash.forward.index.sih.JavaFxControllerClassIndex:2
-shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex:1
 shared.index.file.content.hash.forward.index.sih.gr.field.name:1
+shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex:1
 shared.index.file.content.hash.forward.index.sih.org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionFqnNameIndex:1

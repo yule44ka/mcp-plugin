@@ -1,1 +1,11 @@
 FsRecords.DIRECTORY_CHILDREN
+template_language
+
+language_level_persistence
+AUTO_DETECTION_CACHE_ATTRIBUTE
+FsRecords.SYMLINK_TARGET
+file.content.hash.forward.multi.index
+kotlin-is-binary-compiled
+78a4aed6
+contractInference
+java.simple.property
