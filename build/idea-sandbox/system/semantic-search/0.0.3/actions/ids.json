@@ -2276,5 +2276,8 @@
   "Qodana.ShowBuildPage",
   "EscUnfollowUserAction",
   "PauseScanningAndIndexing",
-  "Maven.Internal"
+  "Maven.Internal",
+  "ActivateServicesToolWindow",
+  "ServiceView.ActivateDefaultRemoteServersServiceViewContributor",
+  "ServiceView.ActivateRunDashboardServiceViewContributor"
 ]

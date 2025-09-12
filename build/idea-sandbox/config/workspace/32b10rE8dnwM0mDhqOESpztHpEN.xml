@@ -17,7 +17,7 @@
   </component>
   <component name="FileTypeUsageLocalSummary">
     <fileType name="JAVA">
-      <summary usageCount="3" lastUsed="1757675471021" />
+      <summary usageCount="4" lastUsed="1757676695682" />
     </fileType>
   </component>
   <component name="IgnoredFileRootStore">
@@ -29,7 +29,7 @@
   </component>
   <component name="LanguageUsageStatistics">
     <language id="JAVA">
-      <summary usageCount="3" lastUsage="1757675471022" />
+      <summary usageCount="4" lastUsage="1757676695683" />
     </language>
   </component>
   <component name="ProjectView">
@@ -78,6 +78,12 @@
       <value>MCP Inspector Lite</value>
       <value>Project</value>
     </recentWindows>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="452" y="320" key="IDE.errors.dialog" timestamp="1757676726077">
+      <screen x="0" y="38" width="1728" height="1079" />
+    </state>
+    <state x="452" y="320" key="IDE.errors.dialog/0.38.1728.1079/1728.-322.1920.975@0.38.1728.1079" timestamp="1757676726077" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/Main.java">
