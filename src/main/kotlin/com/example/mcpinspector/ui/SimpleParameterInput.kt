@@ -236,49 +236,6 @@ fun SimpleBooleanSwitch(
     }
 }
 
-@Composable
-fun SimpleParameterSummaryCard(
-    fields: List<ParameterField>,
-    parameterValues: Map<String, String>
-) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
-    ) {
-        Column(
-            modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Text(
-                text = "Parameter Summary:",
-                style = MaterialTheme.typography.labelMedium,
-                fontWeight = FontWeight.Medium
-            )
-            
-            fields.forEach { field ->
-                val value = parameterValues[field.name] ?: ""
-                if (value.isNotBlank()) {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "${field.name}:",
-                            style = MaterialTheme.typography.bodySmall,
-                            fontWeight = FontWeight.Medium,
-                            modifier = Modifier.weight(0.3f)
-                        )
-                        Text(
-                            text = value,
-                            style = MaterialTheme.typography.bodySmall,
-                            modifier = Modifier.weight(0.7f)
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
 
 /**
  * Convert parameter values to JSON element

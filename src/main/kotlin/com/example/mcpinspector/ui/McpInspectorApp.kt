@@ -28,11 +28,14 @@ fun McpInspectorApp() {
     val connectionState by mcpClient.connectionState.collectAsState()
     val tools by mcpClient.tools.collectAsState()
     val lastError by mcpClient.lastError.collectAsState()
+    val toolHistory by mcpClient.toolHistory.collectAsState()
+    val notifications by mcpClient.notifications.collectAsState()
     
     var serverUrl by remember { mutableStateOf("http://localhost:3000") }
     var selectedTool by remember { mutableStateOf<McpTool?>(null) }
     var toolParameters by remember { mutableStateOf("{}") }
-    var toolResult by remember { mutableStateOf<String?>(null) }
+    var currentResult by remember { mutableStateOf<ToolInvocationHistory?>(null) }
+    var selectedTab by remember { mutableStateOf(0) } // 0: Tools, 1: History, 2: Notifications
     
     // Parameter management
     val schemaParser = remember { SchemaParser() }
@@ -92,18 +95,77 @@ fun McpInspectorApp() {
             modifier = Modifier.fillMaxSize(),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Tools Pane
+            // Left Pane with Tabs
             Card(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight()
             ) {
-                ToolsPane(
-                    tools = tools,
-                    selectedTool = selectedTool,
-                    onToolSelected = { selectedTool = it },
-                    connectionState = connectionState
-                )
+                Column {
+                    TabRow(selectedTabIndex = selectedTab) {
+                        Tab(
+                            selected = selectedTab == 0,
+                            onClick = { selectedTab = 0 },
+                            text = { Text("Tools") }
+                        )
+                        Tab(
+                            selected = selectedTab == 1,
+                            onClick = { selectedTab = 1 },
+                            text = { 
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text("History")
+                                    if (toolHistory.isNotEmpty()) {
+                                        Badge {
+                                            Text("${toolHistory.size}")
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                        Tab(
+                            selected = selectedTab == 2,
+                            onClick = { selectedTab = 2 },
+                            text = { 
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Text("Notifications")
+                                    val unreadCount = notifications.count { !it.isRead }
+                                    if (unreadCount > 0) {
+                                        Badge(
+                                            containerColor = MaterialTheme.colorScheme.error
+                                        ) {
+                                            Text("$unreadCount")
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    
+                    when (selectedTab) {
+                        0 -> ToolsPane(
+                            tools = tools,
+                            selectedTool = selectedTool,
+                            onToolSelected = { selectedTool = it },
+                            connectionState = connectionState
+                        )
+                        1 -> HistoryPane(
+                            history = toolHistory,
+                            onClearHistory = { mcpClient.clearHistory() },
+                            onHistoryItemSelected = { currentResult = it }
+                        )
+                        2 -> NotificationsPane(
+                            notifications = notifications,
+                            onMarkAsRead = { mcpClient.markNotificationAsRead(it) },
+                            onClearNotifications = { mcpClient.clearNotifications() }
+                        )
+                    }
+                }
             }
             
             // Details & Results Pane
@@ -116,7 +178,7 @@ fun McpInspectorApp() {
                     selectedTool = selectedTool,
                     toolParameters = toolParameters,
                     onParametersChange = { toolParameters = it },
-                    toolResult = toolResult,
+                    currentResult = currentResult,
                     parameterFields = parameterFields,
                     parameterManager = parameterManager,
                     parameterValues = parameterValues,
@@ -135,21 +197,9 @@ fun McpInspectorApp() {
                                     }
                                     
                                     val result = mcpClient.callTool(tool.name, params)
-                                    toolResult = if (result.isSuccess) {
-                                        val response = result.getOrNull()
-                                        if (response?.content?.isNotEmpty() == true) {
-                                            // Extract text content from the response
-                                            response.content.joinToString("\n") { content ->
-                                                content.text ?: content.data ?: "No content"
-                                            }
-                                        } else {
-                                            "Tool executed successfully (no content returned)"
-                                        }
-                                    } else {
-                                        "Error: ${result.exceptionOrNull()?.message}"
-                                    }
+                                    currentResult = result.getOrNull()
                                 } catch (e: Exception) {
-                                    toolResult = "Error parsing parameters: ${e.message}"
+                                    // Error will be captured in the result
                                 }
                             }
                         }
@@ -394,9 +444,9 @@ fun DetailsAndResultsPane(
     selectedTool: McpTool?,
     toolParameters: String,
     onParametersChange: (String) -> Unit,
-    toolResult: String?,
+    currentResult: ToolInvocationHistory?,
     parameterFields: List<ParameterField>,
-    parameterManager: ParameterManager,
+    @Suppress("UNUSED_PARAMETER") parameterManager: ParameterManager,
     parameterValues: MutableMap<String, String>,
     useSimpleInput: Boolean,
     onToggleInputMode: () -> Unit,
@@ -484,13 +534,6 @@ fun DetailsAndResultsPane(
                     )
                 }
                 
-                // Parameter summary
-                if (parameterValues.any { it.value.isNotBlank() }) {
-                    SimpleParameterSummaryCard(
-                        fields = parameterFields,
-                        parameterValues = parameterValues
-                    )
-                }
             } else {
                 // JSON input
                 OutlinedTextField(
@@ -535,34 +578,9 @@ fun DetailsAndResultsPane(
             }
             
             // Results
-            toolResult?.let { result ->
+            currentResult?.let { result ->
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Result:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(
-                        containerColor = if (result.startsWith("Error:")) {
-                            MaterialTheme.colorScheme.errorContainer
-                        } else {
-                            MaterialTheme.colorScheme.surfaceVariant
-                        }
-                    )
-                ) {
-                    Text(
-                        text = result,
-                        modifier = Modifier.padding(12.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = if (result.startsWith("Error:")) {
-                            MaterialTheme.colorScheme.onErrorContainer
-                        } else {
-                            MaterialTheme.colorScheme.onSurfaceVariant
-                        }
-                    )
-                }
+                ToolResultCard(result = result)
             }
         } ?: run {
             Box(
@@ -574,6 +592,401 @@ fun DetailsAndResultsPane(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun HistoryPane(
+    history: List<ToolInvocationHistory>,
+    onClearHistory: () -> Unit,
+    onHistoryItemSelected: (ToolInvocationHistory) -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Tool History",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            
+            if (history.isNotEmpty()) {
+                TextButton(onClick = onClearHistory) {
+                    Icon(Icons.Default.Clear, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text("Clear")
+                }
+            }
+        }
+        
+        if (history.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No tool invocations yet",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(history) { historyItem ->
+                    HistoryItemCard(
+                        historyItem = historyItem,
+                        onClick = { onHistoryItemSelected(historyItem) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun HistoryItemCard(
+    historyItem: ToolInvocationHistory,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = onClick
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = historyItem.toolName,
+                    style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    when (historyItem.result) {
+                        is ToolInvocationResult.Success -> {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                        is ToolInvocationResult.Error -> {
+                            Icon(
+                                Icons.Default.Error,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                    
+                    historyItem.duration?.let { duration ->
+                        Text(
+                            text = "${duration}ms",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+            
+            Text(
+                text = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                    .format(java.util.Date(historyItem.timestamp)),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+fun NotificationsPane(
+    notifications: List<ServerNotification>,
+    onMarkAsRead: (String) -> Unit,
+    onClearNotifications: () -> Unit
+) {
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Notifications",
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold
+            )
+            
+            if (notifications.isNotEmpty()) {
+                TextButton(onClick = onClearNotifications) {
+                    Icon(Icons.Default.Clear, contentDescription = null)
+                    Spacer(Modifier.width(4.dp))
+                    Text("Clear")
+                }
+            }
+        }
+        
+        if (notifications.isEmpty()) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "No notifications",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        } else {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                items(notifications) { notification ->
+                    NotificationCard(
+                        notification = notification,
+                        onMarkAsRead = { onMarkAsRead(notification.id) }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun NotificationCard(
+    notification: ServerNotification,
+    onMarkAsRead: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (notification.isRead) {
+                MaterialTheme.colorScheme.surface
+            } else {
+                MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+            }
+        ),
+        onClick = if (!notification.isRead) onMarkAsRead else { {} }
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val (icon, color) = when (notification.type) {
+                        NotificationType.INFO -> Icons.Default.Info to MaterialTheme.colorScheme.primary
+                        NotificationType.WARNING -> Icons.Default.Warning to MaterialTheme.colorScheme.tertiary
+                        NotificationType.ERROR -> Icons.Default.Error to MaterialTheme.colorScheme.error
+                        NotificationType.TOOLS_CHANGED -> Icons.Default.Build to MaterialTheme.colorScheme.primary
+                        NotificationType.CONNECTION_LOST -> Icons.Default.WifiOff to MaterialTheme.colorScheme.error
+                        NotificationType.CONNECTION_RESTORED -> Icons.Default.Wifi to MaterialTheme.colorScheme.primary
+                    }
+                    
+                    Icon(
+                        icon,
+                        contentDescription = null,
+                        tint = color,
+                        modifier = Modifier.size(16.dp)
+                    )
+                    
+                    Text(
+                        text = notification.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+                
+                if (!notification.isRead) {
+                    Badge(
+                        containerColor = MaterialTheme.colorScheme.primary
+                    ) {
+                        Text("NEW")
+                    }
+                }
+            }
+            
+            Text(
+                text = notification.message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            
+            Text(
+                text = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                    .format(java.util.Date(notification.timestamp)),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+@Composable
+fun ToolResultCard(result: ToolInvocationHistory) {
+    Text(
+        text = "Result:",
+        style = MaterialTheme.typography.labelMedium,
+        fontWeight = FontWeight.Medium
+    )
+    
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = when (result.result) {
+                is ToolInvocationResult.Success -> MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                is ToolInvocationResult.Error -> MaterialTheme.colorScheme.errorContainer
+            }
+        )
+    ) {
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Header with status and timing
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    when (result.result) {
+                        is ToolInvocationResult.Success -> {
+                            Icon(
+                                Icons.Default.CheckCircle,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary
+                            )
+                            Text(
+                                text = "SUCCESS",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        is ToolInvocationResult.Error -> {
+                            Icon(
+                                Icons.Default.Error,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.error
+                            )
+                            Text(
+                                text = "ERROR",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
+                
+                result.duration?.let { duration ->
+                    Text(
+                        text = "Executed in ${duration}ms",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+            
+            Divider()
+            
+            // Result content
+            when (val resultData = result.result) {
+                is ToolInvocationResult.Success -> {
+                    Text(
+                        text = resultData.message,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium
+                    )
+                    
+                    resultData.content?.let { content ->
+                        if (content.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(8.dp))
+                            content.forEach { contentItem ->
+                                Card(
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = MaterialTheme.colorScheme.surface
+                                    )
+                                ) {
+                                    Text(
+                                        text = contentItem.text ?: contentItem.data ?: "No content",
+                                        modifier = Modifier.padding(8.dp),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+                is ToolInvocationResult.Error -> {
+                    Text(
+                        text = resultData.message,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = MaterialTheme.colorScheme.onErrorContainer
+                    )
+                    
+                    resultData.code?.let { code ->
+                        Text(
+                            text = "Error Code: $code",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onErrorContainer
+                        )
+                    }
+                    
+                    resultData.details?.let { details ->
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surface
+                            )
+                        ) {
+                            Text(
+                                text = details,
+                                modifier = Modifier.padding(8.dp),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
+                }
             }
         }
     }

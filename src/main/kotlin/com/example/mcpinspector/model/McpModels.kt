@@ -106,3 +106,55 @@ enum class ServerType {
     WEBSOCKET,
     STDIO
 }
+
+/**
+ * Tool invocation history entry
+ */
+data class ToolInvocationHistory(
+    val id: String,
+    val toolName: String,
+    val parameters: JsonElement?,
+    val timestamp: Long,
+    val result: ToolInvocationResult,
+    val duration: Long? = null
+)
+
+/**
+ * Tool invocation result with success/error state
+ */
+sealed class ToolInvocationResult {
+    data class Success(
+        val content: List<McpContent>?,
+        val message: String = "Tool executed successfully"
+    ) : ToolInvocationResult()
+    
+    data class Error(
+        val message: String,
+        val code: Int? = null,
+        val details: String? = null
+    ) : ToolInvocationResult()
+}
+
+/**
+ * Server notification
+ */
+data class ServerNotification(
+    val id: String,
+    val timestamp: Long,
+    val type: NotificationType,
+    val title: String,
+    val message: String,
+    val isRead: Boolean = false
+)
+
+/**
+ * Types of server notifications
+ */
+enum class NotificationType {
+    INFO,
+    WARNING,
+    ERROR,
+    TOOLS_CHANGED,
+    CONNECTION_LOST,
+    CONNECTION_RESTORED
+}
