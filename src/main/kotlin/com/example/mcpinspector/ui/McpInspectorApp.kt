@@ -1,5 +1,6 @@
 package com.example.mcpinspector.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -156,8 +157,7 @@ fun McpInspectorApp() {
                         )
                         1 -> HistoryPane(
                             history = toolHistory,
-                            onClearHistory = { mcpClient.clearHistory() },
-                            onHistoryItemSelected = { currentResult = it }
+                            onClearHistory = { mcpClient.clearHistory() }
                         )
                         2 -> NotificationsPane(
                             notifications = notifications,
@@ -600,9 +600,10 @@ fun DetailsAndResultsPane(
 @Composable
 fun HistoryPane(
     history: List<ToolInvocationHistory>,
-    onClearHistory: () -> Unit,
-    onHistoryItemSelected: (ToolInvocationHistory) -> Unit
+    onClearHistory: () -> Unit
 ) {
+    var expandedItems by remember { mutableStateOf(setOf<String>()) }
+    
     Column(
         modifier = Modifier.padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -645,7 +646,14 @@ fun HistoryPane(
                 items(history) { historyItem ->
                     HistoryItemCard(
                         historyItem = historyItem,
-                        onClick = { onHistoryItemSelected(historyItem) }
+                        isExpanded = expandedItems.contains(historyItem.id),
+                        onToggleExpanded = { 
+                            expandedItems = if (expandedItems.contains(historyItem.id)) {
+                                expandedItems - historyItem.id
+                            } else {
+                                expandedItems + historyItem.id
+                            }
+                        }
                     )
                 }
             }
@@ -656,26 +664,41 @@ fun HistoryPane(
 @Composable
 fun HistoryItemCard(
     historyItem: ToolInvocationHistory,
-    onClick: () -> Unit
+    isExpanded: Boolean,
+    onToggleExpanded: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
-        onClick = onClick
+        modifier = Modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier.padding(12.dp),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            // Header - always visible
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onToggleExpanded() },
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = historyItem.toolName,
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // Expand/collapse icon
+                    Icon(
+                        if (isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                        contentDescription = if (isExpanded) "Collapse" else "Expand",
+                        modifier = Modifier.size(20.dp)
+                    )
+                    
+                    Text(
+                        text = historyItem.toolName,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
                 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -710,12 +733,173 @@ fun HistoryItemCard(
                 }
             }
             
+            // Timestamp - always visible
             Text(
-                text = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault())
+                text = java.text.SimpleDateFormat("HH:mm:ss dd.MM.yyyy", java.util.Locale.getDefault())
                     .format(java.util.Date(historyItem.timestamp)),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            
+            // Expanded content
+            if (isExpanded) {
+                Divider()
+                
+                // Parameters section
+                Text(
+                    text = "Parameters:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Text(
+                        text = if (historyItem.parameters != null) {
+                            historyItem.parameters.toString()
+                        } else {
+                            "No parameters"
+                        },
+                        modifier = Modifier.padding(8.dp),
+                        style = MaterialTheme.typography.bodySmall,
+                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                    )
+                }
+                
+                // Result section
+                Text(
+                    text = "Result:",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.Medium
+                )
+                
+                when (val result = historyItem.result) {
+                    is ToolInvocationResult.Success -> {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.CheckCircle,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = "SUCCESS",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                                
+                                Text(
+                                    text = result.message,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                                
+                                result.content?.let { content ->
+                                    if (content.isNotEmpty()) {
+                                        Text(
+                                            text = "Content:",
+                                            style = MaterialTheme.typography.labelSmall,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                        content.take(3).forEach { contentItem -> // Show max 3 items
+                                            Text(
+                                                text = (contentItem.text ?: contentItem.data ?: "No content").take(200) + 
+                                                    if ((contentItem.text ?: contentItem.data ?: "").length > 200) "..." else "",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                        }
+                                        if (content.size > 3) {
+                                            Text(
+                                                text = "... and ${content.size - 3} more items",
+                                                style = MaterialTheme.typography.bodySmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    is ToolInvocationResult.Error -> {
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(8.dp),
+                                verticalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                ) {
+                                    Icon(
+                                        Icons.Default.Error,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.error,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Text(
+                                        text = "ERROR",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Bold,
+                                        color = MaterialTheme.colorScheme.error
+                                    )
+                                }
+                                
+                                Text(
+                                    text = result.message,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                
+                                result.code?.let { code ->
+                                    Text(
+                                        text = "Error Code: $code",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
+                                
+                                result.details?.let { details ->
+                                    Text(
+                                        text = "Details:",
+                                        style = MaterialTheme.typography.labelSmall,
+                                        fontWeight = FontWeight.Medium,
+                                        color = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                    Text(
+                                        text = details.take(300) + if (details.length > 300) "..." else "",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                                        color = MaterialTheme.colorScheme.onErrorContainer
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
