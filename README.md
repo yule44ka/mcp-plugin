@@ -74,14 +74,8 @@ Options:
 
 The easiest way to run the plugin with the test server:
 
-**Linux/macOS:**
 ```bash
 ./run-plugin-with-server.sh
-```
-
-**Windows:**
-```cmd
-run-plugin-with-server.bat
 ```
 
 This script will:
@@ -161,7 +155,7 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 ## Example Usage
 
 ### Quick Start
-1. Run the automated script: `./run-plugin-with-server.sh` (Linux/macOS) or `run-plugin-with-server.bat` (Windows)
+1. Run the automated script: `./run-plugin-with-server.sh`
 2. Open MCP Inspector Lite tool window in the launched IDE
 3. Connect to `http://localhost:3000`
 4. Try the "echo" tool with Simple Form mode or JSON: `{"text": "Hello MCP!"}`
@@ -180,8 +174,7 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
 ```
 mcp-plugin/
 ├── build.gradle.kts                    # Gradle build configuration
-├── run-plugin-with-server.sh           # Quick start script (Linux/macOS)
-├── run-plugin-with-server.bat          # Quick start script (Windows)
+├── run-plugin-with-server.sh           # Quick start script
 ├── src/main/
 │   ├── kotlin/com/example/mcpinspector/
 │   │   ├── mcp/
