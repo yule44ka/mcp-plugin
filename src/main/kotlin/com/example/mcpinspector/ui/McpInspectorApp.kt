@@ -54,7 +54,7 @@ fun McpInspectorApp() {
             parameterFields = schemaParser.parseSchema(tool.inputSchema)
             parameterManager.clear()
             parameterValues.clear()
-            useSimpleInput = parameterFields.isNotEmpty()
+            useSimpleInput = schemaParser.requiresParameters(tool.inputSchema)
         }
     }
     
@@ -190,16 +190,22 @@ fun McpInspectorApp() {
                     parameterValues = parameterValues,
                     useSimpleInput = useSimpleInput,
                     onToggleInputMode = { useSimpleInput = !useSimpleInput },
+                    schemaParser = schemaParser,
                     onInvokeTool = {
                         selectedTool?.let { tool ->
                             scope.launch {
                                 try {
-                                    val params = if (useSimpleInput && parameterFields.isNotEmpty()) {
-                                        convertParametersToJson(parameterFields, parameterValues)
-                                    } else if (toolParameters.isBlank()) {
-                                        null
+                                    val requiresParams = schemaParser.requiresParameters(tool.inputSchema)
+                                    val params = if (requiresParams) {
+                                        if (useSimpleInput && parameterFields.isNotEmpty()) {
+                                            convertParametersToJson(parameterFields, parameterValues)
+                                        } else if (toolParameters.isBlank()) {
+                                            null
+                                        } else {
+                                            Json.parseToJsonElement(toolParameters)
+                                        }
                                     } else {
-                                        Json.parseToJsonElement(toolParameters)
+                                        null // Tool doesn't require parameters
                                     }
                                     
                                     val result = mcpClient.callTool(tool.name, params)
@@ -510,7 +516,8 @@ fun DetailsAndResultsPane(
     parameterValues: MutableMap<String, String>,
     useSimpleInput: Boolean,
     onToggleInputMode: () -> Unit,
-    onInvokeTool: () -> Unit
+    onInvokeTool: () -> Unit,
+    schemaParser: SchemaParser
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -546,8 +553,11 @@ fun DetailsAndResultsPane(
                 }
             }
             
-            // Input mode toggle (if schema is available)
-            if (parameterFields.isNotEmpty()) {
+            // Check if tool requires parameters
+            val requiresParams = schemaParser.requiresParameters(tool.inputSchema)
+            
+            // Input mode toggle (only if schema has parameters)
+            if (requiresParams && parameterFields.isNotEmpty()) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -575,53 +585,79 @@ fun DetailsAndResultsPane(
                 }
             }
             
-            // Parameters input
-            if (useSimpleInput && parameterFields.isNotEmpty()) {
-                // Simple form input
-                Text(
-                    text = "Parameters:",
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Medium
-                )
-                
-                Card(
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    SimpleParameterInputForm(
-                        fields = parameterFields,
-                        parameterValues = parameterValues,
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
-                
-            } else {
-                // JSON input
-                OutlinedTextField(
-                    value = toolParameters,
-                    onValueChange = onParametersChange,
-                    label = { Text("Parameters (JSON)") },
-                    modifier = Modifier.fillMaxWidth(),
-                    minLines = 3,
-                    maxLines = 6
-                )
-                
-                // Show schema for reference
-                tool.inputSchema?.let { schema ->
+            // Parameters input (only show if tool requires parameters)
+            if (requiresParams) {
+                if (useSimpleInput && parameterFields.isNotEmpty()) {
+                    // Simple form input
                     Text(
-                        text = "Schema Reference:",
+                        text = "Parameters:",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.Medium
                     )
+                    
                     Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant
-                        )
+                        modifier = Modifier.fillMaxWidth()
                     ) {
+                        SimpleParameterInputForm(
+                            fields = parameterFields,
+                            parameterValues = parameterValues,
+                            modifier = Modifier.padding(12.dp)
+                        )
+                    }
+                    
+                } else {
+                    // JSON input
+                    OutlinedTextField(
+                        value = toolParameters,
+                        onValueChange = onParametersChange,
+                        label = { Text("Parameters (JSON)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        minLines = 3,
+                        maxLines = 6
+                    )
+                    
+                    // Show schema for reference
+                    tool.inputSchema?.let { schema ->
                         Text(
-                            text = schema.toString(),
-                            modifier = Modifier.padding(8.dp),
-                            style = MaterialTheme.typography.bodySmall,
-                            fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                            text = "Schema Reference:",
+                            style = MaterialTheme.typography.labelMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                        Card(
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        ) {
+                            Text(
+                                text = schema.toString(),
+                                modifier = Modifier.padding(8.dp),
+                                style = MaterialTheme.typography.bodySmall,
+                                fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                            )
+                        }
+                    }
+                }
+            } else {
+                // Tool doesn't require parameters - show info message
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                    )
+                ) {
+                    Row(
+                        modifier = Modifier.padding(12.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            Icons.Default.Info,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Text(
+                            text = "This tool doesn't require any parameters",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                 }

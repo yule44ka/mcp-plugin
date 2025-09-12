@@ -51,6 +51,36 @@ class SchemaParser {
         }
     }
     
+    /**
+     * Checks if the tool requires parameters (has non-empty schema with properties)
+     */
+    fun requiresParameters(schema: JsonElement?): Boolean {
+        if (schema == null) return false
+        
+        return try {
+            val schemaObj = schema.jsonObject
+            val properties = schemaObj["properties"]?.jsonObject
+            properties != null && properties.isNotEmpty()
+        } catch (e: Exception) {
+            false
+        }
+    }
+    
+    /**
+     * Checks if the tool has required parameters
+     */
+    fun hasRequiredParameters(schema: JsonElement?): Boolean {
+        if (schema == null) return false
+        
+        return try {
+            val schemaObj = schema.jsonObject
+            val required = schemaObj["required"]?.jsonArray
+            required != null && required.isNotEmpty()
+        } catch (e: Exception) {
+            false
+        }
+    }
+    
     private fun parseProperty(name: String, property: JsonElement, isRequired: Boolean): ParameterField {
         val propertyObj = property.jsonObject
         
