@@ -136,10 +136,15 @@ fun McpInspectorApp() {
                                     
                                     val result = mcpClient.callTool(tool.name, params)
                                     toolResult = if (result.isSuccess) {
-                                        Json.encodeToString(
-                                            JsonElement.serializer(),
-                                            Json.encodeToJsonElement(result.getOrNull())
-                                        )
+                                        val response = result.getOrNull()
+                                        if (response?.content?.isNotEmpty() == true) {
+                                            // Extract text content from the response
+                                            response.content.joinToString("\n") { content ->
+                                                content.text ?: content.data ?: "No content"
+                                            }
+                                        } else {
+                                            "Tool executed successfully (no content returned)"
+                                        }
                                     } else {
                                         "Error: ${result.exceptionOrNull()?.message}"
                                     }
@@ -531,6 +536,7 @@ fun DetailsAndResultsPane(
             
             // Results
             toolResult?.let { result ->
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = "Result:",
                     style = MaterialTheme.typography.labelMedium,
@@ -539,14 +545,22 @@ fun DetailsAndResultsPane(
                 Card(
                     modifier = Modifier.fillMaxWidth(),
                     colors = CardDefaults.cardColors(
-                        containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        containerColor = if (result.startsWith("Error:")) {
+                            MaterialTheme.colorScheme.errorContainer
+                        } else {
+                            MaterialTheme.colorScheme.surfaceVariant
+                        }
                     )
                 ) {
                     Text(
                         text = result,
                         modifier = Modifier.padding(12.dp),
-                        style = MaterialTheme.typography.bodySmall,
-                        fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = if (result.startsWith("Error:")) {
+                            MaterialTheme.colorScheme.onErrorContainer
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        }
                     )
                 }
             }
