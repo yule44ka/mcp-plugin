@@ -25,15 +25,27 @@ fun ParameterInputForm(
     parameterManager: ParameterManager,
     modifier: Modifier = Modifier
 ) {
+    // Create local state for each field to ensure proper recomposition
+    val fieldStates = remember(fields) {
+        fields.associate { field ->
+            field.name to mutableStateOf(parameterManager.getValue(field.name))
+        }
+    }
+    
     LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(fields) { field ->
+            val fieldState = fieldStates[field.name] ?: return@items
+            
             ParameterFieldInput(
                 field = field,
-                value = parameterManager.getValue(field.name),
-                onValueChange = { parameterManager.setValue(field.name, it) }
+                value = fieldState.value,
+                onValueChange = { newValue ->
+                    fieldState.value = newValue
+                    parameterManager.setValue(field.name, newValue)
+                }
             )
         }
     }
@@ -240,6 +252,9 @@ fun ParameterSummaryCard(
     fields: List<ParameterField>,
     parameterManager: ParameterManager
 ) {
+    // Force recomposition when parameter values change
+    val currentValues by remember { derivedStateOf { parameterManager.values } }
+    
     Card(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -256,7 +271,7 @@ fun ParameterSummaryCard(
             )
             
             fields.forEach { field ->
-                val value = parameterManager.getValue(field.name)
+                val value = currentValues[field.name] ?: ""
                 if (value.isNotBlank()) {
                     Row(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)

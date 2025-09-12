@@ -4,7 +4,7 @@
       <map>
         <entry key="$USER_HOME$/IdeaProjects/untitled1">
           <value>
-            <RecentProjectMetaInfo opened="true" projectWorkspaceId="32b10rE8dnwM0mDhqOESpztHpEN">
+            <RecentProjectMetaInfo frameTitle="untitled1 – Main.java" projectWorkspaceId="32b10rE8dnwM0mDhqOESpztHpEN">
               <option name="activationTimestamp" value="1757674590287" />
               <option name="binFolder" value="$APPLICATION_HOME_DIR$/bin" />
               <option name="build" value="IC-233.13135.103" />
@@ -12,6 +12,7 @@
               <option name="colorInfo">
                 <RecentProjectColorInfo associatedIndex="5" />
               </option>
+              <frame x="164" y="77" width="1400" height="1000" />
               <option name="productionCode" value="IC" />
               <option name="projectOpenTimestamp" value="1757674238383" />
             </RecentProjectMetaInfo>

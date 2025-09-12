@@ -86,20 +86,21 @@ class SchemaParser {
  * Manages parameter values and converts them to JSON
  */
 class ParameterManager {
-    private val values = mutableMapOf<String, String>()
+    private val _values = mutableMapOf<String, String>()
+    val values: Map<String, String> get() = _values.toMap()
     
     fun setValue(fieldName: String, value: String) {
-        values[fieldName] = value
+        _values[fieldName] = value
     }
     
     fun getValue(fieldName: String): String {
-        return values[fieldName] ?: ""
+        return _values[fieldName] ?: ""
     }
     
     fun toJsonElement(fields: List<ParameterField>): JsonElement {
         val jsonObject = buildJsonObject {
             fields.forEach { field ->
-                val value = values[field.name]
+                val value = _values[field.name]
                 if (!value.isNullOrBlank() || field.required) {
                     val jsonValue = convertToJsonValue(value ?: "", field.type)
                     if (jsonValue != null) {
@@ -137,6 +138,6 @@ class ParameterManager {
     }
     
     fun clear() {
-        values.clear()
+        _values.clear()
     }
 }

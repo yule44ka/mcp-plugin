@@ -40,11 +40,15 @@ fun McpInspectorApp() {
     var parameterFields by remember { mutableStateOf<List<ParameterField>>(emptyList()) }
     var useSimpleInput by remember { mutableStateOf(true) }
     
+    // State map for parameter values to ensure proper recomposition
+    val parameterValues = remember { mutableStateMapOf<String, String>() }
+    
     // Update parameter fields when tool changes
     LaunchedEffect(selectedTool) {
         selectedTool?.let { tool ->
             parameterFields = schemaParser.parseSchema(tool.inputSchema)
             parameterManager.clear()
+            parameterValues.clear()
             useSimpleInput = parameterFields.isNotEmpty()
         }
     }
@@ -115,6 +119,7 @@ fun McpInspectorApp() {
                     toolResult = toolResult,
                     parameterFields = parameterFields,
                     parameterManager = parameterManager,
+                    parameterValues = parameterValues,
                     useSimpleInput = useSimpleInput,
                     onToggleInputMode = { useSimpleInput = !useSimpleInput },
                     onInvokeTool = {
@@ -122,7 +127,7 @@ fun McpInspectorApp() {
                             scope.launch {
                                 try {
                                     val params = if (useSimpleInput && parameterFields.isNotEmpty()) {
-                                        parameterManager.toJsonElement(parameterFields)
+                                        convertParametersToJson(parameterFields, parameterValues)
                                     } else if (toolParameters.isBlank()) {
                                         null
                                     } else {
@@ -387,6 +392,7 @@ fun DetailsAndResultsPane(
     toolResult: String?,
     parameterFields: List<ParameterField>,
     parameterManager: ParameterManager,
+    parameterValues: MutableMap<String, String>,
     useSimpleInput: Boolean,
     onToggleInputMode: () -> Unit,
     onInvokeTool: () -> Unit
@@ -466,18 +472,18 @@ fun DetailsAndResultsPane(
                 Card(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    ParameterInputForm(
+                    SimpleParameterInputForm(
                         fields = parameterFields,
-                        parameterManager = parameterManager,
+                        parameterValues = parameterValues,
                         modifier = Modifier.padding(12.dp)
                     )
                 }
                 
                 // Parameter summary
-                if (parameterFields.any { parameterManager.getValue(it.name).isNotBlank() }) {
-                    ParameterSummaryCard(
+                if (parameterValues.any { it.value.isNotBlank() }) {
+                    SimpleParameterSummaryCard(
                         fields = parameterFields,
-                        parameterManager = parameterManager
+                        parameterValues = parameterValues
                     )
                 }
             } else {

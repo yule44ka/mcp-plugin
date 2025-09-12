@@ -1319,3 +1319,647 @@ Caused by: java.lang.IllegalArgumentException: 25
 2025-09-12 13:58:56,294 [   5629]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose started
 2025-09-12 13:58:56,296 [   5631]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose completed in 2ms.
 2025-09-12 13:58:56,304 [   5639]   INFO - #c.i.p.i.b.AppStarter - ------------------------------------------------------ IDE SHUTDOWN ------------------------------------------------------
+2025-09-12 14:05:08,172 [     11]   INFO - #c.i.p.i.b.AppStarter - ------------------------------------------------------ IDE STARTED ------------------------------------------------------
+2025-09-12 14:05:08,176 [     15]   INFO - #c.i.i.p.PluginManager - Plugin PluginDescriptor(name=Groovy, id=org.intellij.groovy, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/Groovy, version=233.13135.103, package=org.jetbrains.plugins.groovy, isBundled=true) misses optional descriptor duplicates-groovy.xml
+2025-09-12 14:05:08,177 [     16]   INFO - #c.i.i.p.PluginManager - Plugin PluginDescriptor(name=Groovy, id=org.intellij.groovy, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/Groovy, version=233.13135.103, package=org.jetbrains.plugins.groovy, isBundled=true) misses optional descriptor duplicates-detection-groovy.xml
+2025-09-12 14:05:08,177 [     16]   INFO - #c.i.i.p.PluginManager - Using cached broken plugins file
+2025-09-12 14:05:08,180 [     19]   INFO - #c.i.u.EnvironmentUtil - loading shell env is skipped: IDE has been launched from a terminal (SHLVL=2)
+2025-09-12 14:05:08,184 [     23]   INFO - #c.i.u.i.PageCacheUtils - File page caching params:
+2025-09-12 14:05:08,184 [     23]   INFO - #c.i.u.i.PageCacheUtils - 	DEFAULT_PAGE_SIZE: 10485760
+2025-09-12 14:05:08,184 [     23]   INFO - #c.i.u.i.PageCacheUtils - 	Direct memory to use, max: 2126512128
+2025-09-12 14:05:08,184 [     23]   INFO - #c.i.u.i.PageCacheUtils - 	FilePageCache: regular + lock-free (LOCK_FREE_PAGE_CACHE_ENABLED:true)
+2025-09-12 14:05:08,185 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	NEW_PAGE_CACHE_MEMORY_FRACTION: 0.20000000298023224
+2025-09-12 14:05:08,185 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	Regular FilePageCache: 503316478 bytes
+2025-09-12 14:05:08,185 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	New     FilePageCache: 125829122 bytes (+ up to 10.0% overflow)
+2025-09-12 14:05:08,185 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	DirectByteBuffers pool: 104857600 bytes
+2025-09-12 14:05:08,186 [     25]   INFO - #c.i.p.i.b.AppStarter - JNA library (64-bit) loaded in 7 ms
+2025-09-12 14:05:08,187 [     26]   INFO - #c.i.p.i.b.AppStarter - IDE: IntelliJ IDEA (build #IC-233.13135.103, Wed, 20 Dec 2023 05:05:00 GMT)
+2025-09-12 14:05:08,187 [     26]   INFO - #c.i.p.i.b.AppStarter - OS: Mac OS X (15.6.1)
+2025-09-12 14:05:08,188 [     27]   INFO - #c.i.p.i.b.AppStarter - JRE: 17.0.9+7-b1087.9, aarch64 (JetBrains s.r.o.)
+2025-09-12 14:05:08,188 [     27]   INFO - #c.i.p.i.b.AppStarter - JVM: 17.0.9+7-b1087.9 (OpenJDK 64-Bit Server VM)
+2025-09-12 14:05:08,189 [     28]   INFO - #c.i.p.i.b.AppStarter - PID: 91042
+2025-09-12 14:05:08,191 [     30]   INFO - #c.i.p.i.b.AppStarter - JVM options: [-Daether.connector.resumeDownloads=false, -Dapple.awt.application.appearance=system, -Dapple.awt.fileDialogForDirectories=true, -Dapple.laf.useScreenMenuBar=true, -Didea.auto.reload.plugins=true, -Didea.classpath.index.enabled=false, -Didea.config.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/config, -Didea.is.internal=true, -Didea.log.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/log, -Didea.paths.selector=IdeaIC2023.3, -Didea.platform.prefix=Idea, -Didea.plugin.in.sandbox.mode=true, -Didea.plugins.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/plugins, -Didea.required.plugins.id=com.example.mcp-inspector-lite, -Didea.smooth.progress=false, -Didea.system.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system, -Didea.vendor.name=JetBrains, -Dintellij.platform.runtime.repository.path=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/modules/module-descriptors.jar, -Djava.system.class.loader=com.intellij.util.lang.PathClassLoader, -Djbr.catch.SIGABRT=true, -Djdk.attach.allowAttachSelf=true, -Djdk.http.auth.tunneling.disabledSchemes="", -Djdk.module.illegalAccess.silent=true, -Djna.boot.library.path=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/lib/jna/aarch64, -Djna.noclasspath=true, -Djna.nosys=true, -Dpty4j.preferred.native.folder=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/lib/pty4j, -Dsplash=true, -Dsun.io.useCanonCaches=false, -Dsun.java2d.metal=true, -XX:ReservedCodeCacheSize=512m, -XX:+UseG1GC, -XX:SoftRefLRUPolicyMSPerMB=50, -XX:CICompilerCount=2, -XX:+HeapDumpOnOutOfMemoryError, -XX:-OmitStackTraceInFastThrow, -XX:+IgnoreUnrecognizedVMOptions, -XX:CompileCommand=exclude,com/intellij/openapi/vfs/impl/FilePartNodeRoot,trieDescend, -javaagent:/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/tmp/initializeIntelliJPlugin/coroutines-javaagent.jar, --add-opens=java.base/java.io=ALL-UNNAMED, --add-opens=java.base/java.lang=ALL-UNNAMED, --add-opens=java.base/java.lang.ref=ALL-UNNAMED, --add-opens=java.base/java.lang.reflect=ALL-UNNAMED, --add-opens=java.base/java.net=ALL-UNNAMED, --add-opens=java.base/java.nio=ALL-UNNAMED, --add-opens=java.base/java.nio.charset=ALL-UNNAMED, --add-opens=java.base/java.text=ALL-UNNAMED, --add-opens=java.base/java.time=ALL-UNNAMED, --add-opens=java.base/java.util=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED, --add-opens=java.base/jdk.internal.vm=ALL-UNNAMED, --add-opens=java.base/sun.nio.ch=ALL-UNNAMED, --add-opens=java.base/sun.nio.fs=ALL-UNNAMED, --add-opens=java.base/sun.security.ssl=ALL-UNNAMED, --add-opens=java.base/sun.security.util=ALL-UNNAMED, --add-opens=java.base/sun.net.dns=ALL-UNNAMED, --add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED, --add-opens=java.desktop/com.apple.eawt.event=ALL-UNNAMED, --add-opens=java.desktop/com.apple.laf=ALL-UNNAMED, --add-opens=java.desktop/java.awt=ALL-UNNAMED, --add-opens=java.desktop/java.awt.dnd.peer=ALL-UNNAMED, --add-opens=java.desktop/java.awt.event=ALL-UNNAMED, --add-opens=java.desktop/java.awt.image=ALL-UNNAMED, --add-opens=java.desktop/java.awt.peer=ALL-UNNAMED, --add-opens=java.desktop/java.awt.font=ALL-UNNAMED, --add-opens=java.desktop/javax.swing=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.text.html=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.datatransfer=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.image=ALL-UNNAMED, --add-opens=java.desktop/sun.awt=ALL-UNNAMED, --add-opens=java.desktop/sun.font=ALL-UNNAMED, --add-opens=java.desktop/sun.java2d=ALL-UNNAMED, --add-opens=java.desktop/sun.lwawt=ALL-UNNAMED, --add-opens=java.desktop/sun.lwawt.macosx=ALL-UNNAMED, --add-opens=java.desktop/sun.swing=ALL-UNNAMED, --add-opens=java.desktop/com.sun.java.swing=ALL-UNNAMED, --add-opens=jdk.attach/sun.tools.attach=ALL-UNNAMED, --add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED, --add-opens=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED, --add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED, -Xms128m, -Xmx2048m, -Dfile.encoding=UTF-8, -Duser.country=US, -Duser.language=en, -Duser.variant, -ea]
+2025-09-12 14:05:08,191 [     30]   INFO - #c.i.p.i.b.AppStarter - args: 
+2025-09-12 14:05:08,191 [     30]   INFO - #c.i.p.i.b.AppStarter - library path: /Users/Iuliia.Liutova/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+2025-09-12 14:05:08,191 [     30]   INFO - #c.i.p.i.b.AppStarter - boot library path: /Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains/jbre/jbr_jcef-17.0.9-osx-aarch64-b1087.9/extracted/jbr_jcef-17.0.9-osx-aarch64-b1087.9/Contents/Home/lib
+2025-09-12 14:05:08,198 [     37]   INFO - #c.i.p.i.b.AppStarter - locale=en_US JNU=UTF-8 file.encoding=UTF-8
+    idea.config.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/config
+    idea.system.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system
+    idea.plugins.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/plugins
+    idea.log.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/log
+2025-09-12 14:05:08,200 [     39]   INFO - #c.i.p.i.b.AppStarter - CPU cores: 16; ForkJoinPool.commonPool: java.util.concurrent.ForkJoinPool@1ca1f0f8[Running, parallelism = 15, size = 0, active = 0, running = 0, steals = 0, tasks = 0, submissions = 0]; factory: com.intellij.concurrency.IdeaForkJoinWorkerThreadFactory@2de1c195
+2025-09-12 14:05:08,209 [     48]   INFO - #c.i.i.p.PluginManager - Module intellij.sh.python is not enabled because dependency com.intellij.modules.python is not available
+Module intellij.space.gateway is not enabled because dependency com.jetbrains.gateway is not available
+Module intellij.space.php is not enabled because dependency com.jetbrains.php is not available
+Module intellij.groovy/ant is not enabled because dependency AntSupport is not available
+Module intellij.space.index is not enabled because dependency intellij.indexing.shared is not available
+Module intellij.qodana.jvm.swagger is not enabled because dependency com.intellij.swagger is not available
+Module intellij.qodana.python is not enabled because dependency Pythonid is not available
+Module intellij.qodana.php is not enabled because dependency com.jetbrains.php is not available
+Module intellij.qodana.js is not enabled because dependency JavaScript is not available
+Module intellij.qodana.go is not enabled because dependency intellij.go.coverage is not available
+Module intellij.packageChecker.python is not enabled because dependency com.intellij.modules.python is not available
+Module intellij.packageChecker.javascript is not enabled because dependency JavaScript is not available
+Module intellij.packageChecker.go is not enabled because dependency org.jetbrains.plugins.go is not available
+2025-09-12 14:05:08,216 [     55]   INFO - #c.i.i.p.PluginManager - Loaded bundled plugins: Mercurial (233.13135.103), Maven (233.13135.103), Eclipse Keymap (233.13135.103), Configuration Script (233.13135.103), Space (233.13135.103), GitHub (233.13135.103), JUnit (233.13135.103), UI Designer (233.13135.103), IDE Features Trainer (233.13135.103), Shared Indexes (233.13135.103), Properties (233.13135.103), Subversion (233.13135.103), Git (233.13135.103), Java (233.13135.103), TestNG (233.13135.103), Gradle-Maven (233.13135.103), GitLab (233.13135.103), Visual Studio Keymap (233.13135.103), IntelliLang (233.13135.103), Toml (233.13135.103), Code With Me (233.13135.103), YAML (233.13135.103), Code Coverage for Java (233.13135.103), Markdown (233.13135.103), JavaFX (233.13135.103), Async Profiler for IDE Performance Testing (233.13135.103), Copyright (233.13135.103), Gradle-Java (233.13135.103), Gradle (233.13135.103), Package Checker (233.13135.103), Gradle DSL API (233.13135.103), Machine Learning Code Completion (233.13135.103), JetBrains Marketplace Licensing (233.13135.103), Perforce Helix Core (233.13135.103), com.intellij.tracing.ide (233.13135.103), Java Internationalization (233.13135.103), Shell Script (233.13135.103), HTML Tools (233.13135.103), Java Stream Debugger (233.13135.103), Emoji Picker (233.13135.103), TextMate Bundles (233.13135.103), Qodana (233.13135.103), Terminal (233.13135.103), Grazie Lite (233.13135.103), JetBrains Repository Search (233.13135.103), Settings Sync (233.13135.103), Gradle-Java-Analysis (233.13135.103), IDEA CORE (233.13135.103), WebP Support (233.13135.103), com.intellij.dev (233.13135.103), Task Management (233.13135.103), Turbo Complete (233.13135.103), Java Bytecode Decompiler (233.13135.103), Groovy (233.13135.103), Performance Testing (233.13135.103), intellij.platform.ijent.impl (233.13135.103), EditorConfig (233.13135.103), Eclipse Interoperability (233.13135.103), NetBeans Keymap (233.13135.103), Maven server api classes (233.13135.103), Java IDE Customization (233.13135.103), JetBrains maven model api classes (233.13135.103), Kotlin (233.13135.103-IJ), Gradle Dependency Updater Implementation (233.13135.103), Bytecode Viewer (233.13135.103), Machine Learning in Search Everywhere (233.13135.103), Images (233.13135.103)
+2025-09-12 14:05:08,216 [     55]   INFO - #c.i.i.p.PluginManager - Loaded custom plugins: MCP Inspector Lite (1.0-SNAPSHOT)
+2025-09-12 14:05:08,407 [    246]   INFO - #c.i.o.v.n.p.FSRecords - VFS health-check enabled: first after 600000 ms, and each following 43200000 ms
+2025-09-12 14:05:08,431 [    270]   INFO - #c.i.a.o.PathMacrosImpl - Loaded path macros: {MAVEN_REPOSITORY=/Users/Iuliia.Liutova/.m2/repository}
+2025-09-12 14:05:08,434 [    273]   WARN - #c.i.s.ComponentManagerImpl - `preload=true` must be used only for core services (service=com.jetbrains.rdserver.statistics.BackendStatisticsManager, plugin=com.jetbrains.codeWithMe)
+2025-09-12 14:05:08,438 [    277]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses 'fast' names enumerator (over mmapped file)
+2025-09-12 14:05:08,441 [    280]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses content storage over new FilePageCache
+2025-09-12 14:05:08,441 [    280]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses streamlined attributes storage (over mmapped file)
+2025-09-12 14:05:08,442 [    281]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses content hash storage over mmapped file
+2025-09-12 14:05:08,442 [    281]   INFO - #c.i.i.p.ExpiredPluginsState - Plugins to skip: []
+2025-09-12 14:05:08,464 [    303]   INFO - #c.j.r.p.c.g.g.V.Z - Start Wire Storage check: Check Wire Buffer Size
+2025-09-12 14:05:08,481 [    320]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS: impl (expected) version=846656, 92399 file records, 7 content blobs
+2025-09-12 14:05:08,491 [    330]   INFO - #c.i.o.v.n.p.FSRecordsImpl - VFS initialized: 55 ms, 0 failed attempts, 0 error(s) were recovered
+2025-09-12 14:05:08,502 [    341]   INFO - #c.i.o.v.i.l.NativeFileWatcherImpl - Starting file watcher: /Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/bin/mac/fsnotifier
+2025-09-12 14:05:08,515 [    354]   INFO - #c.i.u.m.s.Menu - use new ScreenMenuBar implementation
+2025-09-12 14:05:08,521 [    360]   INFO - #c.i.o.v.n.p.FSRecordsImpl - VFS scanned: file-by-name index was populated
+2025-09-12 14:05:08,523 [    362]   INFO - #c.i.o.v.i.l.NativeFileWatcherImpl - Native file watcher is operational.
+2025-09-12 14:05:08,530 [    369]   WARN - #c.i.o.a.Application - No URL bundle (CFBundleURLTypes) is defined in the main bundle.
+To be able to open external links, specify protocols in the app layout section of the build file.
+Example: args.urlSchemes = ["your-protocol"] will handle following links: your-protocol://open?file=file&line=line
+2025-09-12 14:05:08,555 [    394]   INFO - #c.i.o.a.i.ActionManagerImpl - keymap "VSCode" not found PluginDescriptor(name=Terminal, id=org.jetbrains.plugins.terminal, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/terminal, version=233.13135.103, package=org.jetbrains.plugins.terminal, isBundled=true)
+2025-09-12 14:05:08,555 [    394]   INFO - #c.i.o.a.i.ActionManagerImpl - keymap "VSCode OSX" not found PluginDescriptor(name=Terminal, id=org.jetbrains.plugins.terminal, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/terminal, version=233.13135.103, package=org.jetbrains.plugins.terminal, isBundled=true)
+2025-09-12 14:05:08,557 [    396]   INFO - #o.j.i.BuiltInServerManager - built-in server started, port 63343
+2025-09-12 14:05:08,559 [    398]   INFO - #c.i.o.a.i.NonBlockingReadActionImpl - OTel monitoring for NonBlockingReadAction is enabled
+2025-09-12 14:05:08,561 [    400] SEVERE - #c.i.d.LoadingState - Should be called at least in the state COMPONENTS_LOADED, the current state is: CONFIGURATION_STORE_INITIALIZED
+Current violators count: 1
+
+
+java.lang.Throwable
+	at com.intellij.diagnostic.LoadingState.logStateError(LoadingState.java:58)
+	at com.intellij.diagnostic.LoadingState.checkOccurred(LoadingState.java:54)
+	at com.intellij.openapi.util.registry.Registry.getInstance(Registry.java:180)
+	at com.intellij.openapi.util.registry.Registry.get(Registry.java:45)
+	at com.intellij.openapi.util.registry.Registry.is(Registry.java:58)
+	at com.intellij.util.concurrency.Holder.<clinit>(propagation.kt:29)
+	at com.intellij.util.concurrency.Propagation.isPropagateCancellation(propagation.kt:62)
+	at com.intellij.util.concurrency.Propagation.createChildContext(propagation.kt:112)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl$Submission.<init>(NonBlockingReadActionImpl.java:261)
+	at com.intellij.openapi.application.impl.NonBlockingReadActionImpl.submit(NonBlockingReadActionImpl.java:231)
+	at com.intellij.openapi.vfs.newvfs.RefreshQueueImpl.lambda$queueSession$6(RefreshQueueImpl.java:120)
+	at com.intellij.util.concurrency.CoroutineDispatcherBackedExecutor$execute$1.invokeSuspend(executor.kt:42)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.internal.LimitedDispatcher$Worker.run(LimitedDispatcher.kt:115)
+	at kotlinx.coroutines.scheduling.TaskImpl.run(Tasks.kt:103)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684)
+2025-09-12 14:05:08,563 [    402] SEVERE - #c.i.d.LoadingState - IntelliJ IDEA 2023.3.2  Build #IC-233.13135.103
+2025-09-12 14:05:08,563 [    402] SEVERE - #c.i.d.LoadingState - JDK: 17.0.9; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2025-09-12 14:05:08,564 [    403] SEVERE - #c.i.d.LoadingState - OS: Mac OS X
+2025-09-12 14:05:08,564 [    403] SEVERE - #c.i.d.LoadingState - Last Action: 
+2025-09-12 14:05:08,595 [    434]   INFO - #c.i.u.n.s.CertificateManager - Default SSL context initialized
+2025-09-12 14:05:08,601 [    440]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.psi.search.FilenameIndex initializer requests com.intellij.ide.plugins.PluginUtil instance
+2025-09-12 14:05:08,628 [    467]   INFO - #c.i.i.s.p.i.SharedIndexMainZipStorage - Shared Indexes Storage is opened and empty
+2025-09-12 14:05:08,682 [    521]   INFO - #c.i.u.i.FileBasedIndexImpl - Indices to be built:FilenameIndex(v = 258)
+2025-09-12 14:05:08,685 [    524]   INFO - #c.i.u.i.FileBasedIndexImpl - Using nice flusher for indexes
+2025-09-12 14:05:08,688 [    527]   WARN - #c.i.i.u.l.LafManagerImpl - VersionControl.Log.Commit.rowHeight = null in LookAndFeelThemeAdapter; it may lead to performance degradation
+2025-09-12 14:05:08,688 [    527]   INFO - #c.i.u.i.IndexDataInitializer - Index data initialization done: 87 ms. Initialized indexes: [FilenameIndex, Trigram.Index, XmlNamespaces, json.file.root.values, XmlTagNames, html5.custom.attributes.index, DomFileIndex, SchemaTypeInheritance, editorconfig.index.name, RelaxSymbolIndex, filetypes, java.auto.module.name, TodoIndex, IdIndex, FrameworkDetectionIndex, fileIncludes, xmlProperties, java.null.method.argument, java.source.module.name, yaml.keys.name, HtmlTagIdIndex, bytecodeAnalysis, java.binary.plus.expression, java.fun.expression, org.jetbrains.kotlin.idea.versions.KotlinJsMetadataVersionIndex, JavaFxControllerClassIndex, javafx.id.name, javafx.custom.component, org.jetbrains.kotlin.idea.versions.KotlinJvmMetadataVersionIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinJavaScriptMetaFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinPartialPackageNamesIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinClassFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFilePackageIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinPackageSourcesMemberNamesIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinModuleMappingIndex, org.jetbrains.kotlin.idea.vfilefinder.KlibMetaFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinStdlibIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinShortClassNameFileIndex, com.intellij.uiDesigner.FormClassIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinBuiltInsMetadataIndex, org.jetbrains.kotlin.idea.base.indices.names.KotlinTopLevelCallableByPackageShortNameIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinJvmModuleAnnotationsIndex, org.jetbrains.kotlin.idea.base.indices.names.KotlinTopLevelClassLikeDeclarationByPackageShortNameIndex, Stubs].
+2025-09-12 14:05:08,727 [    566]   INFO - #c.i.u.i.IndexDataInitializer - Index data initialization done: 39 ms. Initialized stub indexes: {gr.class.super, java.field.name, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyNothingFunctionShortNameIndex, markdown.header.anchor, org.jetbrains.kotlin.idea.stubindex.KotlinExactPackagesIndex, org.jetbrains.kotlin.idea.stubindex.KotlinPropertyShortNameIndex, kotlin.primeIndexKey, org.jetbrains.kotlin.idea.stubindex.KotlinInnerTypeAliasClassIdIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeFqNameIndex, gr.script.fqn.s, java.anonymous.baseref, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyNothingPropertyShortNameIndex, dom.namespaceKey, org.jetbrains.kotlin.idea.stubindex.KotlinFilePartClassIndex, gr.class.fqn.s, gr.method.name, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinJvmNameAnnotationIndex, java.class.fqn, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelPropertyByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasByExpansionShortNameIndex, java.method.name, org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex, dom.elementClass, java.class.extlist, jvm.static.member.type, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelTypeAliasFqNameIndex, gr.anonymous.class, gr.field.name, org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex, java.class.shortname, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelTypeAliasByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinMultifileClassPartIndex, java.module.name, gr.annot.method.name, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelClassByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinClassShortNameIndex, markdown.header, java.annotations, org.jetbrains.kotlin.idea.stubindex.KotlinFunctionShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelExtensionsByReceiverTypeIndex, org.jetbrains.kotlin.idea.stubindex.KotlinSuperClassIndex, java.method.parameter.types, gr.annot.members, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelPropertyFqnNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFullClassNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinSubclassObjectNameIndex, properties.index, gr.script.class, jvm.static.member.name, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyContractedFunctionShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinScriptFqnIndex, java.unnamed.class, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeClassByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinExtensionsInObjectsByReceiverTypeIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionFqnNameIndex}.
+2025-09-12 14:05:08,741 [    580]   WARN - #c.i.o.v.n.p.d.e.DurableEnumeratorFactory - [enumerator.mmapped]: .valueToId map is out-of-sync with .valuesLog data -> rebuilding it
+2025-09-12 14:05:08,755 [    594]   INFO - #c.i.j.JdkEx - === TabbingMode: available ===
+2025-09-12 14:05:08,768 [    607]   INFO - #c.i.j.JdkEx - === TabbingMode: on ===
+2025-09-12 14:05:08,817 [    656]   INFO - #c.i.w.i.i.WorkspaceModelImpl - Load workspace model from cache in 59 ms
+2025-09-12 14:05:08,847 [    686]   INFO - #c.i.w.i.i.WorkspaceModelImpl - Project model updated silently to version 1 in 4 ms: Add module mapping
+2025-09-12 14:05:08,853 [    692]   INFO - #c.i.w.i.i.j.s.JpsGlobalModelSynchronizerImpl - Loading global entities from files
+2025-09-12 14:05:09,024 [    863]   INFO - #c.i.w.i.i.EntitiesOrphanageImpl - Update orphanage. 0 modules added
+2025-09-12 14:05:09,026 [    865]   INFO - #c.i.i.p.DisabledPluginsState - Plugins to enable: [com.jetbrains.codeWithMe]
+2025-09-12 14:05:09,027 [    866]   INFO - #c.i.w.i.i.WorkspaceModelImpl - Project model updated to version 2 in 14 ms: Sync global entities with project: untitled1
+2025-09-12 14:05:09,027 [    866]   INFO - #c.i.i.p.DynamicPlugins - Plugins to load: []
+2025-09-12 14:05:09,134 [    973]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.psi.LanguageSubstitutors initializer requests com.intellij.psi.LanguageSubstitutors instance
+2025-09-12 14:05:09,136 [    975]   INFO - #c.i.r.OsRegistryConfigProvider - Looking for 'enabled' value in [/Library/Application Support/JetBrains/portForwarding/enabled, /Library/Application Support/JetBrains/portForwarding/config.json, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/portForwarding/enabled, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/portForwarding/config.json]
+2025-09-12 14:05:09,136 [    975]   INFO - #c.i.r.OsRegistryConfigProvider - OS provided value for 'enabled' is not found
+2025-09-12 14:05:09,137 [    976]   INFO - PerformancePlugin - Performance Plugin is in silent mode
+2025-09-12 14:05:09,154 [    993]   WARN - #c.i.s.ComponentManagerImpl - org.zmlx.hg4idea.provider.HgChangeProvider initializer requests com.intellij.openapi.vcs.FileStatusFactory instance
+2025-09-12 14:05:09,155 [    994]   INFO - #c.i.p.c.ProjectCodeStyleSettingsManager - Initialized from default code style settings.
+2025-09-12 14:05:09,171 [   1010]   INFO - #c.j.r.f.FollowMeManager - Register new user (name: 'Iuliia.Liutova', client id: Host)
+2025-09-12 14:05:09,173 [   1012]   INFO - #c.i.c.d.i.HighlightingMarkupStore - restoring markup cache 'untitled1-78a4aed6' for 0 files
+2025-09-12 14:05:09,175 [   1014]   INFO - #c.i.o.f.i.t.f.FoldingModelStore - restoring folding cache 'untitled1-78a4aed6' for 0 files
+2025-09-12 14:05:09,257 [   1096]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: (dumb mode task) com.intellij.openapi.project.InitialDumbTaskRequiredForSmartMode@4517067b
+2025-09-12 14:05:09,258 [   1097]   INFO - #c.i.o.p.DumbServiceMergingTaskQueue - Initializing DumbServiceMergingTaskQueue...
+2025-09-12 14:05:09,258 [   1097]   INFO - #c.i.o.p.DumbServiceMergingTaskQueue - Running initialization condition: com.intellij.indexing.shared.download.SharedIndexDownloadedCondition@61957d9e
+2025-09-12 14:05:09,259 [   1098]   INFO - #c.i.o.p.DumbServiceMergingTaskQueue - Finished: com.intellij.indexing.shared.download.SharedIndexDownloadedCondition@61957d9e
+2025-09-12 14:05:09,267 [   1106]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.indexing.shared.platform.impl.OnDiskSharedIndexChunkLocator@3e6d03c
+2025-09-12 14:05:09,270 [   1109]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.indexing.shared.platform.impl.OnDiskSharedIndexChunkLocator@3e6d03c
+2025-09-12 14:05:09,271 [   1110]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.util.indexing.ProjectFileBasedIndexStartupActivity@cf636d9
+2025-09-12 14:05:09,294 [   1133]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.util.indexing.ProjectFileBasedIndexStartupActivity@cf636d9
+2025-09-12 14:05:09,296 [   1135]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.externalDependencies.impl.CheckRequiredPluginsActivity@6f8a97bd
+2025-09-12 14:05:09,297 [   1136]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.externalDependencies.impl.CheckRequiredPluginsActivity@6f8a97bd
+2025-09-12 14:05:09,298 [   1137]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.util.indexing.DumbModeWhileScanningSubscriber@4b880085
+2025-09-12 14:05:09,301 [   1140]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.util.indexing.DumbModeWhileScanningSubscriber@4b880085
+2025-09-12 14:05:09,302 [   1141]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.ide.projectWizard.generators.SdkPreIndexingRequiredForSmartModeActivity@6a385573
+2025-09-12 14:05:09,303 [   1142]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.ide.projectWizard.generators.SdkPreIndexingRequiredForSmartModeActivity@6a385573
+2025-09-12 14:05:09,304 [   1143]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Running task required for smart mode: com.intellij.indexing.shared.platform.impl.SharedIndexProjectActivity@4b6b7ced
+2025-09-12 14:05:09,305 [   1144]   INFO - #c.i.o.p.InitialDumbTaskRequiredForSmartMode - Finished task required for smart mode: com.intellij.indexing.shared.platform.impl.SharedIndexProjectActivity@4b6b7ced
+2025-09-12 14:05:09,305 [   1144]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Task finished: (dumb mode task) com.intellij.openapi.project.InitialDumbTaskRequiredForSmartMode@4517067b
+2025-09-12 14:05:09,373 [   1212]   WARN - #c.i.o.w.i.ToolWindowImpl - ToolWindow icons should be 13x13, but got: 16x16. Please fix ToolWindow (ID:  MCP Inspector Lite) or icon ImageDataByPathLoader(classLoader=PluginClassLoader(plugin=PluginDescriptor(name=MCP Inspector Lite, id=com.example.mcp-inspector-lite, descriptorPath=plugin.xml, path=~/IdeaProjects/mcp-plugin/build/idea-sandbox/plugins/mcp-plugin, version=1.0-SNAPSHOT, package=null, isBundled=false), packagePrefix=null, state=active), path=icons/mcp-icon.svg, original=null)
+2025-09-12 14:05:09,518 [   1357]   INFO - STDERR - SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+2025-09-12 14:05:09,518 [   1357]   INFO - STDERR - SLF4J: Defaulting to no-operation (NOP) logger implementation
+2025-09-12 14:05:09,518 [   1357]   INFO - STDERR - SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+2025-09-12 14:05:09,878 [   1717]   WARN - #c.i.o.a.i.ActionUpdater - 517 ms to grab EDT for ToolWindowHeader$2#Update@ToolwindowTitle (com.intellij.toolWindow.ToolWindowHeader$2)
+2025-09-12 14:05:09,993 [   1832]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: (dumb mode task) com.intellij.util.indexing.UnindexedFilesScanner$2@74bc7b09
+2025-09-12 14:05:09,994 [   1833]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Task finished: (dumb mode task) com.intellij.util.indexing.UnindexedFilesScanner$2@74bc7b09
+2025-09-12 14:05:09,994 [   1833]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Running task: UnindexedFilesScanner[untitled1]
+2025-09-12 14:05:09,999 [   1838]   INFO - #c.i.u.i.UnindexedFilesScanner - Started scanning for indexing of untitled1. Reason: On project open
+2025-09-12 14:05:10,007 [   1846]   INFO - #c.i.u.i.UnindexedFilesScanner - Performing delayed pushing properties tasks for untitled1 took 6ms; general responsiveness: ok; EDT responsiveness: ok
+2025-09-12 14:05:10,039 [   1878]   INFO - #c.i.u.i.d.IndexingDependenciesFingerprint - Calculated dependencies fingerprint in 5 ms (hash=159o1r7sgm8hs, buildTime=1703048700, appVersion=IC-233.13135.103)
+2025-09-12 14:05:10,039 [   1878]   INFO - #c.i.u.i.d.AppIndexingDependenciesService - Invalidating all indexing flags. Reason: App fingerprint changed: FingerprintImpl(fingerprint=-6899115704402954563) to FingerprintImpl(fingerprint=5431837676354339968)
+2025-09-12 14:05:10,042 [   1881]   INFO - #c.i.o.u.i.UpdateCheckerService - channel: release
+2025-09-12 14:05:10,056 [   1895]   INFO - #c.i.u.i.UnindexedFilesScanner - Scanning of untitled1 uses 15 scanning threads
+2025-09-12 14:05:10,071 [   1910]   INFO - #c.i.u.m.t.TouchbarSupport - touchbar disabled: touchbar-server isn't running
+2025-09-12 14:05:10,138 [   1977]   INFO - #c.i.o.p.DumbServiceImpl - exit dumb mode [untitled1]
+2025-09-12 14:05:10,268 [   2107]   WARN - #o.j.p.t.TextMateService - Cannot find referenced file `./language-configuration.json` in bundle `/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/textmate/lib/bundles/mdx`
+2025-09-12 14:05:10,342 [   2181] SEVERE - #c.i.c.ComponentStoreImpl - Cannot init component state (componentName=GradleJvmSupportMatrix, componentClass=GradleJvmSupportMatrix) [Plugin: com.intellij.gradle]
+com.intellij.diagnostic.PluginException: Cannot init component state (componentName=GradleJvmSupportMatrix, componentClass=GradleJvmSupportMatrix) [Plugin: com.intellij.gradle]
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:174)
+	at com.intellij.configurationStore.ComponentStoreWithExtraComponents.initComponent(ComponentStoreWithExtraComponents.kt:48)
+	at com.intellij.serviceContainer.ComponentManagerImpl.initializeComponent$intellij_platform_serviceContainer(ComponentManagerImpl.kt:931)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance$suspendImpl(ServiceInstanceInitializer.kt:41)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance(ServiceInstanceInitializer.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invokeSuspend(LazyInstanceHolder.kt:162)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:78)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:167)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invokeSuspend(LazyInstanceHolder.kt:160)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:44)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:112)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:56)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.initialize(LazyInstanceHolder.kt:145)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.access$initialize(LazyInstanceHolder.kt:13)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.tryInitialize(LazyInstanceHolder.kt:135)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstance(LazyInstanceHolder.kt:95)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext$suspendImpl(LazyInstanceHolder.kt:87)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext(LazyInstanceHolder.kt)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$getOrCreateInstanceBlocking$3.invokeSuspend(ComponentManagerImpl.kt:2337)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2406)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2397)
+	at com.intellij.openapi.progress.ContextKt.prepareThreadContext(context.kt:83)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.runBlockingInitialization(ComponentManagerImpl.kt:2397)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.getOrCreateInstanceBlocking(ComponentManagerImpl.kt:2336)
+	at com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:1057)
+	at com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:988)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$Companion.getInstance(GradleJvmSupportMatrix.kt:220)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleCompatibilitySupportUpdater.<init>(GradleCompatibilitySupportUpdater.kt:14)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:480)
+	at com.intellij.platform.instanceContainer.instantiation.InstantiateKt$instantiate$4.invoke(instantiate.kt:74)
+	at com.intellij.platform.instanceContainer.instantiation.InstantiateKt$instantiate$4.invoke(instantiate.kt:72)
+	at com.intellij.platform.instanceContainer.instantiation.InstantiateKt.instantiate(instantiate.kt:278)
+	at com.intellij.platform.instanceContainer.instantiation.InstantiateKt.instantiate(instantiate.kt:72)
+	at com.intellij.serviceContainer.InstantiateKt.instantiateWithContainer(instantiate.kt:19)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance$suspendImpl(ServiceInstanceInitializer.kt:26)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance(ServiceInstanceInitializer.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invokeSuspend(LazyInstanceHolder.kt:162)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:78)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:167)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invokeSuspend(LazyInstanceHolder.kt:160)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:44)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:112)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:56)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.initialize(LazyInstanceHolder.kt:145)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.access$initialize(LazyInstanceHolder.kt:13)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.tryInitialize(LazyInstanceHolder.kt:135)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstance(LazyInstanceHolder.kt:95)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext$suspendImpl(LazyInstanceHolder.kt:87)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext(LazyInstanceHolder.kt)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$getOrCreateInstanceBlocking$3.invokeSuspend(ComponentManagerImpl.kt:2337)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2406)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2397)
+	at com.intellij.openapi.progress.ContextKt.prepareThreadContext(context.kt:86)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.runBlockingInitialization(ComponentManagerImpl.kt:2397)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.getOrCreateInstanceBlocking(ComponentManagerImpl.kt:2336)
+	at com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:1057)
+	at com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:988)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleCompatibilitySupportUpdater$Companion.getInstance(GradleCompatibilitySupportUpdater.kt:26)
+	at org.jetbrains.plugins.gradle.service.project.GradleVersionUpdateStartupActivity.execute(GradleVersionUpdateStartupActivity.kt:12)
+	at com.intellij.ide.startup.impl.StartupManagerImplKt$launchActivity$1.invokeSuspend(StartupManagerImpl.kt:482)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684)
+Caused by: java.lang.IllegalArgumentException: 25
+	at com.intellij.util.lang.JavaVersion.parse(JavaVersion.java:307)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$getCompatibilityRanges$1$javaRange$1.invoke(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$getCompatibilityRanges$1$javaRange$1.invoke(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataParser$Companion.parseVersion(IdeVersionedDataParser.kt:21)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataParser$Companion.parseRange(IdeVersionedDataParser.kt:31)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.getCompatibilityRanges(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.applyState(GradleJvmSupportMatrix.kt:28)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.onStateChanged(GradleJvmSupportMatrix.kt:50)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.onStateChanged(GradleJvmSupportMatrix.kt:13)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataStorage.loadState(IdeVersionedDataStorage.kt:38)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataStorage.loadState(IdeVersionedDataStorage.kt:7)
+	at com.intellij.configurationStore.ComponentStoreImpl.doInitComponent(ComponentStoreImpl.kt:490)
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:409)
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:131)
+	... 95 more
+2025-09-12 14:05:10,344 [   2183]   INFO - #c.i.o.e.s.p.m.ExternalProjectsDataStorage - Load external projects data in 4 millis (read time: 2)
+2025-09-12 14:05:10,351 [   2190] SEVERE - #c.i.c.ComponentStoreImpl - IntelliJ IDEA 2023.3.2  Build #IC-233.13135.103
+2025-09-12 14:05:10,351 [   2190] SEVERE - #c.i.c.ComponentStoreImpl - JDK: 17.0.9; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2025-09-12 14:05:10,351 [   2190] SEVERE - #c.i.c.ComponentStoreImpl - OS: Mac OS X
+2025-09-12 14:05:10,352 [   2191] SEVERE - #c.i.c.ComponentStoreImpl - Last Action: 
+2025-09-12 14:05:10,372 [   2211]   INFO - #c.i.o.p.SmartModeScheduler - Post-startup activity executed. Current mode: 5
+2025-09-12 14:05:10,381 [   2220]   INFO - #c.i.i.s.IdeStartupScripts - 0 startup script(s) found
+2025-09-12 14:05:10,383 [   2222]   INFO - #c.i.d.PerformanceWatcherImpl - Post-startup activities under progress took 82ms; general responsiveness: ok; EDT responsiveness: ok
+2025-09-12 14:05:11,182 [   3021]   INFO - #c.i.u.i.UnindexedFilesScanner - Scanning completed for untitled1. Number of scanned files: 43478; number of files for indexing: 0 took 1174ms; general responsiveness: 0/2 sluggish, 2/2 very slow; EDT responsiveness: ok
+2025-09-12 14:05:11,183 [   3022]   INFO - #c.i.o.p.InitialVfsRefreshService - 78a4aed6: marking roots for initial VFS refresh
+2025-09-12 14:05:11,183 [   3022]   INFO - #c.i.u.i.PerProjectIndexingQueue - Finished for untitled1. No files to index with loading content.
+2025-09-12 14:05:11,186 [   3025]   INFO - #c.i.o.p.MergingQueueGuiExecutor - Task finished: UnindexedFilesScanner[untitled1]
+2025-09-12 14:05:11,186 [   3025]   INFO - #c.i.o.p.InitialVfsRefreshService - 78a4aed6: starting initial VFS refresh of 4 roots
+2025-09-12 14:05:11,206 [   3045]   INFO - #c.i.o.p.InitialVfsRefreshService - 78a4aed6: initial VFS refresh finished in 19 ms
+2025-09-12 14:05:11,549 [   3388]   INFO - #c.i.c.CompilerWorkspaceConfiguration - Available processors: 16
+2025-09-12 14:05:11,632 [   3471]   INFO - #c.i.p.m.MavenProjectDependenciesModel - Start collecting all modules
+2025-09-12 14:05:11,633 [   3472]   INFO - #c.i.p.g.GradleProjectDependenciesModel - Start collecting all modules
+2025-09-12 14:05:11,633 [   3472]   INFO - #c.i.p.g.GradleProjectDependenciesModel - Finish collecting all modules, count of found modules: 0
+2025-09-12 14:05:11,635 [   3474]   INFO - #c.i.p.m.i.ProjectDependenciesModelImpl - Count of declared packages: null, imported packages: 0
+2025-09-12 14:05:11,732 [   3571]   INFO - #c.i.p.m.i.ProjectDependenciesModelImpl - Count of declared packages: null, imported packages: 0
+2025-09-12 14:05:12,639 [   4478]   INFO - #c.i.p.m.ProjectDependenciesModuleAggregator - Supported models after update: [IntellijModuleProjectDependenciesModel, IntellijProjectDependenciesModel]
+2025-09-12 14:05:12,641 [   4480]   INFO - #c.i.p.m.i.ProjectDependenciesModelImpl - Count of declared packages: 0, imported packages: 0
+2025-09-12 14:05:15,411 [   7250]   INFO - #o.j.j.b.i.CompilerReferenceIndex - backward reference index version doesn't exist
+2025-09-12 14:05:15,417 [   7256]   INFO - #c.i.c.b.IsUpToDateCheckStartupActivity - suitable consumer is not found
+2025-09-12 14:05:15,417 [   7256]   INFO - #c.j.r.p.c.CodeWithMeCleanup - running activity to cleanup old thin clients... Root path is '/Users/Iuliia.Liutova/Library/Caches/JetBrains'. JvmStartTimeMs=1757675108008
+2025-09-12 14:05:15,418 [   7257]   INFO - #c.j.r.p.c.CodeWithMeCleanup - found 0 Code With Me client system folders to check
+2025-09-12 14:05:15,419 [   7258]   INFO - #c.j.r.p.c.CodeWithMeCleanup - found 0 Code With Me client config folders to check
+2025-09-12 14:05:15,419 [   7258]   INFO - #c.j.r.p.c.CodeWithMeCleanup - keep only [] major versions
+2025-09-12 14:05:15,419 [   7258]   INFO - #c.j.r.p.c.CodeWithMeCleanup - Starting the logs folder cleanup. Path: /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/log
+2025-09-12 14:05:15,420 [   7259]   INFO - #c.i.r.OsRegistryConfigProvider - Looking for 'versionManagementEnabled' value in [/Library/Application Support/JetBrains/JetBrainsClient/versionManagementEnabled, /Library/Application Support/JetBrains/JetBrainsClient/config.json, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/JetBrainsClient/versionManagementEnabled, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/JetBrainsClient/config.json]
+2025-09-12 14:05:15,420 [   7259]   INFO - #c.i.r.OsRegistryConfigProvider - OS provided value for 'versionManagementEnabled' is not found
+2025-09-12 14:05:15,439 [   7278]   INFO - #c.i.w.i.i.GlobalWorkspaceModel - Sync global entities with mutable entity storage
+2025-09-12 14:05:15,462 [   7301]   INFO - #c.i.w.i.i.EntitiesOrphanageImpl - Update orphanage. 0 modules added
+2025-09-12 14:05:15,463 [   7302]   INFO - #c.i.w.i.i.WorkspaceModelImpl - Project model updated to version 3 in 15 ms: Apply JPS storage (iml files)
+2025-09-12 14:05:15,463 [   7302]   INFO - #c.i.w.i.i.EntitiesOrphanageImpl - Update orphanage. 0 modules added
+2025-09-12 14:05:15,464 [   7303]   INFO - #c.i.w.i.i.j.s.DelayedProjectSynchronizer$Companion - Workspace model loaded from cache. Syncing real project state into workspace model in 65 ms. Thread[DefaultDispatcher-worker-32 @run activity#7375,5,main]
+2025-09-12 14:06:10,005 [  61844]   INFO - #c.i.u.g.s.GistStorageImpl - Cleaning old huge-gists dirs from [/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/caches/huge-gists] ...
+2025-09-12 14:06:10,006 [  61845]   INFO - #c.i.u.g.s.GistStorageImpl - Cleaning old huge-gists dirs finished
+2025-09-12 14:06:16,165 [  68004]   INFO - #c.i.w.i.i.j.s.JpsGlobalModelSynchronizerImpl - Saving global entities to files
+2025-09-12 14:06:16,327 [  68166]   WARN - #c.i.u.x.Binding - no accessors for org.jetbrains.idea.maven.project.MavenHomeType
+2025-09-12 14:06:20,272 [  72111]   INFO - #c.j.r.p.c.g.g.V.Z - Start Wire Storage check: Check Wire Buffer Size
+2025-09-12 14:06:20,272 [  72111]   INFO - #c.j.r.p.c.g.g.V.Z - Start Wire Storage check: Check Wire Expiration
+2025-09-12 14:06:20,298 [  72137]   INFO - #c.j.r.f.FollowMeManager - Unregister user (name: 'Iuliia.Liutova', clientId: Host)
+2025-09-12 14:06:20,299 [  72138]   INFO - #c.i.o.w.i.WindowManagerImpl - === Release(true) frame on closed project ===
+2025-09-12 14:06:20,322 [  72161]   INFO - #c.j.r.p.c.g.g.V.Z - Terminate Wire Storage lifetime
+2025-09-12 14:06:20,327 [  72166]   INFO - #c.i.c.b.CompilerReferenceServiceBase - backward reference index reader is closed (didn't exist)
+2025-09-12 14:06:20,329 [  72168]   INFO - #o.j.k.i.s.r.KotlinCompilerReferenceIndexStorage - KCRI storage is closed (didn't exist)
+2025-09-12 14:06:21,871 [  73710]   INFO - #c.i.w.i.i.j.s.JpsGlobalModelSynchronizerImpl - Saving global entities to files
+2025-09-12 14:06:21,895 [  73734]   INFO - #c.i.c.ComponentStoreImpl - Saving appPluginFeatureCacheService took 14 ms
+2025-09-12 14:06:21,909 [  73748]   INFO - #c.i.u.s.SvgCacheManager - SVG icon cache is closed
+2025-09-12 14:06:21,911 [  73750]   INFO - #o.j.i.BuiltInServer - web server stopped
+2025-09-12 14:06:21,911 [  73750]   INFO - #c.i.o.v.i.l.NativeFileWatcherImpl - Watcher terminated with exit code 0
+2025-09-12 14:06:21,914 [  73753]   INFO - #c.i.u.i.FileBasedIndexImpl - Index dispose started
+2025-09-12 14:06:21,925 [  73764]   INFO - #c.i.p.s.StubIndexImpl - StubIndexExtension-s were unloaded
+2025-09-12 14:06:21,925 [  73764]   INFO - #c.i.p.s.SerializationManagerImpl - Start shutting down /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/index/rep.names
+2025-09-12 14:06:21,926 [  73765]   INFO - #c.i.p.s.SerializationManagerImpl - Finished shutting down /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/index/rep.names
+2025-09-12 14:06:21,926 [  73765]   INFO - #c.i.u.i.FileBasedIndexImpl - Index dispose completed in 12ms.
+2025-09-12 14:06:21,930 [  73769]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose started
+2025-09-12 14:06:21,933 [  73772]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose completed in 3ms.
+2025-09-12 14:06:21,933 [  73772]   INFO - #c.j.r.p.c.g.g.V.Z - Terminate Wire Storage lifetime
+2025-09-12 14:06:21,933 [  73772]   INFO - #c.i.o.f.i.FileTypeDetectionService - 5 auto-detected files. Detection took 131 ms
+2025-09-12 14:06:21,937 [  73776]   INFO - #c.i.p.i.b.AppStarter - ------------------------------------------------------ IDE SHUTDOWN ------------------------------------------------------
+2025-09-12 14:09:44,231 [     11]   INFO - #c.i.i.p.PluginManager - Plugin PluginDescriptor(name=Groovy, id=org.intellij.groovy, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/Groovy, version=233.13135.103, package=org.jetbrains.plugins.groovy, isBundled=true) misses optional descriptor duplicates-groovy.xml
+2025-09-12 14:09:44,231 [     11]   INFO - #c.i.i.p.PluginManager - Using cached broken plugins file
+2025-09-12 14:09:44,231 [     11]   INFO - #c.i.p.i.b.AppStarter - ------------------------------------------------------ IDE STARTED ------------------------------------------------------
+2025-09-12 14:09:44,235 [     15]   INFO - #c.i.i.p.PluginManager - Plugin PluginDescriptor(name=Groovy, id=org.intellij.groovy, descriptorPath=plugin.xml, path=~/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/plugins/Groovy, version=233.13135.103, package=org.jetbrains.plugins.groovy, isBundled=true) misses optional descriptor duplicates-detection-groovy.xml
+2025-09-12 14:09:44,239 [     19]   INFO - #c.i.u.EnvironmentUtil - loading shell env is skipped: IDE has been launched from a terminal (SHLVL=1)
+2025-09-12 14:09:44,243 [     23]   INFO - #c.i.u.i.PageCacheUtils - File page caching params:
+2025-09-12 14:09:44,243 [     23]   INFO - #c.i.u.i.PageCacheUtils - 	DEFAULT_PAGE_SIZE: 10485760
+2025-09-12 14:09:44,244 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	Direct memory to use, max: 2126512128
+2025-09-12 14:09:44,244 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	FilePageCache: regular + lock-free (LOCK_FREE_PAGE_CACHE_ENABLED:true)
+2025-09-12 14:09:44,244 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	NEW_PAGE_CACHE_MEMORY_FRACTION: 0.20000000298023224
+2025-09-12 14:09:44,244 [     24]   INFO - #c.i.u.i.PageCacheUtils - 	Regular FilePageCache: 503316478 bytes
+2025-09-12 14:09:44,245 [     25]   INFO - #c.i.u.i.PageCacheUtils - 	New     FilePageCache: 125829122 bytes (+ up to 10.0% overflow)
+2025-09-12 14:09:44,245 [     25]   INFO - #c.i.u.i.PageCacheUtils - 	DirectByteBuffers pool: 104857600 bytes
+2025-09-12 14:09:44,246 [     26]   INFO - #c.i.p.i.b.AppStarter - JNA library (64-bit) loaded in 8 ms
+2025-09-12 14:09:44,248 [     28]   INFO - #c.i.p.i.b.AppStarter - IDE: IntelliJ IDEA (build #IC-233.13135.103, Wed, 20 Dec 2023 05:05:00 GMT)
+2025-09-12 14:09:44,248 [     28]   INFO - #c.i.p.i.b.AppStarter - OS: Mac OS X (15.6.1)
+2025-09-12 14:09:44,248 [     28]   INFO - #c.i.p.i.b.AppStarter - JRE: 17.0.9+7-b1087.9, aarch64 (JetBrains s.r.o.)
+2025-09-12 14:09:44,248 [     28]   INFO - #c.i.p.i.b.AppStarter - JVM: 17.0.9+7-b1087.9 (OpenJDK 64-Bit Server VM)
+2025-09-12 14:09:44,250 [     30]   INFO - #c.i.p.i.b.AppStarter - PID: 91761
+2025-09-12 14:09:44,251 [     31]   INFO - #c.i.p.i.b.AppStarter - JVM options: [-Daether.connector.resumeDownloads=false, -Dapple.awt.application.appearance=system, -Dapple.awt.fileDialogForDirectories=true, -Dapple.laf.useScreenMenuBar=true, -Didea.auto.reload.plugins=true, -Didea.classpath.index.enabled=false, -Didea.config.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/config, -Didea.is.internal=true, -Didea.log.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/log, -Didea.paths.selector=IdeaIC2023.3, -Didea.platform.prefix=Idea, -Didea.plugin.in.sandbox.mode=true, -Didea.plugins.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/plugins, -Didea.required.plugins.id=com.example.mcp-inspector-lite, -Didea.smooth.progress=false, -Didea.system.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system, -Didea.vendor.name=JetBrains, -Dintellij.platform.runtime.repository.path=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/modules/module-descriptors.jar, -Djava.system.class.loader=com.intellij.util.lang.PathClassLoader, -Djbr.catch.SIGABRT=true, -Djdk.attach.allowAttachSelf=true, -Djdk.http.auth.tunneling.disabledSchemes="", -Djdk.module.illegalAccess.silent=true, -Djna.boot.library.path=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/lib/jna/aarch64, -Djna.noclasspath=true, -Djna.nosys=true, -Dpty4j.preferred.native.folder=/Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIC/2023.3.2/10c6e2167c4f10b06d74fbc24823728c619c9157/ideaIC-2023.3.2/lib/pty4j, -Dsplash=true, -Dsun.io.useCanonCaches=false, -Dsun.java2d.metal=true, -XX:ReservedCodeCacheSize=512m, -XX:+UseG1GC, -XX:SoftRefLRUPolicyMSPerMB=50, -XX:CICompilerCount=2, -XX:+HeapDumpOnOutOfMemoryError, -XX:-OmitStackTraceInFastThrow, -XX:+IgnoreUnrecognizedVMOptions, -XX:CompileCommand=exclude,com/intellij/openapi/vfs/impl/FilePartNodeRoot,trieDescend, -javaagent:/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/tmp/initializeIntelliJPlugin/coroutines-javaagent.jar, --add-opens=java.base/java.io=ALL-UNNAMED, --add-opens=java.base/java.lang=ALL-UNNAMED, --add-opens=java.base/java.lang.ref=ALL-UNNAMED, --add-opens=java.base/java.lang.reflect=ALL-UNNAMED, --add-opens=java.base/java.net=ALL-UNNAMED, --add-opens=java.base/java.nio=ALL-UNNAMED, --add-opens=java.base/java.nio.charset=ALL-UNNAMED, --add-opens=java.base/java.text=ALL-UNNAMED, --add-opens=java.base/java.time=ALL-UNNAMED, --add-opens=java.base/java.util=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED, --add-opens=java.base/java.util.concurrent.locks=ALL-UNNAMED, --add-opens=java.base/jdk.internal.vm=ALL-UNNAMED, --add-opens=java.base/sun.nio.ch=ALL-UNNAMED, --add-opens=java.base/sun.nio.fs=ALL-UNNAMED, --add-opens=java.base/sun.security.ssl=ALL-UNNAMED, --add-opens=java.base/sun.security.util=ALL-UNNAMED, --add-opens=java.base/sun.net.dns=ALL-UNNAMED, --add-opens=java.desktop/com.apple.eawt=ALL-UNNAMED, --add-opens=java.desktop/com.apple.eawt.event=ALL-UNNAMED, --add-opens=java.desktop/com.apple.laf=ALL-UNNAMED, --add-opens=java.desktop/java.awt=ALL-UNNAMED, --add-opens=java.desktop/java.awt.dnd.peer=ALL-UNNAMED, --add-opens=java.desktop/java.awt.event=ALL-UNNAMED, --add-opens=java.desktop/java.awt.image=ALL-UNNAMED, --add-opens=java.desktop/java.awt.peer=ALL-UNNAMED, --add-opens=java.desktop/java.awt.font=ALL-UNNAMED, --add-opens=java.desktop/javax.swing=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.text.html=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.datatransfer=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.image=ALL-UNNAMED, --add-opens=java.desktop/sun.awt=ALL-UNNAMED, --add-opens=java.desktop/sun.font=ALL-UNNAMED, --add-opens=java.desktop/sun.java2d=ALL-UNNAMED, --add-opens=java.desktop/sun.lwawt=ALL-UNNAMED, --add-opens=java.desktop/sun.lwawt.macosx=ALL-UNNAMED, --add-opens=java.desktop/sun.swing=ALL-UNNAMED, --add-opens=java.desktop/com.sun.java.swing=ALL-UNNAMED, --add-opens=jdk.attach/sun.tools.attach=ALL-UNNAMED, --add-opens=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED, --add-opens=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED, --add-opens=jdk.jdi/com.sun.tools.jdi=ALL-UNNAMED, -Xms128m, -Xmx2048m, -Dfile.encoding=UTF-8, -Duser.country=US, -Duser.language=en, -Duser.variant, -ea]
+2025-09-12 14:09:44,252 [     32]   INFO - #c.i.p.i.b.AppStarter - args: traverseUI /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions true
+2025-09-12 14:09:44,252 [     32]   INFO - #c.i.p.i.b.AppStarter - library path: /Users/Iuliia.Liutova/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.
+2025-09-12 14:09:44,252 [     32]   INFO - #c.i.p.i.b.AppStarter - boot library path: /Users/Iuliia.Liutova/.gradle/caches/modules-2/files-2.1/com.jetbrains/jbre/jbr_jcef-17.0.9-osx-aarch64-b1087.9/extracted/jbr_jcef-17.0.9-osx-aarch64-b1087.9/Contents/Home/lib
+2025-09-12 14:09:44,259 [     39]   INFO - #c.i.p.i.b.AppStarter - locale=en_US JNU=UTF-8 file.encoding=UTF-8
+    idea.config.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/config
+    idea.system.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system
+    idea.plugins.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/plugins
+    idea.log.path=/Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/log
+2025-09-12 14:09:44,261 [     41]   INFO - #c.i.p.i.b.AppStarter - CPU cores: 16; ForkJoinPool.commonPool: java.util.concurrent.ForkJoinPool@52a62a12[Running, parallelism = 16, size = 0, active = 0, running = 0, steals = 0, tasks = 0, submissions = 0]; factory: com.intellij.concurrency.IdeaForkJoinWorkerThreadFactory@29e16283
+2025-09-12 14:09:44,270 [     50]   INFO - #c.i.i.p.PluginManager - Module intellij.sh.python is not enabled because dependency com.intellij.modules.python is not available
+Module intellij.space.gateway is not enabled because dependency com.jetbrains.gateway is not available
+Module intellij.space.php is not enabled because dependency com.jetbrains.php is not available
+Module intellij.groovy/ant is not enabled because dependency AntSupport is not available
+Module intellij.space.index is not enabled because dependency intellij.indexing.shared is not available
+Module intellij.qodana.jvm.swagger is not enabled because dependency com.intellij.swagger is not available
+Module intellij.qodana.python is not enabled because dependency Pythonid is not available
+Module intellij.qodana.php is not enabled because dependency com.jetbrains.php is not available
+Module intellij.qodana.js is not enabled because dependency JavaScript is not available
+Module intellij.qodana.go is not enabled because dependency intellij.go.coverage is not available
+Module intellij.packageChecker.python is not enabled because dependency com.intellij.modules.python is not available
+Module intellij.packageChecker.javascript is not enabled because dependency JavaScript is not available
+Module intellij.packageChecker.go is not enabled because dependency org.jetbrains.plugins.go is not available
+2025-09-12 14:09:44,277 [     57]   INFO - #c.i.i.p.PluginManager - Loaded bundled plugins: Kotlin (233.13135.103-IJ), JetBrains maven model api classes (233.13135.103), Java IDE Customization (233.13135.103), Maven server api classes (233.13135.103), NetBeans Keymap (233.13135.103), Eclipse Interoperability (233.13135.103), EditorConfig (233.13135.103), intellij.platform.ijent.impl (233.13135.103), Performance Testing (233.13135.103), Groovy (233.13135.103), Java Bytecode Decompiler (233.13135.103), Turbo Complete (233.13135.103), Task Management (233.13135.103), com.intellij.dev (233.13135.103), WebP Support (233.13135.103), IDEA CORE (233.13135.103), Gradle-Java-Analysis (233.13135.103), Settings Sync (233.13135.103), JetBrains Repository Search (233.13135.103), Grazie Lite (233.13135.103), Terminal (233.13135.103), Qodana (233.13135.103), TextMate Bundles (233.13135.103), Emoji Picker (233.13135.103), Java Stream Debugger (233.13135.103), HTML Tools (233.13135.103), Shell Script (233.13135.103), Java Internationalization (233.13135.103), com.intellij.tracing.ide (233.13135.103), Perforce Helix Core (233.13135.103), JetBrains Marketplace Licensing (233.13135.103), Machine Learning Code Completion (233.13135.103), Gradle DSL API (233.13135.103), Package Checker (233.13135.103), Gradle (233.13135.103), Gradle-Java (233.13135.103), Copyright (233.13135.103), Async Profiler for IDE Performance Testing (233.13135.103), JavaFX (233.13135.103), Markdown (233.13135.103), Code Coverage for Java (233.13135.103), YAML (233.13135.103), Code With Me (233.13135.103), Toml (233.13135.103), IntelliLang (233.13135.103), Visual Studio Keymap (233.13135.103), GitLab (233.13135.103), Gradle-Maven (233.13135.103), TestNG (233.13135.103), Java (233.13135.103), Git (233.13135.103), Subversion (233.13135.103), Properties (233.13135.103), Shared Indexes (233.13135.103), IDE Features Trainer (233.13135.103), UI Designer (233.13135.103), JUnit (233.13135.103), GitHub (233.13135.103), Space (233.13135.103), Configuration Script (233.13135.103), Eclipse Keymap (233.13135.103), Maven (233.13135.103), Mercurial (233.13135.103), Images (233.13135.103), Machine Learning in Search Everywhere (233.13135.103), Bytecode Viewer (233.13135.103), Gradle Dependency Updater Implementation (233.13135.103)
+2025-09-12 14:09:44,277 [     57]   INFO - #c.i.i.p.PluginManager - Loaded custom plugins: MCP Inspector Lite (1.0-SNAPSHOT)
+2025-09-12 14:09:44,335 [    115]   INFO - #c.i.o.v.n.p.FSRecords - VFS health-check enabled: first after 600000 ms, and each following 43200000 ms
+2025-09-12 14:09:44,357 [    137]   INFO - #c.i.a.o.PathMacrosImpl - Loaded path macros: {MAVEN_REPOSITORY=/Users/Iuliia.Liutova/.m2/repository}
+2025-09-12 14:09:44,362 [    142]   WARN - #c.i.s.ComponentManagerImpl - `preload=true` must be used only for core services (service=com.jetbrains.rdserver.statistics.BackendStatisticsManager, plugin=com.jetbrains.codeWithMe)
+2025-09-12 14:09:44,364 [    144]   INFO - #c.i.i.p.ExpiredPluginsState - Plugins to skip: []
+2025-09-12 14:09:44,372 [    152]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses 'fast' names enumerator (over mmapped file)
+2025-09-12 14:09:44,373 [    153]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses streamlined attributes storage (over mmapped file)
+2025-09-12 14:09:44,373 [    153]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses content storage over new FilePageCache
+2025-09-12 14:09:44,374 [    154]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS uses content hash storage over mmapped file
+2025-09-12 14:09:44,374 [    154]   INFO - #c.j.r.p.c.g.g.V.Z - Start Wire Storage check: Check Wire Buffer Size
+2025-09-12 14:09:44,406 [    186]   INFO - #c.i.o.v.n.p.PersistentFSLoader - VFS: impl (expected) version=846656, 92399 file records, 7 content blobs
+2025-09-12 14:09:44,415 [    195]   INFO - #c.i.o.v.n.p.FSRecordsImpl - VFS initialized: 48 ms, 0 failed attempts, 0 error(s) were recovered
+2025-09-12 14:09:44,442 [    222]   INFO - #c.i.o.v.n.p.FSRecordsImpl - VFS scanned: file-by-name index was populated
+2025-09-12 14:09:44,450 [    230]   INFO - #o.j.i.BuiltInServerManager - built-in server started, port 63343
+2025-09-12 14:09:44,471 [    251]   INFO - #c.i.u.n.s.CertificateManager - Default SSL context initialized
+2025-09-12 14:09:44,479 [    259]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.psi.search.FilenameIndex initializer requests com.intellij.ide.plugins.PluginUtil instance
+2025-09-12 14:09:44,482 [    262]   INFO - #c.i.o.v.i.l.NativeFileWatcherImpl - Native file watcher is disabled
+2025-09-12 14:09:44,506 [    286]   INFO - #c.i.i.s.p.i.SharedIndexMainZipStorage - Shared Indexes Storage is opened and empty
+2025-09-12 14:09:44,577 [    357]   INFO - #c.i.u.i.FileBasedIndexImpl - Indices to be built:FilenameIndex(v = 258)
+2025-09-12 14:09:44,579 [    359]   INFO - #c.i.u.i.FileBasedIndexImpl - Using nice flusher for indexes
+2025-09-12 14:09:44,582 [    362]   INFO - #c.i.u.i.IndexDataInitializer - Index data initialization done: 104 ms. Initialized indexes: [FilenameIndex, filetypes, SchemaTypeInheritance, html5.custom.attributes.index, DomFileIndex, Trigram.Index, editorconfig.index.name, XmlTagNames, RelaxSymbolIndex, json.file.root.values, XmlNamespaces, java.auto.module.name, IdIndex, FrameworkDetectionIndex, fileIncludes, TodoIndex, yaml.keys.name, bytecodeAnalysis, java.fun.expression, xmlProperties, java.binary.plus.expression, java.null.method.argument, java.source.module.name, org.jetbrains.kotlin.idea.versions.KotlinJsMetadataVersionIndex, JavaFxControllerClassIndex, HtmlTagIdIndex, javafx.custom.component, org.jetbrains.kotlin.idea.versions.KotlinJvmMetadataVersionIndex, javafx.id.name, org.jetbrains.kotlin.idea.vfilefinder.KotlinPartialPackageNamesIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFilePackageIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinClassFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinJavaScriptMetaFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinMetadataFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinModuleMappingIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinBuiltInsMetadataIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinShortClassNameFileIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinPackageSourcesMemberNamesIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinStdlibIndex, org.jetbrains.kotlin.idea.base.indices.names.KotlinTopLevelCallableByPackageShortNameIndex, org.jetbrains.kotlin.idea.vfilefinder.KotlinJvmModuleAnnotationsIndex, org.jetbrains.kotlin.idea.base.indices.names.KotlinTopLevelClassLikeDeclarationByPackageShortNameIndex, org.jetbrains.kotlin.idea.vfilefinder.KlibMetaFileIndex, com.intellij.uiDesigner.FormClassIndex, Stubs].
+2025-09-12 14:09:44,627 [    407]   INFO - #c.i.u.i.IndexDataInitializer - Index data initialization done: 44 ms. Initialized stub indexes: {java.class.shortname, gr.anonymous.class, java.annotations, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeShortNameIndex, jvm.static.member.type, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelClassByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyNothingFunctionShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionFqnNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeClassByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFilePartClassIndex, org.jetbrains.kotlin.idea.stubindex.KotlinSubclassObjectNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinExactPackagesIndex, org.jetbrains.kotlin.idea.stubindex.KotlinScriptFqnIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelTypeAliasFqNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyContractedFunctionShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinSuperClassIndex, org.jetbrains.kotlin.idea.stubindex.KotlinFunctionShortNameIndex, gr.method.name, jvm.static.member.name, gr.script.class, java.module.name, org.jetbrains.kotlin.idea.stubindex.KotlinProbablyNothingPropertyShortNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinMultifileClassPartIndex, markdown.header.anchor, gr.annot.members, java.unnamed.class, org.jetbrains.kotlin.idea.stubindex.KotlinTypeAliasByExpansionShortNameIndex, java.class.extlist, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelExtensionsByReceiverTypeIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelPropertyFqnNameIndex, gr.class.fqn.s, org.jetbrains.kotlin.idea.stubindex.KotlinFileFacadeFqNameIndex, gr.field.name, org.jetbrains.kotlin.idea.stubindex.KotlinAnnotationsIndex, markdown.header, java.method.name, kotlin.primeIndexKey, org.jetbrains.kotlin.idea.stubindex.KotlinOverridableInternalMembersShortNameIndex, java.class.fqn, gr.class.super, properties.index, org.jetbrains.kotlin.idea.stubindex.KotlinClassShortNameIndex, gr.annot.method.name, java.anonymous.baseref, org.jetbrains.kotlin.idea.stubindex.KotlinJvmNameAnnotationIndex, dom.elementClass, gr.script.fqn.s, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelTypeAliasByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinPropertyShortNameIndex, dom.namespaceKey, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelFunctionByPackageIndex, java.field.name, org.jetbrains.kotlin.idea.stubindex.KotlinFullClassNameIndex, org.jetbrains.kotlin.idea.stubindex.KotlinTopLevelPropertyByPackageIndex, org.jetbrains.kotlin.idea.stubindex.KotlinExtensionsInObjectsByReceiverTypeIndex, java.method.parameter.types, org.jetbrains.kotlin.idea.stubindex.KotlinInnerTypeAliasClassIdIndex}.
+2025-09-12 14:09:44,644 [    424]   INFO - #c.i.i.p.DisabledPluginsState - Plugins to enable: [com.jetbrains.codeWithMe]
+2025-09-12 14:09:44,650 [    430]   INFO - #c.i.i.p.DisabledPluginsState - Plugins to enable: [com.jetbrains.codeWithMe]
+2025-09-12 14:09:44,652 [    432] SEVERE - #c.i.o.a.i.CoroutineExceptionHandlerImpl - Unhandled exception in [CoroutineId(116), "coroutine#116":StandaloneCoroutine{Cancelling}@233d775a, Dispatchers.Default]
+java.util.ConcurrentModificationException
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
+	at java.base/jdk.internal.reflect.GeneratedMethodAccessor11.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.V.L.N.g.g_.V(g_.java:191)
+	at com.V.L.N.g.g_.V(g_.java:135)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at com.V.L.N.G.invokeSuspend(G.java:18)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697)
+	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684)
+2025-09-12 14:09:44,654 [    434] SEVERE - #c.i.o.a.i.CoroutineExceptionHandlerImpl - IntelliJ IDEA 2023.3.2  Build #IC-233.13135.103
+2025-09-12 14:09:44,654 [    434] SEVERE - #c.i.o.a.i.CoroutineExceptionHandlerImpl - JDK: 17.0.9; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2025-09-12 14:09:44,654 [    434] SEVERE - #c.i.o.a.i.CoroutineExceptionHandlerImpl - OS: Mac OS X
+2025-09-12 14:09:44,655 [    435] SEVERE - #c.i.o.a.i.CoroutineExceptionHandlerImpl - Last Action: 
+2025-09-12 14:09:44,663 [    443]   INFO - STDERR - Exception in thread "DefaultDispatcher-worker-8 @coroutine#116" java.util.ConcurrentModificationException
+2025-09-12 14:09:44,663 [    443]   INFO - STDERR - 	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/jdk.internal.reflect.GeneratedMethodAccessor11.invoke(Unknown Source)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at com.V.L.N.g.g_.V(g_.java:191)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at com.V.L.N.g.g_.V(g_.java:135)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2025-09-12 14:09:44,664 [    444]   INFO - STDERR - 	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at com.V.L.N.G.invokeSuspend(G.java:18)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlinx.coroutines.scheduling.CoroutineScheduler.runSafely(CoroutineScheduler.kt:584)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.executeTask(CoroutineScheduler.kt:793)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.runWorker(CoroutineScheduler.kt:697)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	at kotlinx.coroutines.scheduling.CoroutineScheduler$Worker.run(CoroutineScheduler.kt:684)
+2025-09-12 14:09:44,665 [    445]   INFO - STDERR - 	Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [CoroutineId(116), "coroutine#116":StandaloneCoroutine{Cancelling}@233d775a, Dispatchers.Default]
+2025-09-12 14:09:44,714 [    494]   INFO - #c.i.i.p.DisabledPluginsState - Plugins to enable: [com.jetbrains.codeWithMe]
+2025-09-12 14:09:44,893 [    673]   WARN - #c.i.s.ComponentManagerImpl - org.zmlx.hg4idea.provider.HgChangeProvider initializer requests com.intellij.openapi.vcs.FileStatusFactory instance
+2025-09-12 14:09:45,424 [   1204]   INFO - #c.i.i.p.n.PluginsGroupComponentWithProgress - Marketplace tab: loading stopped
+2025-09-12 14:09:45,430 [   1210]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Staff Picks' group load started
+2025-09-12 14:09:45,689 [   1469]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Staff Picks' group load finished
+2025-09-12 14:09:45,690 [   1470]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'New and Updated' group load started
+2025-09-12 14:09:45,877 [   1657]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'New and Updated' group load finished
+2025-09-12 14:09:45,877 [   1657]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Top Downloads' group load started
+2025-09-12 14:09:45,960 [   1740]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.codeInsight.daemon.LineMarkerProviders initializer requests com.intellij.codeInsight.daemon.LineMarkerProviders instance
+2025-09-12 14:09:46,056 [   1836]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Top Downloads' group load finished
+2025-09-12 14:09:46,056 [   1836]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Top Rated' group load started
+2025-09-12 14:09:46,238 [   2018]   INFO - #c.i.i.p.PluginManagerConfigurable - Marketplace tab: 'Top Rated' group load finished
+2025-09-12 14:09:46,351 [   2131]   INFO - #c.i.o.a.i.NonBlockingReadActionImpl - OTel monitoring for NonBlockingReadAction is enabled
+2025-09-12 14:09:46,730 [   2510]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.psi.LanguageSubstitutors initializer requests com.intellij.psi.LanguageSubstitutors instance
+2025-09-12 14:09:47,704 [   3484]   INFO - #c.i.r.OsRegistryConfigProvider - Looking for 'lobbyServerUrl' value in [/Library/Application Support/JetBrains/CodeWithMe/lobbyServerUrl, /Library/Application Support/JetBrains/CodeWithMe/config.json, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/CodeWithMe/lobbyServerUrl, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/CodeWithMe/config.json]
+2025-09-12 14:09:47,705 [   3485]   INFO - #c.i.r.OsRegistryConfigProvider - OS provided value for 'lobbyServerUrl' is not found
+2025-09-12 14:09:47,705 [   3485]   INFO - #c.j.r.p.c.u.CodeWithMeSystemSettings - Setting default value='https://code-with-me.jetbrains.com'
+2025-09-12 14:09:47,713 [   3493]   INFO - #c.i.r.OsRegistryConfigProvider - Looking for 'lobbyServerUrl' value in [/Library/Application Support/JetBrains/CodeWithMe/lobbyServerUrl, /Library/Application Support/JetBrains/CodeWithMe/config.json, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/CodeWithMe/lobbyServerUrl, /Users/Iuliia.Liutova/Library/Application Support/JetBrains/CodeWithMe/config.json]
+2025-09-12 14:09:47,713 [   3493]   INFO - #c.i.r.OsRegistryConfigProvider - OS provided value for 'lobbyServerUrl' is not found
+2025-09-12 14:09:47,713 [   3493]   INFO - #c.j.r.p.c.u.CodeWithMeSystemSettings - Setting default value='https://code-with-me.jetbrains.com'
+2025-09-12 14:09:47,836 [   3616]   WARN - #c.i.s.ComponentManagerImpl - com.intellij.psi.codeStyle.CodeStyleSettingsCustomizable initializer requests com.intellij.util.LocaleSensitiveApplicationCacheService instance
+2025-09-12 14:09:48,508 [   4288]   WARN - #c.i.u.j.JBCefApp - JCEF is manually disabled in headless env via 'ide.browser.jcef.headless.enabled=false'
+2025-09-12 14:09:48,512 [   4292]   INFO - #org.intellij.plugins.markdown.settings.MarkdownSettings - Migrating Markdown settings
+2025-09-12 14:09:48,558 [   4338] SEVERE - #c.i.c.ComponentStoreImpl - Cannot init component state (componentName=GradleJvmSupportMatrix, componentClass=GradleJvmSupportMatrix) [Plugin: com.intellij.gradle]
+com.intellij.diagnostic.PluginException: Cannot init component state (componentName=GradleJvmSupportMatrix, componentClass=GradleJvmSupportMatrix) [Plugin: com.intellij.gradle]
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:174)
+	at com.intellij.configurationStore.ComponentStoreWithExtraComponents.initComponent(ComponentStoreWithExtraComponents.kt:48)
+	at com.intellij.serviceContainer.ComponentManagerImpl.initializeComponent$intellij_platform_serviceContainer(ComponentManagerImpl.kt:931)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance$suspendImpl(ServiceInstanceInitializer.kt:41)
+	at com.intellij.serviceContainer.ServiceInstanceInitializer.createInstance(ServiceInstanceInitializer.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invokeSuspend(LazyInstanceHolder.kt:162)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startUndispatchedOrReturn(Undispatched.kt:78)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.withContext(Builders.common.kt:167)
+	at kotlinx.coroutines.BuildersKt.withContext(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invokeSuspend(LazyInstanceHolder.kt:160)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder$initialize$1.invoke(LazyInstanceHolder.kt)
+	at kotlinx.coroutines.intrinsics.UndispatchedKt.startCoroutineUndispatched(Undispatched.kt:44)
+	at kotlinx.coroutines.CoroutineStart.invoke(CoroutineStart.kt:112)
+	at kotlinx.coroutines.AbstractCoroutine.start(AbstractCoroutine.kt:126)
+	at kotlinx.coroutines.BuildersKt__Builders_commonKt.launch(Builders.common.kt:56)
+	at kotlinx.coroutines.BuildersKt.launch(Unknown Source)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.initialize(LazyInstanceHolder.kt:145)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.access$initialize(LazyInstanceHolder.kt:13)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.tryInitialize(LazyInstanceHolder.kt:135)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstance(LazyInstanceHolder.kt:95)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext$suspendImpl(LazyInstanceHolder.kt:87)
+	at com.intellij.platform.instanceContainer.internal.LazyInstanceHolder.getInstanceInCallerContext(LazyInstanceHolder.kt)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$getOrCreateInstanceBlocking$3.invokeSuspend(ComponentManagerImpl.kt:2337)
+	at kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith(ContinuationImpl.kt:33)
+	at kotlinx.coroutines.DispatchedTask.run(DispatchedTask.kt:108)
+	at kotlinx.coroutines.EventLoopImplBase.processNextEvent(EventLoop.common.kt:280)
+	at kotlinx.coroutines.BlockingCoroutine.joinBlocking(Builders.kt:85)
+	at kotlinx.coroutines.BuildersKt__BuildersKt.runBlocking(Builders.kt:59)
+	at kotlinx.coroutines.BuildersKt.runBlocking(Unknown Source)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2406)
+	at com.intellij.serviceContainer.ComponentManagerImplKt$runBlockingInitialization$1.invoke(ComponentManagerImpl.kt:2397)
+	at com.intellij.openapi.progress.ContextKt.prepareThreadContext(context.kt:86)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.runBlockingInitialization(ComponentManagerImpl.kt:2397)
+	at com.intellij.serviceContainer.ComponentManagerImplKt.getOrCreateInstanceBlocking(ComponentManagerImpl.kt:2336)
+	at com.intellij.serviceContainer.ComponentManagerImpl.doGetService(ComponentManagerImpl.kt:1057)
+	at com.intellij.serviceContainer.ComponentManagerImpl.getService(ComponentManagerImpl.kt:988)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$Companion.getInstance(GradleJvmSupportMatrix.kt:220)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$Companion.getAllSupportedGradleVersionsByIdea(GradleJvmSupportMatrix.kt:192)
+	at org.jetbrains.plugins.gradle.service.settings.IdeaGradleDefaultProjectSettingsControl.setCurrentDefaultProjectSettings(IdeaGradleDefaultProjectSettingsControl.kt:122)
+	at org.jetbrains.plugins.gradle.service.settings.IdeaGradleDefaultProjectSettingsControl.<init>(IdeaGradleDefaultProjectSettingsControl.kt:55)
+	at org.jetbrains.plugins.gradle.service.settings.IdeaGradleSystemSettingsControlBuilder.<init>(IdeaGradleSystemSettingsControlBuilder.java:85)
+	at org.jetbrains.plugins.gradle.service.settings.JavaGradleSettingsControlProvider.getSystemSettingsControlBuilder(JavaGradleSettingsControlProvider.java:20)
+	at org.jetbrains.plugins.gradle.service.settings.GradleSystemSettingsControl.<init>(GradleSystemSettingsControl.java:34)
+	at org.jetbrains.plugins.gradle.service.settings.GradleConfigurable.createSystemSettingsControl(GradleConfigurable.java:34)
+	at org.jetbrains.plugins.gradle.service.settings.GradleConfigurable.createSystemSettingsControl(GradleConfigurable.java:15)
+	at com.intellij.openapi.externalSystem.service.settings.AbstractExternalSystemConfigurable.prepareSystemSettings(AbstractExternalSystemConfigurable.java:188)
+	at com.intellij.openapi.externalSystem.service.settings.AbstractExternalSystemConfigurable.createComponent(AbstractExternalSystemConfigurable.java:82)
+	at com.intellij.openapi.options.ex.ConfigurableWrapper.createComponent(ConfigurableWrapper.java:181)
+	at com.intellij.ide.ui.search.SearchUtil.processConfigurables(SearchUtil.java:72)
+	at com.intellij.ide.ui.search.TraverseUIStarter.lambda$startup$0(TraverseUIStarter.java:116)
+	at java.desktop/java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:308)
+	at java.desktop/java.awt.EventQueue.dispatchEventImpl(EventQueue.java:792)
+	at java.desktop/java.awt.EventQueue$3.run(EventQueue.java:739)
+	at java.desktop/java.awt.EventQueue$3.run(EventQueue.java:733)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:399)
+	at java.base/java.security.ProtectionDomain$JavaSecurityAccessImpl.doIntersectionPrivilege(ProtectionDomain.java:86)
+	at java.desktop/java.awt.EventQueue.dispatchEvent(EventQueue.java:761)
+	at com.intellij.ide.IdeEventQueue.defaultDispatchEvent(IdeEventQueue.kt:695)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent$lambda$12(IdeEventQueue.kt:589)
+	at com.intellij.openapi.application.impl.RwLockHolder.runWithoutImplicitRead(RwLockHolder.kt:44)
+	at com.intellij.ide.IdeEventQueue._dispatchEvent(IdeEventQueue.kt:589)
+	at com.intellij.ide.IdeEventQueue.access$_dispatchEvent(IdeEventQueue.kt:72)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1.invoke(IdeEventQueue.kt:351)
+	at com.intellij.ide.IdeEventQueue$dispatchEvent$processEventRunnable$1$1.invoke(IdeEventQueue.kt:349)
+	at com.intellij.ide.IdeEventQueueKt.performActivity$lambda$1(IdeEventQueue.kt:1014)
+	at com.intellij.openapi.application.TransactionGuardImpl.performActivity(TransactionGuardImpl.java:106)
+	at com.intellij.ide.IdeEventQueueKt.performActivity(IdeEventQueue.kt:1014)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent$lambda$7(IdeEventQueue.kt:349)
+	at com.intellij.openapi.application.impl.ApplicationImpl.runIntendedWriteActionOnCurrentThread(ApplicationImpl.java:848)
+	at com.intellij.ide.IdeEventQueue.dispatchEvent(IdeEventQueue.kt:391)
+	at java.desktop/java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:207)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:128)
+	at java.desktop/java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:117)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:113)
+	at java.desktop/java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:105)
+	at java.desktop/java.awt.EventDispatchThread.run(EventDispatchThread.java:92)
+Caused by: java.lang.IllegalArgumentException: 25
+	at com.intellij.util.lang.JavaVersion.parse(JavaVersion.java:307)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$getCompatibilityRanges$1$javaRange$1.invoke(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix$getCompatibilityRanges$1$javaRange$1.invoke(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataParser$Companion.parseVersion(IdeVersionedDataParser.kt:21)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataParser$Companion.parseRange(IdeVersionedDataParser.kt:31)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.getCompatibilityRanges(GradleJvmSupportMatrix.kt:44)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.applyState(GradleJvmSupportMatrix.kt:28)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.onStateChanged(GradleJvmSupportMatrix.kt:50)
+	at org.jetbrains.plugins.gradle.jvmcompat.GradleJvmSupportMatrix.onStateChanged(GradleJvmSupportMatrix.kt:13)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataStorage.loadState(IdeVersionedDataStorage.kt:38)
+	at org.jetbrains.plugins.gradle.jvmcompat.IdeVersionedDataStorage.loadState(IdeVersionedDataStorage.kt:7)
+	at com.intellij.configurationStore.ComponentStoreImpl.doInitComponent(ComponentStoreImpl.kt:490)
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:409)
+	at com.intellij.configurationStore.ComponentStoreImpl.initComponent(ComponentStoreImpl.kt:131)
+	... 78 more
+2025-09-12 14:09:48,560 [   4340] SEVERE - #c.i.c.ComponentStoreImpl - IntelliJ IDEA 2023.3.2  Build #IC-233.13135.103
+2025-09-12 14:09:48,560 [   4340] SEVERE - #c.i.c.ComponentStoreImpl - JDK: 17.0.9; VM: OpenJDK 64-Bit Server VM; Vendor: JetBrains s.r.o.
+2025-09-12 14:09:48,560 [   4340] SEVERE - #c.i.c.ComponentStoreImpl - OS: Mac OS X
+2025-09-12 14:09:48,560 [   4340] SEVERE - #c.i.c.ComponentStoreImpl - Last Action: 
+2025-09-12 14:09:48,926 [   4706]   INFO - STDOUT - Found 205 configurables
+2025-09-12 14:09:48,963 [   4743]   INFO - #c.i.i.p.n.PluginsGroupComponentWithProgress - Marketplace tab: loading stopped
+2025-09-12 14:09:49,613 [   5393]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/textmate.jar/search/textmate.jar.searchableOptions.xml
+2025-09-12 14:09:49,616 [   5396]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/markdown.jar/search/markdown.jar.searchableOptions.xml
+2025-09-12 14:09:49,616 [   5396]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/IntelliLang.jar/search/IntelliLang.jar.searchableOptions.xml
+2025-09-12 14:09:49,616 [   5396]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/eclipse.jar/search/eclipse.jar.searchableOptions.xml
+2025-09-12 14:09:49,617 [   5397]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/tasks-core.jar/search/tasks-core.jar.searchableOptions.xml
+2025-09-12 14:09:49,617 [   5397]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/sh.jar/search/sh.jar.searchableOptions.xml
+2025-09-12 14:09:49,617 [   5397]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-coverage.jar/search/java-coverage.jar.searchableOptions.xml
+2025-09-12 14:09:49,618 [   5398]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-impl.jar!/search/java-impl.jar!.searchableOptions.xml
+2025-09-12 14:09:49,618 [   5398]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/javaFX.jar!/search/javaFX.jar!.searchableOptions.xml
+2025-09-12 14:09:49,618 [   5398]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/searchEverywhereMl.jar/search/searchEverywhereMl.jar.searchableOptions.xml
+2025-09-12 14:09:49,618 [   5398]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/idea-junit.jar!/search/idea-junit.jar!.searchableOptions.xml
+2025-09-12 14:09:49,619 [   5399]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/uiDesigner.jar/search/uiDesigner.jar.searchableOptions.xml
+2025-09-12 14:09:49,619 [   5399]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/javaFX.jar/search/javaFX.jar.searchableOptions.xml
+2025-09-12 14:09:49,620 [   5400]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/dev.jar/search/dev.jar.searchableOptions.xml
+2025-09-12 14:09:49,620 [   5400]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/space.jar/search/space.jar.searchableOptions.xml
+2025-09-12 14:09:49,620 [   5400]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/cwm-plugin-terminal.jar/search/cwm-plugin-terminal.jar.searchableOptions.xml
+2025-09-12 14:09:49,621 [   5401]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-svn.jar/search/vcs-svn.jar.searchableOptions.xml
+2025-09-12 14:09:49,621 [   5401]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/byteCodeViewer.jar/search/byteCodeViewer.jar.searchableOptions.xml
+2025-09-12 14:09:49,622 [   5402]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/testng-plugin.jar!/search/testng-plugin.jar!.searchableOptions.xml
+2025-09-12 14:09:49,622 [   5402]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/marketplace.jar/search/marketplace.jar.searchableOptions.xml
+2025-09-12 14:09:49,624 [   5404]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/maven.jar/search/maven.jar.searchableOptions.xml
+2025-09-12 14:09:49,624 [   5404]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/copyright.jar/search/copyright.jar.searchableOptions.xml
+2025-09-12 14:09:49,624 [   5404]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/maven.jar!/search/maven.jar!.searchableOptions.xml
+2025-09-12 14:09:49,626 [   5406]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/Groovy.jar/search/Groovy.jar.searchableOptions.xml
+2025-09-12 14:09:49,626 [   5406]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/terminal.jar/search/terminal.jar.searchableOptions.xml
+2025-09-12 14:09:49,627 [   5407]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/gradle-java.jar/search/gradle-java.jar.searchableOptions.xml
+2025-09-12 14:09:49,627 [   5407]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/performanceTesting-async.jar/search/performanceTesting-async.jar.searchableOptions.xml
+2025-09-12 14:09:49,627 [   5407]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/properties.jar/search/properties.jar.searchableOptions.xml
+2025-09-12 14:09:49,630 [   5410]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-impl.jar/search/java-impl.jar.searchableOptions.xml
+2025-09-12 14:09:49,638 [   5418]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/app-client.jar/search/app-client.jar.searchableOptions.xml
+2025-09-12 14:09:49,638 [   5418]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/html-tools.jar/search/html-tools.jar.searchableOptions.xml
+2025-09-12 14:09:49,639 [   5419]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-perforce.jar/search/vcs-perforce.jar.searchableOptions.xml
+2025-09-12 14:09:49,639 [   5419]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-debugger-streams.jar/search/java-debugger-streams.jar.searchableOptions.xml
+2025-09-12 14:09:49,639 [   5419]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/gradle.jar/search/gradle.jar.searchableOptions.xml
+2025-09-12 14:09:49,639 [   5419]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/testng-plugin.jar/search/testng-plugin.jar.searchableOptions.xml
+2025-09-12 14:09:49,639 [   5419]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/grazie.jar/search/grazie.jar.searchableOptions.xml
+2025-09-12 14:09:49,640 [   5420]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/qodana.jar/search/qodana.jar.searchableOptions.xml
+2025-09-12 14:09:49,641 [   5421]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/app.jar/search/app.jar.searchableOptions.xml
+2025-09-12 14:09:49,641 [   5421]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/completionMlRanking.jar/search/completionMlRanking.jar.searchableOptions.xml
+2025-09-12 14:09:49,641 [   5421]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-decompiler.jar/search/java-decompiler.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-hg.jar/search/vcs-hg.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/performanceTesting.jar/search/performanceTesting.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-gitlab.jar/search/vcs-gitlab.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/cwm-common.jar/search/cwm-common.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/java-i18n.jar/search/java-i18n.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/Groovy.jar!/search/Groovy.jar!.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/emojipicker.jar/search/emojipicker.jar.searchableOptions.xml
+2025-09-12 14:09:49,642 [   5422]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/toml.jar/search/toml.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/platform-ijent-impl.jar/search/platform-ijent-impl.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/idea-junit.jar/search/idea-junit.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/yaml.jar/search/yaml.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/packageChecker.jar/search/packageChecker.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/platform-tracing-ide.jar/search/platform-tracing-ide.jar.searchableOptions.xml
+2025-09-12 14:09:49,643 [   5423]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/editorconfig.jar/search/editorconfig.jar.searchableOptions.xml
+2025-09-12 14:09:49,644 [   5424]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-github.jar/search/vcs-github.jar.searchableOptions.xml
+2025-09-12 14:09:49,644 [   5424]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/platform-langInjection.jar/search/platform-langInjection.jar.searchableOptions.xml
+2025-09-12 14:09:49,644 [   5424]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/platform-images.jar/search/platform-images.jar.searchableOptions.xml
+2025-09-12 14:09:49,645 [   5425]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/vcs-git.jar/search/vcs-git.jar.searchableOptions.xml
+2025-09-12 14:09:49,646 [   5426]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/kotlin-plugin.jar/search/kotlin-plugin.jar.searchableOptions.xml
+2025-09-12 14:09:49,647 [   5427]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/modules.jar/search/modules.jar.searchableOptions.xml
+2025-09-12 14:09:49,647 [   5427]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/indexing-shared.jar/search/indexing-shared.jar.searchableOptions.xml
+2025-09-12 14:09:49,647 [   5427]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/featuresTrainer.jar/search/featuresTrainer.jar.searchableOptions.xml
+2025-09-12 14:09:49,647 [   5427]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/kotlin-plugin.jar!/search/kotlin-plugin.jar!.searchableOptions.xml
+2025-09-12 14:09:49,648 [   5428]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/cwm-host.jar/search/cwm-host.jar.searchableOptions.xml
+2025-09-12 14:09:49,648 [   5428]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/gradle-java-maven.jar/search/gradle-java-maven.jar.searchableOptions.xml
+2025-09-12 14:09:49,648 [   5428]   INFO - STDOUT - Output written to /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/searchableOptions/settingsSync.jar/search/settingsSync.jar.searchableOptions.xml
+2025-09-12 14:09:49,648 [   5428]   INFO - STDOUT - Searchable options index builder completed
+2025-09-12 14:09:49,648 [   5428]   INFO - #c.i.u.i.FileBasedIndexImpl - Index dispose started
+2025-09-12 14:09:49,662 [   5442]   INFO - #c.i.p.s.StubIndexImpl - StubIndexExtension-s were unloaded
+2025-09-12 14:09:49,663 [   5443]   INFO - #c.i.p.s.SerializationManagerImpl - Start shutting down /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/index/rep.names
+2025-09-12 14:09:49,663 [   5443]   INFO - #c.i.p.s.SerializationManagerImpl - Finished shutting down /Users/Iuliia.Liutova/IdeaProjects/mcp-plugin/build/idea-sandbox/system/index/rep.names
+2025-09-12 14:09:49,663 [   5443]   INFO - #c.i.u.i.FileBasedIndexImpl - Index dispose completed in 15ms.
+2025-09-12 14:09:49,667 [   5447]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose started
+2025-09-12 14:09:49,670 [   5450]   INFO - #c.i.o.v.n.p.PersistentFSImpl - VFS dispose completed in 3ms.
+2025-09-12 14:09:49,677 [   5457]   INFO - #c.i.p.i.b.AppStarter - ------------------------------------------------------ IDE SHUTDOWN ------------------------------------------------------
