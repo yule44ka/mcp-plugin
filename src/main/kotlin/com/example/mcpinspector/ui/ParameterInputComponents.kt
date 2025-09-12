@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 fun ParameterInputForm(
     fields: List<ParameterField>,
     parameterManager: ParameterManager,
+    validationErrors: Map<String, String> = emptyMap(),
     modifier: Modifier = Modifier
 ) {
     // Create local state for each field to ensure proper recomposition
@@ -45,7 +46,8 @@ fun ParameterInputForm(
                 onValueChange = { newValue ->
                     fieldState.value = newValue
                     parameterManager.setValue(field.name, newValue)
-                }
+                },
+                validationError = validationErrors[field.name]
             )
         }
     }
@@ -55,7 +57,8 @@ fun ParameterInputForm(
 fun ParameterFieldInput(
     field: ParameterField,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    validationError: String? = null
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -79,20 +82,6 @@ fun ParameterFieldInput(
                 )
             }
             
-            // Description tooltip
-            field.description?.let { _ ->
-                IconButton(
-                    onClick = { /* Could show tooltip or dialog */ },
-                    modifier = Modifier.size(20.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Info,
-                        contentDescription = "Info",
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
         }
         
         // Description text
@@ -122,7 +111,9 @@ fun ParameterFieldInput(
                             Text(field.defaultValue ?: "Enter ${field.name}") 
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        singleLine = true,
+                        isError = validationError != null,
+                        supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                     )
                 }
             }
@@ -136,7 +127,9 @@ fun ParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
             
@@ -157,7 +150,9 @@ fun ParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
-                    maxLines = 4
+                    maxLines = 4,
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
             
@@ -170,7 +165,9 @@ fun ParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 3,
-                    maxLines = 6
+                    maxLines = 6,
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
         }

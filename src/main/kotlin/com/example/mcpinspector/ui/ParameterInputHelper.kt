@@ -113,6 +113,103 @@ class SchemaParser {
 }
 
 /**
+ * Validation result for parameter fields
+ */
+data class ValidationResult(
+    val isValid: Boolean,
+    val errors: List<ValidationError> = emptyList()
+)
+
+/**
+ * Validation error for a specific field
+ */
+data class ValidationError(
+    val fieldName: String,
+    val message: String
+)
+
+/**
+ * Validates parameter fields and their values
+ */
+class ParameterValidator {
+    
+    /**
+     * Validates all required fields are filled
+     */
+    fun validateRequiredFields(
+        fields: List<ParameterField>,
+        values: Map<String, String>
+    ): ValidationResult {
+        val errors = mutableListOf<ValidationError>()
+        
+        fields.filter { it.required }.forEach { field ->
+            val value = values[field.name]
+            if (value.isNullOrBlank()) {
+                errors.add(
+                    ValidationError(
+                        fieldName = field.name,
+                        message = "Field '${field.name}' is required"
+                    )
+                )
+            } else {
+                // Additional type-specific validation
+                val typeValidationError = validateFieldType(field, value)
+                if (typeValidationError != null) {
+                    errors.add(typeValidationError)
+                }
+            }
+        }
+        
+        return ValidationResult(
+            isValid = errors.isEmpty(),
+            errors = errors
+        )
+    }
+    
+    /**
+     * Validates field value matches expected type
+     */
+    private fun validateFieldType(field: ParameterField, value: String): ValidationError? {
+        return try {
+            when (field.type) {
+                ParameterType.NUMBER -> {
+                    value.toDoubleOrNull() ?: throw NumberFormatException()
+                    null
+                }
+                ParameterType.INTEGER -> {
+                    value.toIntOrNull() ?: throw NumberFormatException()
+                    null
+                }
+                ParameterType.BOOLEAN -> {
+                    if (value.lowercase() !in listOf("true", "false")) {
+                        throw IllegalArgumentException()
+                    }
+                    null
+                }
+                ParameterType.OBJECT -> {
+                    if (value.isNotBlank()) {
+                        Json.parseToJsonElement(value)
+                    }
+                    null
+                }
+                else -> null // STRING and ARRAY don't need special validation
+            }
+        } catch (e: Exception) {
+            ValidationError(
+                fieldName = field.name,
+                message = when (field.type) {
+                    ParameterType.NUMBER -> "Field '${field.name}' must be a number"
+                    ParameterType.INTEGER -> "Field '${field.name}' must be an integer"
+                    ParameterType.BOOLEAN -> "Field '${field.name}' must be true or false"
+                    ParameterType.OBJECT -> "Field '${field.name}' must contain valid JSON"
+                    else -> "Invalid value for field '${field.name}'"
+                }
+            )
+        }
+    }
+}
+
+/**
  * Manages parameter values and converts them to JSON
  */
 class ParameterManager {

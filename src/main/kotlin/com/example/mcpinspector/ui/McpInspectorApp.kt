@@ -42,11 +42,15 @@ fun McpInspectorApp() {
     // Parameter management
     val schemaParser = remember { SchemaParser() }
     val parameterManager = remember { ParameterManager() }
+    val parameterValidator = remember { ParameterValidator() }
     var parameterFields by remember { mutableStateOf<List<ParameterField>>(emptyList()) }
     var useSimpleInput by remember { mutableStateOf(true) }
     
     // State map for parameter values to ensure proper recomposition
     val parameterValues = remember { mutableStateMapOf<String, String>() }
+    
+    // Validation state
+    var validationErrors by remember { mutableStateOf<Map<String, String>>(emptyMap()) }
     
     // Update parameter fields when tool changes
     LaunchedEffect(selectedTool) {
@@ -54,6 +58,7 @@ fun McpInspectorApp() {
             parameterFields = schemaParser.parseSchema(tool.inputSchema)
             parameterManager.clear()
             parameterValues.clear()
+            validationErrors = emptyMap()
             useSimpleInput = schemaParser.requiresParameters(tool.inputSchema)
         }
     }
@@ -191,11 +196,35 @@ fun McpInspectorApp() {
                     useSimpleInput = useSimpleInput,
                     onToggleInputMode = { useSimpleInput = !useSimpleInput },
                     schemaParser = schemaParser,
+                    validationErrors = validationErrors,
+                    onClearValidationError = { fieldName ->
+                        validationErrors = validationErrors - fieldName
+                    },
                     onInvokeTool = {
                         selectedTool?.let { tool ->
                             scope.launch {
                                 try {
                                     val requiresParams = schemaParser.requiresParameters(tool.inputSchema)
+                                    
+                                    // Validate parameters if using simple input mode
+                                    if (useSimpleInput && parameterFields.isNotEmpty()) {
+                                        val validation = parameterValidator.validateRequiredFields(
+                                            parameterFields, 
+                                            parameterValues
+                                        )
+                                        
+                                        if (!validation.isValid) {
+                                            // Update validation errors and don't proceed
+                                            validationErrors = validation.errors.associate { 
+                                                it.fieldName to it.message 
+                                            }
+                                            return@launch
+                                        } else {
+                                            // Clear validation errors if validation passes
+                                            validationErrors = emptyMap()
+                                        }
+                                    }
+                                    
                                     val params = if (requiresParams) {
                                         if (useSimpleInput && parameterFields.isNotEmpty()) {
                                             convertParametersToJson(parameterFields, parameterValues)
@@ -517,7 +546,9 @@ fun DetailsAndResultsPane(
     useSimpleInput: Boolean,
     onToggleInputMode: () -> Unit,
     onInvokeTool: () -> Unit,
-    schemaParser: SchemaParser
+    schemaParser: SchemaParser,
+    validationErrors: Map<String, String> = emptyMap(),
+    onClearValidationError: (String) -> Unit = {}
 ) {
     Column(
         modifier = Modifier.padding(16.dp),
@@ -601,6 +632,13 @@ fun DetailsAndResultsPane(
                         SimpleParameterInputForm(
                             fields = parameterFields,
                             parameterValues = parameterValues,
+                            validationErrors = validationErrors,
+                            onValueChange = { fieldName, _ ->
+                                // Clear validation error for this field when user starts typing
+                                if (validationErrors.containsKey(fieldName)) {
+                                    onClearValidationError(fieldName)
+                                }
+                            },
                             modifier = Modifier.padding(12.dp)
                         )
                     }
@@ -663,14 +701,55 @@ fun DetailsAndResultsPane(
                 }
             }
             
+            // Show validation summary if there are errors
+            if (validationErrors.isNotEmpty()) {
+                Card(
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.errorContainer
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(12.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(
+                                Icons.Default.Warning,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                            Text(
+                                text = "Please fix errors to continue:",
+                                style = MaterialTheme.typography.labelMedium,
+                                fontWeight = FontWeight.Medium,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+                        validationErrors.forEach { (_, message) ->
+                            Text(
+                                text = "• $message",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        }
+                    }
+                }
+            }
+            
             // Invoke button
+            val hasValidationErrors = validationErrors.isNotEmpty()
             Button(
                 onClick = onInvokeTool,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                enabled = !hasValidationErrors
             ) {
                 Icon(Icons.Default.PlayArrow, contentDescription = null)
                 Spacer(Modifier.width(8.dp))
-                Text("Invoke Tool")
+                Text(if (hasValidationErrors) "Fill required fields" else "Invoke Tool")
             }
             
             // Results

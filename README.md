@@ -2,6 +2,22 @@
 
 A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
 
+## 🚀 Quick Start
+
+### Development Setup (Separate Terminals)
+```bash
+# Terminal 1: Start MCP server with auto-reload
+./dev-start.sh server
+
+# Terminal 2: Start IntelliJ plugin
+./dev-start.sh inspector
+```
+
+### Using the Plugin
+1. Open **View → Tool Windows → MCP Inspector Lite** in the launched IDE
+2. Connect to `http://localhost:3000`
+3. Try the available tools (echo, calculate, server_info, etc.)
+
 ## Features
 
 - **Connection Management**: Connect to and disconnect from MCP servers
@@ -10,6 +26,8 @@ A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Proto
   - **Simple Form Mode**: Auto-generated forms based on tool schema with proper field types
   - **JSON Mode**: Direct JSON input for advanced users
 - **Tool Invocation**: Execute tools with custom parameters and view results
+- **History**: Check what tools were executed and what parameters used 
+- **Notifications**: List server messages
 - **Modern UI**: Built with Compose Multiplatform for a responsive interface
 - **Three-Pane Layout**: 
   - Connection Pane: Server connection management
@@ -29,62 +47,15 @@ The plugin is structured with the following components:
 - **Tool Window Factory** (`McpToolWindowFactory.kt`): IntelliJ plugin integration
 - **Data Models** (`McpModels.kt`): MCP protocol data structures
 
-## Prerequisites
+### Running the MCP Server
 
-- IntelliJ IDEA 2023.3+ or PyCharm 2023.3+
-- JDK 17 or higher
-- Python 3.7+ (for running the test server)
-
-## Development Quick Start
-
-The project now includes convenient scripts for development workflow:
-
-### 🚀 Recommended Development Workflow
-
-For the best development experience, use separate terminals:
-
-**Terminal 1 - Start MCP server with auto-reload:**
+#### Option 1: Using Development Scripts (Recommended)
 ```bash
-./dev-start.sh server-watch
-```
+# Start server with auto-reload (restarts when you edit server code)
+./dev-start.sh server
 
-**Terminal 2 - Start IntelliJ plugin:**
-```bash
-./dev-start.sh inspector
-```
-
-This allows you to:
-- Edit server code and see changes automatically
-- Restart the inspector independently
-- View server logs in real-time
-
-### 📋 Available Development Commands
-
-```bash
-./dev-start.sh <command>
-```
-
-Commands:
-- `server` - Start MCP server only
-- `server-watch` - Start MCP server with auto-reload (recommended for development)
-- `inspector` - Start IntelliJ plugin only
-- `both` - Start both server and inspector (legacy mode)
-- `stop` - Stop running MCP server
-- `status` - Check server status
-- `logs` - Show server logs
-- `clean` - Clean build and start inspector
-
-### 🛠️ Individual Script Usage
-
-You can also use the individual scripts directly:
-
-**MCP Server Management:**
-```bash
-# Start server normally
-./start-mcp-server.sh
-
-# Start with auto-reload for development
-./start-mcp-server.sh --watch
+# Or start without auto-reload
+./dev-start.sh server-no-watch
 
 # Check server status
 ./start-mcp-server.sh --status
@@ -96,95 +67,53 @@ You can also use the individual scripts directly:
 ./start-mcp-server.sh --stop
 ```
 
-**IntelliJ Plugin:**
+#### Option 2: Manual Server Setup
 ```bash
-# Start inspector normally
-./start-inspector.sh
-
-# Start with clean build
-./start-inspector.sh --clean
-
-# Check server connection first
-./start-inspector.sh --check-server
-```
-
-## MCP Test Server
-
-The project includes a Python-based MCP server with the following tools:
-
-- **echo**: Echoes back input text
-- **add_numbers**: Adds two numbers together
-- **get_time**: Returns current server time
-- **reverse_string**: Reverses a string
-- **server_info**: Returns server information and uptime
-- **calculate**: Performs mathematical calculations
-- **generate_uuid**: Generates random UUIDs
-
-### Manual Server Setup
-
-If you prefer to run the server manually:
-
-```bash
+# Install dependencies (optional - server uses only standard library)
 cd test-server
+pip install -r requirements.txt  # Only needed for test client
+
+# Start server manually
 python3 mcp_server.py --port 3000 --host localhost
 ```
 
-Server options:
-- `--port`: Port to run the server on (default: 3000)
-- `--host`: Host to bind the server to (default: localhost)
+#### Server Configuration
+- **Default URL**: `http://localhost:3000`
+- **Port**: `--port 3000` (customizable)
+- **Host**: `--host localhost` (customizable)
+- **Auto-reload**: Available with `./start-mcp-server.sh` (requires `fswatch`)
 
-## Building and Running the Plugin
+#### Prerequisites
+- **Python 3.7+** (server uses only standard library)
+- **fswatch** (optional, for auto-reload): `brew install fswatch`
 
-### Quick Start (Recommended)
+## 🔧 Building and Running the Plugin
 
-The easiest way to run the plugin with the test server:
+### Prerequisites
+- **IntelliJ IDEA 2023.3+** or **PyCharm 2023.3+**
+- **JDK 17 or higher**
+- **Python 3.7+** (for the MCP test server)
 
+### Available Build Commands
 ```bash
-./run-plugin-with-server.sh
+# Development commands
+./dev-start.sh server          # Start server with auto-reload
+./dev-start.sh inspector       # Start plugin
+./dev-start.sh both           # Start both (legacy)
+./dev-start.sh clean          # Clean build + start plugin
+
+# Individual scripts
+./start-mcp-server.sh         # Server management
+./start-inspector.sh          # Plugin launcher
+./run-plugin-with-server.sh   # Combined launcher
+
+# Gradle commands
+./gradlew buildPlugin         # Build plugin ZIP
+./gradlew runIde             # Run in development IDE
+./gradlew verifyPlugin       # Verify plugin compatibility
+./gradlew test               # Run tests
+./gradlew clean              # Clean build artifacts
 ```
-
-This script will:
-1. Start the MCP test server automatically
-2. Build and run the plugin in IntelliJ IDEA
-3. Clean up the server when you close the IDE
-
-### Manual Setup
-
-### 1. Clone the repository
-
-```bash
-git clone <repository-url>
-cd mcp-plugin
-```
-
-### 2. Build the plugin
-
-```bash
-./gradlew buildPlugin
-```
-
-### 3. Run the plugin in a development IDE instance
-
-```bash
-./gradlew runIde
-```
-
-This will launch a new IntelliJ IDEA instance with the plugin installed.
-
-### 4. Alternative: Install the plugin manually
-
-1. Build the plugin distribution:
-   ```bash
-   ./gradlew buildPlugin
-   ```
-
-2. The plugin ZIP file will be created in `build/distributions/`
-
-3. In IntelliJ IDEA/PyCharm:
-   - Go to **File → Settings → Plugins**
-   - Click the gear icon → **Install Plugin from Disk...**
-   - Select the generated ZIP file
-   - Restart the IDE
 
 ## Using the Plugin
 
@@ -216,30 +145,6 @@ This will launch a new IntelliJ IDEA instance with the plugin installed.
    - Schema reference is shown for guidance
 6. Click **Invoke Tool** to execute the tool
 7. View the results in the same pane
-
-## Example Usage
-
-### 🚀 Quick Development Start
-1. **Terminal 1**: `./dev-start.sh server-watch` (starts server with auto-reload)
-2. **Terminal 2**: `./dev-start.sh inspector` (starts IntelliJ plugin)
-3. Open MCP Inspector Lite tool window in the launched IDE
-4. Connect to `http://localhost:3000`
-5. Try the tools:
-   - **echo**: `{"text": "Hello MCP!"}`
-   - **calculate**: `{"expression": "2 + 3 * 4"}`
-   - **server_info**: `{}` (no parameters needed)
-
-### 🔄 Development Workflow
-1. Edit server code in `test-server/mcp_server.py`
-2. Server automatically restarts (if using `--watch`)
-3. Test changes immediately in the inspector
-4. No need to restart IntelliJ
-
-### 📊 Legacy Single-Command Start
-1. Run: `./run-plugin-with-server.sh`
-2. Open MCP Inspector Lite tool window in the launched IDE
-3. Connect to `http://localhost:3000`
-4. Try the "echo" tool with parameters: `{"text": "Hello MCP!"}`
 
 ## Development
 
@@ -282,19 +187,6 @@ mcp-plugin/
 - **Kotlinx Serialization**: JSON handling
 - **IntelliJ Platform SDK**: Plugin framework
 
-### Building for Distribution
-
-```bash
-# Build plugin ZIP
-./gradlew buildPlugin
-
-# Verify plugin
-./gradlew verifyPlugin
-
-# Run tests
-./gradlew test
-```
-
 ## MCP Protocol Support
 
 This plugin implements basic MCP (Model Context Protocol) support:
@@ -309,37 +201,3 @@ This plugin implements basic MCP (Model Context Protocol) support:
 - `initialize`: Server capability negotiation
 - `tools/list`: Retrieve available tools
 - `tools/call`: Invoke a specific tool
-
-## Troubleshooting
-
-### Plugin Won't Load
-
-1. Check that you're using IntelliJ IDEA 2023.3+ or PyCharm 2023.3+
-2. Verify JDK 17+ is configured
-3. Check the IDE logs for error messages
-
-### Connection Issues
-
-1. Ensure the MCP server is running and accessible
-2. Check the server URL format (include `http://`)
-3. Verify no firewall is blocking the connection
-4. Check server logs for error messages
-
-### Tool Invocation Errors
-
-1. Verify parameter JSON syntax is correct
-2. Check that required parameters are provided
-3. Review tool input schema requirements
-4. Check server logs for detailed error information
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is provided as an example implementation for educational purposes.

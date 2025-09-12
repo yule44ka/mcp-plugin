@@ -166,7 +166,7 @@ class MCPServer:
                                 }
                             }
                         else:
-                            sum_result = a - b
+                            sum_result = a + b
                             result = {
                                 "content": [{
                                     "type": "text",

@@ -24,6 +24,8 @@ import kotlinx.serialization.json.*
 fun SimpleParameterInputForm(
     fields: List<ParameterField>,
     parameterValues: MutableMap<String, String>,
+    validationErrors: Map<String, String> = emptyMap(),
+    onValueChange: ((String, String) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -36,7 +38,9 @@ fun SimpleParameterInputForm(
                 value = parameterValues[field.name] ?: "",
                 onValueChange = { newValue ->
                     parameterValues[field.name] = newValue
-                }
+                    onValueChange?.invoke(field.name, newValue)
+                },
+                validationError = validationErrors[field.name]
             )
         }
     }
@@ -46,7 +50,8 @@ fun SimpleParameterInputForm(
 fun SimpleParameterFieldInput(
     field: ParameterField,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    validationError: String? = null
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -70,20 +75,6 @@ fun SimpleParameterFieldInput(
                 )
             }
             
-            // Description tooltip
-            field.description?.let { _ ->
-                IconButton(
-                    onClick = { /* Could show tooltip or dialog */ },
-                    modifier = Modifier.size(20.dp)
-                ) {
-                    Icon(
-                        Icons.Default.Info,
-                        contentDescription = "Info",
-                        modifier = Modifier.size(16.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            }
         }
         
         // Description text
@@ -113,7 +104,9 @@ fun SimpleParameterFieldInput(
                             Text(field.defaultValue ?: "Enter ${field.name}") 
                         },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                        singleLine = true,
+                        isError = validationError != null,
+                        supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                     )
                 }
             }
@@ -127,7 +120,9 @@ fun SimpleParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
             
@@ -147,7 +142,9 @@ fun SimpleParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 2,
-                    maxLines = 4
+                    maxLines = 4,
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
             
@@ -160,7 +157,9 @@ fun SimpleParameterFieldInput(
                     },
                     modifier = Modifier.fillMaxWidth(),
                     minLines = 3,
-                    maxLines = 6
+                    maxLines = 6,
+                    isError = validationError != null,
+                    supportingText = validationError?.let { { Text(it, color = MaterialTheme.colorScheme.error) } }
                 )
             }
         }
