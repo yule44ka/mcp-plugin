@@ -113,6 +113,28 @@ class McpClient {
     }
     
     /**
+     * Restart connection to the current MCP server
+     */
+    suspend fun restart(): Result<Unit> {
+        val serverConfig = currentServerConfig ?: return Result.failure(Exception("No server to restart"))
+        
+        addNotification(
+            NotificationType.INFO,
+            "Restarting",
+            "Restarting connection to ${serverConfig.name}..."
+        )
+        
+        // Disconnect first
+        disconnect()
+        
+        // Small delay to ensure clean disconnection
+        kotlinx.coroutines.delay(100)
+        
+        // Reconnect
+        return connect(serverConfig)
+    }
+    
+    /**
      * List available tools from the MCP server
      */
     suspend fun listTools(): Result<List<McpTool>> {

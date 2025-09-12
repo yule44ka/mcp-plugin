@@ -35,7 +35,8 @@ fun McpInspectorApp() {
     var serverUrl by remember { mutableStateOf("http://localhost:3000") }
     var selectedTool by remember { mutableStateOf<McpTool?>(null) }
     var toolParameters by remember { mutableStateOf("{}") }
-    var currentResult by remember { mutableStateOf<ToolInvocationHistory?>(null) }
+    // Store results per tool name
+    val toolResults = remember { mutableStateMapOf<String, ToolInvocationHistory>() }
     var selectedTab by remember { mutableStateOf(0) } // 0: Tools, 1: History, 2: Notifications
     
     // Parameter management
@@ -87,6 +88,11 @@ fun McpInspectorApp() {
             },
             onDisconnect = {
                 mcpClient.disconnect()
+            },
+            onRestart = {
+                scope.launch {
+                    mcpClient.restart()
+                }
             }
         )
         
@@ -178,7 +184,7 @@ fun McpInspectorApp() {
                     selectedTool = selectedTool,
                     toolParameters = toolParameters,
                     onParametersChange = { toolParameters = it },
-                    currentResult = currentResult,
+                    currentResult = selectedTool?.let { toolResults[it.name] },
                     parameterFields = parameterFields,
                     parameterManager = parameterManager,
                     parameterValues = parameterValues,
@@ -197,7 +203,9 @@ fun McpInspectorApp() {
                                     }
                                     
                                     val result = mcpClient.callTool(tool.name, params)
-                                    currentResult = result.getOrNull()
+                                    result.getOrNull()?.let { historyEntry ->
+                                        toolResults[tool.name] = historyEntry
+                                    }
                                 } catch (e: Exception) {
                                     // Error will be captured in the result
                                 }
@@ -217,7 +225,8 @@ fun ConnectionPane(
     connectionState: ConnectionState,
     lastError: String?,
     onConnect: () -> Unit,
-    onDisconnect: () -> Unit
+    onDisconnect: () -> Unit,
+    onRestart: () -> Unit = {}
 ) {
     Card(
         modifier = Modifier.fillMaxWidth()
@@ -270,15 +279,29 @@ fun ConnectionPane(
                         }
                     }
                     ConnectionState.CONNECTED -> {
-                        Button(
-                            onClick = onDisconnect,
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.error
-                            )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Icon(Icons.Default.Stop, contentDescription = null)
-                            Spacer(Modifier.width(4.dp))
-                            Text("Disconnect")
+                            Button(
+                                onClick = onRestart,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.secondary
+                                )
+                            ) {
+                                Icon(Icons.Default.Refresh, contentDescription = null)
+                                Spacer(Modifier.width(4.dp))
+                                Text("Restart")
+                            }
+                            Button(
+                                onClick = onDisconnect,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.error
+                                )
+                            ) {
+                                Icon(Icons.Default.Stop, contentDescription = null)
+                                Spacer(Modifier.width(4.dp))
+                                Text("Disconnect")
+                            }
                         }
                     }
                     ConnectionState.ERROR -> {
