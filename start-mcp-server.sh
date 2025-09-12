@@ -19,7 +19,7 @@ SERVER_HOST=localhost
 SERVER_URL="http://${SERVER_HOST}:${SERVER_PORT}"
 SERVER_PID_FILE="/tmp/mcp_server.pid"
 SERVER_LOG_FILE="/tmp/mcp_server.log"
-WATCH_MODE=false
+WATCH_MODE=true
 
 # Function to print colored messages
 print_message() {
@@ -35,7 +35,8 @@ show_help() {
     echo "Usage: $0 [options]"
     echo ""
     echo "Options:"
-    echo "  -w, --watch        Enable auto-reload when server files change"
+    echo "  -w, --watch        Enable auto-reload when server files change (default: enabled)"
+    echo "  --no-watch         Disable auto-reload (start server normally)"
     echo "  -p, --port PORT    Set server port (default: 3000)"
     echo "  -h, --host HOST    Set server host (default: localhost)"
     echo "  --help             Show this help message"
@@ -44,8 +45,8 @@ show_help() {
     echo "  --logs             Show server logs"
     echo ""
     echo "Examples:"
-    echo "  $0                 Start server normally"
-    echo "  $0 --watch         Start server with auto-reload"
+    echo "  $0                 Start server with auto-reload (default)"
+    echo "  $0 --no-watch      Start server without auto-reload"
     echo "  $0 --stop          Stop running server"
     echo "  $0 --logs          Show server logs"
     exit 0
@@ -235,6 +236,10 @@ while [[ $# -gt 0 ]]; do
             WATCH_MODE=true
             shift
             ;;
+        --no-watch)
+            WATCH_MODE=false
+            shift
+            ;;
         -p|--port)
             SERVER_PORT="$2"
             SERVER_URL="http://${SERVER_HOST}:${SERVER_PORT}"
@@ -284,7 +289,7 @@ main() {
     else
         start_server
         print_message $CYAN "💡 Server is running. Use '$0 --stop' to stop it"
-        print_message $CYAN "💡 Use '$0 --watch' for auto-reload during development"
+        print_message $CYAN "💡 Use '$0 --no-watch' to disable auto-reload"
         print_message $CYAN "💡 Use '$0 --logs' to view server logs"
     fi
 }

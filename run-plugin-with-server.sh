@@ -39,64 +39,74 @@ is_server_running() {
     return 1
 }
 
-# Function to start MCP server
+# Function to start MCP server with watch mode
 start_server() {
-    print_message $BLUE "🚀 Starting MCP Test Server..."
+    print_message $BLUE "🚀 Starting MCP Test Server with auto-reload..."
     
-    # Check if Python 3 is available
-    if ! command -v python3 &> /dev/null; then
-        print_message $RED "❌ Error: python3 is not installed or not in PATH"
+    # Use the dedicated server script with watch mode
+    if [ -f "./start-mcp-server.sh" ]; then
+        print_message $YELLOW "📡 Using start-mcp-server.sh for better server management..."
+        chmod +x ./start-mcp-server.sh
+        
+        # Start server in background using the dedicated script
+        ./start-mcp-server.sh > /tmp/mcp_server_wrapper.log 2>&1 &
+        local wrapper_pid=$!
+        
+        # Wait for server to be ready
+        print_message $YELLOW "⏳ Waiting for server to start..."
+        local max_attempts=15
+        local attempt=1
+        
+        while [ $attempt -le $max_attempts ]; do
+            if curl -s "$SERVER_URL" > /dev/null 2>&1; then
+                print_message $GREEN "✅ MCP server started successfully on $SERVER_URL"
+                print_message $CYAN "👁️  Server is running in watch mode - changes will auto-reload"
+                print_message $BLUE "📋 Available tools:"
+                print_message $BLUE "   - echo: Echoes back input text"
+                print_message $BLUE "   - add_numbers: Adds two numbers together"
+                print_message $BLUE "   - get_time: Returns current server time"
+                print_message $BLUE "   - reverse_string: Reverses a string"
+                print_message $BLUE "   - server_info: Returns server information"
+                print_message $BLUE "   - calculate: Performs mathematical calculations"
+                print_message $BLUE "   - generate_uuid: Generates random UUIDs"
+                return 0
+            fi
+            
+            sleep 1
+            attempt=$((attempt + 1))
+        done
+        
+        print_message $RED "❌ Failed to start MCP server after $max_attempts attempts"
+        print_message $RED "📄 Check server logs: tail -f /tmp/mcp_server.log"
+        print_message $RED "📄 Check wrapper logs: tail -f /tmp/mcp_server_wrapper.log"
+        stop_server
+        exit 1
+    else
+        print_message $RED "❌ Error: start-mcp-server.sh not found"
         exit 1
     fi
-    
-    # Check if server is already running
-    if is_server_running; then
-        print_message $YELLOW "⚠️  MCP server is already running"
-        return 0
-    fi
-    
-    # Start server in background
-    cd test-server
-    python3 mcp_server.py --port $SERVER_PORT --host $SERVER_HOST > /tmp/mcp_server.log 2>&1 &
-    local server_pid=$!
-    echo $server_pid > "$SERVER_PID_FILE"
-    cd ..
-    
-    # Wait for server to start
-    print_message $YELLOW "⏳ Waiting for server to start..."
-    local max_attempts=10
-    local attempt=1
-    
-    while [ $attempt -le $max_attempts ]; do
-        if curl -s "$SERVER_URL" > /dev/null 2>&1; then
-            print_message $GREEN "✅ MCP server started successfully on $SERVER_URL"
-            print_message $BLUE "📋 Available tools:"
-            print_message $BLUE "   - echo: Echoes back input text"
-            print_message $BLUE "   - add_numbers: Adds two numbers together"
-            print_message $BLUE "   - get_time: Returns current server time"
-            print_message $BLUE "   - reverse_string: Reverses a string"
-            return 0
-        fi
-        
-        sleep 1
-        attempt=$((attempt + 1))
-    done
-    
-    print_message $RED "❌ Failed to start MCP server after $max_attempts attempts"
-    print_message $RED "📄 Check server logs: tail -f /tmp/mcp_server.log"
-    stop_server
-    exit 1
 }
 
 # Function to stop MCP server
 stop_server() {
+    print_message $YELLOW "🛑 Stopping MCP server and related processes..."
+    
+    # Stop server using the dedicated script if available
+    if [ -f "./start-mcp-server.sh" ]; then
+        ./start-mcp-server.sh --stop > /dev/null 2>&1 || true
+    fi
+    
+    # Also clean up any remaining processes
     if is_server_running; then
         local pid=$(cat "$SERVER_PID_FILE")
-        print_message $YELLOW "🛑 Stopping MCP server (PID: $pid)..."
         kill $pid 2>/dev/null || true
         rm -f "$SERVER_PID_FILE"
-        print_message $GREEN "✅ MCP server stopped"
     fi
+    
+    # Clean up wrapper log
+    rm -f /tmp/mcp_server_wrapper.log
+    
+    print_message $GREEN "✅ MCP server stopped"
 }
 
 # Function to run the plugin
@@ -124,6 +134,7 @@ run_plugin() {
     print_message $YELLOW "   1. Open 'MCP Inspector Lite' tool window"
     print_message $YELLOW "   2. Connect to: $SERVER_URL"
     print_message $YELLOW "   3. Browse and test the available tools"
+    print_message $CYAN "👁️  Server runs in watch mode - edit test-server files for auto-reload"
     
     # Run the plugin (this will block until IDE is closed)
     ./gradlew runIde
@@ -166,8 +177,9 @@ if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
     echo ""
     echo "Usage: $0 [options]"
     echo ""
-    echo "This script starts the MCP test server and runs the IntelliJ plugin."
-    echo "When the plugin/IDE is closed, the server is automatically stopped."
+    echo "This script starts the MCP test server in watch mode and runs the IntelliJ plugin."
+    echo "The server will auto-reload when files change. When the plugin/IDE is closed,"
+    echo "the server is automatically stopped."
     echo ""
     echo "Options:"
     echo "  -h, --help     Show this help message"

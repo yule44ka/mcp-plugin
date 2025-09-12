@@ -27,8 +27,8 @@ show_help() {
     echo "Usage: $0 <command>"
     echo ""
     echo "Commands:"
-    echo "  server         Start MCP server only"
-    echo "  server-watch   Start MCP server with auto-reload"
+    echo "  server         Start MCP server with auto-reload (default behavior)"
+    echo "  server-no-watch Start MCP server without auto-reload"
     echo "  inspector      Start IntelliJ plugin only"
     echo "  both           Start both server and inspector"
     echo "  stop           Stop running MCP server"
@@ -37,9 +37,10 @@ show_help() {
     echo "  clean          Clean build and start inspector"
     echo ""
     echo "Examples:"
-    echo "  $0 server-watch    # Start server with auto-reload for development"
+    echo "  $0 server          # Start server with auto-reload (default)"
+    echo "  $0 server-no-watch # Start server without auto-reload"
     echo "  $0 inspector       # Start inspector (in another terminal)"
-    echo "  $0 both            # Start server, then inspector (legacy mode)"
+    echo "  $0 both            # Start server, then inspector"
     echo "  $0 stop            # Stop the server"
     exit 0
 }
@@ -56,13 +57,13 @@ check_directory() {
 case "${1:-help}" in
     "server")
         check_directory
-        print_message $BLUE "🚀 Starting MCP server..."
+        print_message $BLUE "🚀 Starting MCP server with auto-reload..."
         ./start-mcp-server.sh
         ;;
-    "server-watch")
+    "server-no-watch")
         check_directory
-        print_message $BLUE "🚀 Starting MCP server with auto-reload..."
-        ./start-mcp-server.sh --watch
+        print_message $BLUE "🚀 Starting MCP server without auto-reload..."
+        ./start-mcp-server.sh --no-watch
         ;;
     "inspector")
         check_directory
@@ -71,9 +72,9 @@ case "${1:-help}" in
         ;;
     "both")
         check_directory
-        print_message $YELLOW "⚠️  Legacy mode: Starting both server and inspector"
+        print_message $BLUE "🚀 Starting both server (with auto-reload) and inspector"
         print_message $CYAN "💡 For development, consider using separate terminals:"
-        print_message $CYAN "   Terminal 1: $0 server-watch"
+        print_message $CYAN "   Terminal 1: $0 server"
         print_message $CYAN "   Terminal 2: $0 inspector"
         echo ""
         ./run-plugin-with-server.sh
