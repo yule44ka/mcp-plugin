@@ -70,13 +70,33 @@ This script will:
 ### Project Structure
 
 ```
-src/main/kotlin/com/example/mcpinspector/
-├── model/McpModels.kt           # MCP protocol data models
-├── mcp/McpClient.kt             # MCP client for server communication
-└── ui/
-    ├── McpToolWindowFactory.kt  # Tool window factory
-    ├── McpInspectorApp.kt       # Main Compose application
-    └── NotificationsPane.kt     # UI components
+mcp-plugin/
+├── src/main/
+│   ├── kotlin/com/example/mcpinspector/
+│   │   ├── model/
+│   │   │   └── McpModels.kt           # MCP protocol data models
+│   │   ├── mcp/
+│   │   │   └── McpClient.kt           # MCP client for server communication
+│   │   └── ui/
+│   │       ├── McpToolWindowFactory.kt  # Tool window factory
+│   │       ├── McpInspectorApp.kt       # Main Compose application
+│   │       ├── ConnectionPane.kt        # Connection management UI
+│   │       ├── ToolsPane.kt            # Tools list UI
+│   │       ├── DetailsPane.kt          # Tool details and execution UI
+│   │       ├── HistoryPane.kt          # Execution history UI
+│   │       └── NotificationsPane.kt    # Server notifications UI
+│   └── resources/
+│       ├── META-INF/plugin.xml         # Plugin configuration
+│       └── icons/mcp-icon.svg          # Plugin icon
+├── simple-server-setup/                # MCP server for testing
+│   ├── server.py                       # Main MCP server
+│   ├── watch_server.py                 # Auto-reload server wrapper
+│   ├── client-*.py                     # Example clients
+│   └── README.md                       # Server documentation
+├── build.gradle.kts                    # Build configuration
+├── dev-start.sh                        # Development environment script
+├── run-plugin.sh                       # Plugin runner script
+└── run-server-watch.sh                 # Server with auto-reload script
 ```
 
 ### Development Scripts
