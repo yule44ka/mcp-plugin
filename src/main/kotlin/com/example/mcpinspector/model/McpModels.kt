@@ -11,9 +11,13 @@ import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class McpRequest(
-    val jsonrpc: String = "2.0",
+    @kotlinx.serialization.SerialName("jsonrpc")
+    val jsonrpc: String,
+    @kotlinx.serialization.SerialName("id")
     val id: String,
+    @kotlinx.serialization.SerialName("method")
     val method: String,
+    @kotlinx.serialization.SerialName("params")
     val params: JsonObject? = null
 )
 

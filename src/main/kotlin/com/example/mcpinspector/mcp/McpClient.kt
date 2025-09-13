@@ -31,9 +31,12 @@ class McpClient {
         }
     }
     
+    @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
     private val json = Json {
         ignoreUnknownKeys = true
         isLenient = true
+        encodeDefaults = true
+        explicitNulls = false
     }
     
     private val requestIdCounter = AtomicInteger(0)
