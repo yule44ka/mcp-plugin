@@ -1,4 +1,4 @@
-# MCP Inspector 
+# MCP Inspector (Custom MCP)
 
 A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
 
