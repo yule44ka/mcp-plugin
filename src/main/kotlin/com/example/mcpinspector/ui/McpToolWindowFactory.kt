@@ -5,7 +5,6 @@ import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
 import com.intellij.ui.content.ContentFactory
 import androidx.compose.ui.awt.ComposePanel
-import javax.swing.JComponent
 
 /**
  * Factory for creating the MCP Inspector Lite tool window
@@ -13,20 +12,24 @@ import javax.swing.JComponent
 class McpToolWindowFactory : ToolWindowFactory {
     
     override fun createToolWindowContent(project: Project, toolWindow: ToolWindow) {
-        val mcpInspectorPanel = createMcpInspectorPanel()
-        val content = ContentFactory.getInstance().createContent(
-            mcpInspectorPanel,
-            "",
-            false
-        )
-        toolWindow.contentManager.addContent(content)
-    }
-    
-    private fun createMcpInspectorPanel(): JComponent {
-        return ComposePanel().apply {
+        val contentFactory = ContentFactory.getInstance()
+        
+        // Create the main Compose UI panel
+        val composePanel = ComposePanel().apply {
             setContent {
                 McpInspectorApp()
             }
         }
+        
+        // Create and add content to the tool window
+        val content = contentFactory.createContent(
+            composePanel,
+            "",
+            false
+        )
+        
+        toolWindow.contentManager.addContent(content)
     }
+    
+    override fun shouldBeAvailable(project: Project): Boolean = true
 }

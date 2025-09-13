@@ -2,159 +2,178 @@ package com.example.mcpinspector.model
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
 
 /**
- * JSON-RPC 2.0 request structure
+ * MCP Protocol Models
+ * Based on the Model Context Protocol specification
  */
+
 @Serializable
-data class JsonRpcRequest(
-    val jsonrpc: String = "2.0",
+data class McpRequest(
+    @kotlinx.serialization.SerialName("jsonrpc")
+    val jsonrpc: String,
+    @kotlinx.serialization.SerialName("id")
     val id: String,
+    @kotlinx.serialization.SerialName("method")
     val method: String,
-    val params: JsonElement? = null
+    @kotlinx.serialization.SerialName("params")
+    val params: JsonObject? = null
 )
 
-/**
- * JSON-RPC 2.0 response structure
- */
 @Serializable
-data class JsonRpcResponse(
+data class McpResponse(
     val jsonrpc: String = "2.0",
     val id: String? = null,
     val result: JsonElement? = null,
-    val error: JsonRpcError? = null
+    val error: McpError? = null
 )
 
-/**
- * JSON-RPC 2.0 error structure
- */
 @Serializable
-data class JsonRpcError(
+data class McpError(
     val code: Int,
     val message: String,
     val data: JsonElement? = null
 )
 
-/**
- * MCP Tool definition
- */
 @Serializable
-data class McpTool(
+data class InitializeRequest(
+    val protocolVersion: String = "2024-11-05",
+    val capabilities: ClientCapabilities = ClientCapabilities(),
+    val clientInfo: ClientInfo = ClientInfo()
+)
+
+@Serializable
+data class ClientCapabilities(
+    val experimental: JsonObject? = null,
+    val sampling: JsonObject? = null
+)
+
+@Serializable
+data class ClientInfo(
+    val name: String = "MCP Inspector Lite",
+    val version: String = "1.0.0"
+)
+
+@Serializable
+data class InitializeResult(
+    val protocolVersion: String,
+    val capabilities: ServerCapabilities,
+    val serverInfo: ServerInfo
+)
+
+@Serializable
+data class ServerCapabilities(
+    val logging: JsonObject? = null,
+    val prompts: JsonObject? = null,
+    val resources: JsonObject? = null,
+    val tools: JsonObject? = null
+)
+
+@Serializable
+data class ServerInfo(
+    val name: String,
+    val version: String
+)
+
+@Serializable
+data class ListToolsResult(
+    val tools: List<Tool>
+)
+
+@Serializable
+data class Tool(
     val name: String,
     val description: String? = null,
-    val inputSchema: JsonElement? = null
+    val inputSchema: JsonObject
 )
 
-/**
- * MCP Tools list response
- */
 @Serializable
-data class McpToolsResponse(
-    val tools: List<McpTool>
-)
-
-/**
- * MCP Tool call request
- */
-@Serializable
-data class McpToolCallRequest(
+data class CallToolRequest(
     val name: String,
-    val arguments: JsonElement? = null
+    val arguments: JsonObject? = null
 )
 
-/**
- * MCP Tool call response
- */
 @Serializable
-data class McpToolCallResponse(
-    val content: List<McpContent>? = null,
+data class CallToolResult(
+    val content: List<ToolContent>,
     val isError: Boolean? = null
 )
 
-/**
- * MCP Content item
- */
 @Serializable
-data class McpContent(
+data class ToolContent(
     val type: String,
     val text: String? = null,
     val data: String? = null,
     val mimeType: String? = null
 )
 
-/**
- * Connection state for the MCP client
- */
-enum class ConnectionState {
-    DISCONNECTED,
-    CONNECTING,
-    CONNECTED,
-    ERROR
-}
-
-/**
- * MCP Server configuration
- */
-data class McpServerConfig(
-    val name: String,
-    val url: String,
-    val type: ServerType = ServerType.HTTP
+// UI State Models
+data class ConnectionState(
+    val isConnected: Boolean = false,
+    val serverUrl: String = "http://localhost:8050/sse",
+    val status: String = "Disconnected",
+    val serverInfo: ServerInfo? = null
 )
 
-enum class ServerType {
-    HTTP,
-    WEBSOCKET,
-    STDIO
+data class ToolsState(
+    val tools: List<Tool> = emptyList(),
+    val selectedTool: Tool? = null,
+    val isLoading: Boolean = false,
+    val error: String? = null
+)
+
+data class ExecutionState(
+    val isExecuting: Boolean = false,
+    val result: CallToolResult? = null,
+    val error: String? = null,
+    val parameters: Map<String, String> = emptyMap(),
+    val inputMode: ParameterInputMode = ParameterInputMode.FORM
+)
+
+// New models for enhanced features
+enum class ParameterInputMode {
+    FORM,   // Auto-generated forms based on tool schema
+    JSON    // Direct JSON input for advanced users
 }
 
-/**
- * Tool invocation history entry
- */
-data class ToolInvocationHistory(
+data class ExecutionHistoryEntry(
     val id: String,
-    val toolName: String,
-    val parameters: JsonElement?,
     val timestamp: Long,
-    val result: ToolInvocationResult,
-    val duration: Long? = null
+    val toolName: String,
+    val parameters: Map<String, Any>,
+    val result: CallToolResult?,
+    val error: String?,
+    val executionTimeMs: Long
 )
 
-/**
- * Tool invocation result with success/error state
- */
-sealed class ToolInvocationResult {
-    data class Success(
-        val content: List<McpContent>?,
-        val message: String = "Tool executed successfully"
-    ) : ToolInvocationResult()
-    
-    data class Error(
-        val message: String,
-        val code: Int? = null,
-        val details: String? = null
-    ) : ToolInvocationResult()
-}
+data class HistoryState(
+    val entries: List<ExecutionHistoryEntry> = emptyList()
+)
 
-/**
- * Server notification
- */
 data class ServerNotification(
     val id: String,
     val timestamp: Long,
     val type: NotificationType,
     val title: String,
     val message: String,
+    val category: NotificationCategory = NotificationCategory.SERVER,
     val isRead: Boolean = false
 )
 
-/**
- * Types of server notifications
- */
 enum class NotificationType {
     INFO,
     WARNING,
     ERROR,
-    TOOLS_CHANGED,
-    CONNECTION_LOST,
-    CONNECTION_RESTORED
+    SUCCESS
 }
+
+enum class NotificationCategory {
+    SERVER,  // Server connection, initialization, etc.
+    TOOL     // Tool loading, execution, etc.
+}
+
+data class NotificationsState(
+    val notifications: List<ServerNotification> = emptyList(),
+    val unreadCount: Int = 0
+)

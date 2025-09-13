@@ -1,4 +1,0 @@
-# Dependencies for MCP test server and test client
-requests>=2.25.0  # For test_mcp_server.py HTTP client
-
-# Note: The MCP server itself (mcp_server.py) uses only Python standard library modules

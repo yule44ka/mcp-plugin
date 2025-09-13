@@ -1,107 +1,124 @@
 #!/bin/bash
 
-# MCP Inspector Lite - Development Quick Start
-# This script provides easy commands to start development environment
+# Development Environment Startup Script
+# This script starts both the MCP server with auto-reload and the IntelliJ plugin
 
-set -e
+set -e  # Exit on any error
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
+echo "🚀 MCP Plugin Development Environment"
+echo "====================================="
+echo ""
+echo "This script will start:"
+echo "  1. 🔄 MCP Server with auto-reload (port 8050)"
+echo "  2. 🔌 IntelliJ IDEA with MCP Plugin"
+echo ""
 
-# Function to print colored messages
-print_message() {
-    local color=$1
-    local message=$2
-    echo -e "${color}${message}${NC}"
-}
-
-# Function to print usage
-show_help() {
-    echo "MCP Inspector Lite - Development Quick Start"
+# Function to cleanup background processes
+cleanup() {
     echo ""
-    echo "Usage: $0 <command>"
-    echo ""
-    echo "Commands:"
-    echo "  server         Start MCP server with auto-reload (default behavior)"
-    echo "  server-no-watch Start MCP server without auto-reload"
-    echo "  inspector      Start IntelliJ plugin only"
-    echo "  both           Start both server and inspector"
-    echo "  stop           Stop running MCP server"
-    echo "  status         Check server status"
-    echo "  logs           Show server logs"
-    echo "  clean          Clean build and start inspector"
-    echo ""
-    echo "Examples:"
-    echo "  $0 server          # Start server with auto-reload (default)"
-    echo "  $0 server-no-watch # Start server without auto-reload"
-    echo "  $0 inspector       # Start inspector (in another terminal)"
-    echo "  $0 both            # Start server, then inspector"
-    echo "  $0 stop            # Stop the server"
+    echo "🛑 Shutting down development environment..."
+    
+    # Kill server if running
+    if [ ! -z "$SERVER_PID" ]; then
+        echo "🛑 Stopping MCP server..."
+        kill $SERVER_PID 2>/dev/null || true
+        wait $SERVER_PID 2>/dev/null || true
+    fi
+    
+    # Kill plugin if running
+    if [ ! -z "$PLUGIN_PID" ]; then
+        echo "🛑 Stopping IntelliJ plugin..."
+        kill $PLUGIN_PID 2>/dev/null || true
+        wait $PLUGIN_PID 2>/dev/null || true
+    fi
+    
+    echo "👋 Development environment stopped."
     exit 0
 }
 
-# Check if we're in the right directory
-check_directory() {
-    if [ ! -f "build.gradle.kts" ] || [ ! -d "test-server" ]; then
-        print_message $RED "❌ Error: Please run this script from the mcp-plugin project root directory"
-        exit 1
-    fi
-}
+# Set up signal handlers
+trap cleanup SIGINT SIGTERM
 
-# Main execution
-case "${1:-help}" in
-    "server")
-        check_directory
-        print_message $BLUE "🚀 Starting MCP server with auto-reload..."
-        ./start-mcp-server.sh
-        ;;
-    "server-no-watch")
-        check_directory
-        print_message $BLUE "🚀 Starting MCP server without auto-reload..."
-        ./start-mcp-server.sh --no-watch
-        ;;
-    "inspector")
-        check_directory
-        print_message $BLUE "🚀 Starting IntelliJ plugin..."
-        ./start-inspector.sh --check-server
-        ;;
-    "both")
-        check_directory
-        print_message $BLUE "🚀 Starting both server (with auto-reload) and inspector"
-        print_message $CYAN "💡 For development, consider using separate terminals:"
-        print_message $CYAN "   Terminal 1: $0 server"
-        print_message $CYAN "   Terminal 2: $0 inspector"
+# Check if we're in the right directory
+if [ ! -f "build.gradle.kts" ]; then
+    echo "❌ Error: build.gradle.kts not found. Please run this script from the project root."
+    exit 1
+fi
+
+# Check dependencies
+echo "📦 Checking dependencies..."
+
+# Check Java
+if ! command -v java &> /dev/null; then
+    echo "❌ Error: Java is not installed or not in PATH"
+    exit 1
+fi
+
+# Check Python
+if ! command -v python &> /dev/null; then
+    echo "❌ Error: Python is not installed or not in PATH"
+    exit 1
+fi
+
+# Check Gradle wrapper
+if [ ! -f "./gradlew" ]; then
+    echo "❌ Error: Gradle wrapper not found"
+    exit 1
+fi
+
+echo "✅ All dependencies available!"
+
+# Ask user what to start
+echo ""
+echo "Choose startup mode:"
+echo "  1) Start both server and plugin (recommended)"
+echo "  2) Start only MCP server with auto-reload"
+echo "  3) Start only IntelliJ plugin"
+echo ""
+read -p "Enter your choice (1-3): " choice
+
+case $choice in
+    1)
         echo ""
-        ./run-plugin-with-server.sh
+        echo "🔄 Starting MCP server with auto-reload..."
+        ./run-server-watch.sh &
+        SERVER_PID=$!
+        
+        # Wait a bit for server to start
+        sleep 3
+        
+        echo ""
+        echo "🔌 Starting IntelliJ IDEA with MCP plugin..."
+        ./run-plugin.sh &
+        PLUGIN_PID=$!
+        
+        echo ""
+        echo "✅ Both services started!"
+        echo "📋 Development Environment Status:"
+        echo "   🔄 MCP Server: Running on http://localhost:8050 (PID: $SERVER_PID)"
+        echo "   🔌 IntelliJ Plugin: Starting... (PID: $PLUGIN_PID)"
+        echo ""
+        echo "💡 Usage Tips:"
+        echo "   - Edit files in simple-server-setup/ to see auto-reload"
+        echo "   - Test the plugin in IntelliJ: Tools > MCP Inspector"
+        echo "   - Press Ctrl+C to stop both services"
+        echo ""
+        
+        # Wait for both processes
+        wait
         ;;
-    "stop")
-        check_directory
-        ./start-mcp-server.sh --stop
+    2)
+        echo ""
+        echo "🔄 Starting only MCP server with auto-reload..."
+        exec ./run-server-watch.sh
         ;;
-    "status")
-        check_directory
-        ./start-mcp-server.sh --status
-        ;;
-    "logs")
-        check_directory
-        ./start-mcp-server.sh --logs
-        ;;
-    "clean")
-        check_directory
-        print_message $BLUE "🧹 Clean build and start inspector..."
-        ./start-inspector.sh --clean --check-server
-        ;;
-    "help"|"--help"|"-h"|"")
-        show_help
+    3)
+        echo ""
+        echo "🔌 Starting only IntelliJ plugin..."
+        exec ./run-plugin.sh
         ;;
     *)
-        print_message $RED "❌ Unknown command: $1"
-        echo ""
-        show_help
+        echo "❌ Invalid choice. Please run the script again and choose 1, 2, or 3."
+        exit 1
         ;;
 esac
