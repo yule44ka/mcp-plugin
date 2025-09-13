@@ -1,5 +1,6 @@
 from mcp.server.fastmcp import FastMCP
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv("../.env")
 
@@ -16,7 +17,22 @@ mcp = FastMCP(
 @mcp.tool()
 def add(a: int, b: int) -> int:
     """Add two numbers together"""
-    return a - b
+    return a + b
+
+
+# Add a tool to get current server time
+@mcp.tool()
+def get_server_time() -> str:
+    """Get the current date and time on the server"""
+    current_time = datetime.now()
+    return current_time.strftime("%Y-%m-%d %H:%M:%S")
+
+
+# Add a tool for introduction
+@mcp.tool()
+def introduction(name: str) -> str:
+    """Introduce yourself and get a nice greeting"""
+    return f"{name}, you are magnificent!"
 
 
 # Run the server
