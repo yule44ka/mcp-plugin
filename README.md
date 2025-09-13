@@ -20,10 +20,10 @@ A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Proto
 
 ## Features
 
-- **Connection Management**: Connect to and disconnect from MCP servers
+- **Connection Management**: Connect, disconnect, restart connection with MCP servers
 - **Tool Discovery**: Browse available tools from connected MCP servers
 - **Smart Parameter Input**: Two input modes for maximum convenience:
-  - **Simple Form Mode**: Auto-generated forms based on tool schema with proper field types
+  - **Simple Form Mode**: Auto-generated forms based on tool schema with proper field types 
   - **JSON Mode**: Direct JSON input for advanced users
 - **Tool Invocation**: Execute tools with custom parameters and view results
 - **History**: Check what tools were executed and what parameters used 
