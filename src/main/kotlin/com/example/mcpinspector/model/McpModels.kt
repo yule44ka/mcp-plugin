@@ -127,5 +127,53 @@ data class ExecutionState(
     val isExecuting: Boolean = false,
     val result: CallToolResult? = null,
     val error: String? = null,
-    val parameters: Map<String, String> = emptyMap()
+    val parameters: Map<String, String> = emptyMap(),
+    val inputMode: ParameterInputMode = ParameterInputMode.FORM
+)
+
+// New models for enhanced features
+enum class ParameterInputMode {
+    FORM,   // Auto-generated forms based on tool schema
+    JSON    // Direct JSON input for advanced users
+}
+
+data class ExecutionHistoryEntry(
+    val id: String,
+    val timestamp: Long,
+    val toolName: String,
+    val parameters: Map<String, Any>,
+    val result: CallToolResult?,
+    val error: String?,
+    val executionTimeMs: Long
+)
+
+data class HistoryState(
+    val entries: List<ExecutionHistoryEntry> = emptyList()
+)
+
+data class ServerNotification(
+    val id: String,
+    val timestamp: Long,
+    val type: NotificationType,
+    val title: String,
+    val message: String,
+    val category: NotificationCategory = NotificationCategory.SERVER,
+    val isRead: Boolean = false
+)
+
+enum class NotificationType {
+    INFO,
+    WARNING,
+    ERROR,
+    SUCCESS
+}
+
+enum class NotificationCategory {
+    SERVER,  // Server connection, initialization, etc.
+    TOOL     // Tool loading, execution, etc.
+}
+
+data class NotificationsState(
+    val notifications: List<ServerNotification> = emptyList(),
+    val unreadCount: Int = 0
 )

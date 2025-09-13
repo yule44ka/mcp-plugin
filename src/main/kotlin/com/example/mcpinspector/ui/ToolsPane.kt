@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -25,14 +26,15 @@ import com.example.mcpinspector.model.ToolsState
 fun ToolsPane(
     toolsState: ToolsState,
     onToolSelected: (Tool) -> Unit,
-    onRefreshTools: () -> Unit
+    onRefreshTools: () -> Unit,
+    onCheckHealth: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(12.dp)
     ) {
-        // Header with title and refresh button
+        // Header with title and action buttons
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -44,14 +46,35 @@ fun ToolsPane(
                 fontWeight = FontWeight.Bold
             )
             
-            IconButton(
-                onClick = onRefreshTools,
-                enabled = !toolsState.isLoading
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Icon(
-                    imageVector = Icons.Default.Refresh,
-                    contentDescription = "Refresh Tools"
-                )
+                // Health check button (if provided)
+                onCheckHealth?.let { healthCheck ->
+                    IconButton(
+                        onClick = healthCheck,
+                        enabled = !toolsState.isLoading
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.HealthAndSafety,
+                            contentDescription = "Check Connection Health",
+                            tint = if (toolsState.error != null) 
+                                MaterialTheme.colorScheme.error 
+                            else MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+                
+                // Refresh button
+                IconButton(
+                    onClick = onRefreshTools,
+                    enabled = !toolsState.isLoading
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Refresh,
+                        contentDescription = "Refresh Tools"
+                    )
+                }
             }
         }
         

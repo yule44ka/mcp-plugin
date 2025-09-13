@@ -24,7 +24,7 @@ class McpToolWindowFactory : ToolWindowFactory {
         // Create and add content to the tool window
         val content = contentFactory.createContent(
             composePanel,
-            "MCP Inspector",
+            "",
             false
         )
         

@@ -3,6 +3,10 @@ package com.example.mcpinspector.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.History
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -24,6 +28,8 @@ fun McpInspectorApp() {
     val connectionState by mcpClient.connectionState.collectAsState()
     val toolsState by mcpClient.toolsState.collectAsState()
     val executionState by mcpClient.executionState.collectAsState()
+    val historyState by mcpClient.historyState.collectAsState()
+    val notificationsState by mcpClient.notificationsState.collectAsState()
     
     // Clean up client when composable is disposed
     DisposableEffect(mcpClient) {
@@ -60,34 +66,127 @@ fun McpInspectorApp() {
                             scope.launch {
                                 mcpClient.disconnect()
                             }
+                        },
+                        onRestart = {
+                            scope.launch {
+                                mcpClient.restart()
+                            }
                         }
                     )
                 }
                 
                 Spacer(modifier = Modifier.height(8.dp))
                 
-                // Main content area with Tools and Details panes
+                // Main content area
                 Row(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    // Tools Pane (Left)
+                    // Tools/History/Notifications Pane (Left)
                     Card(
                         modifier = Modifier
                             .weight(0.4f)
                             .fillMaxHeight(),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
-                        ToolsPane(
-                            toolsState = toolsState,
-                            onToolSelected = { tool ->
-                                mcpClient.selectTool(tool)
-                            },
-                            onRefreshTools = {
-                                scope.launch {
-                                    mcpClient.loadTools()
-                                }
+                        var selectedTab by remember { mutableIntStateOf(0) }
+                        
+                        Column {
+                            TabRow(selectedTabIndex = selectedTab) {
+                                // Tools tab
+                                Tab(
+                                    selected = selectedTab == 0,
+                                    onClick = { selectedTab = 0 },
+                                    text = { 
+                                        Row(
+                                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Settings,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Text("Tools")
+                                        }
+                                    }
+                                )
+                                
+                                // History tab
+                                Tab(
+                                    selected = selectedTab == 1,
+                                    onClick = { selectedTab = 1 },
+                                    text = { 
+                                        Row(
+                                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.History,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Text("History")
+                                        }
+                                    }
+                                )
+                                
+                                // Notifications tab
+                                Tab(
+                                    selected = selectedTab == 2,
+                                    onClick = { selectedTab = 2 },
+                                    text = { 
+                                        Row(
+                                            verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                        ) {
+                                            Icon(
+                                                imageVector = Icons.Default.Notifications,
+                                                contentDescription = null,
+                                                modifier = Modifier.size(16.dp)
+                                            )
+                                            Text("Notifications")
+                                        }
+                                    }
+                                )
                             }
-                        )
+                            
+                            // Tab content
+                            when (selectedTab) {
+                                0 -> ToolsPane(
+                                    toolsState = toolsState,
+                                    onToolSelected = { tool ->
+                                        mcpClient.selectTool(tool)
+                                    },
+                                    onRefreshTools = {
+                                        scope.launch {
+                                            mcpClient.loadToolsWithHealthCheck()
+                                        }
+                                    },
+                                    onCheckHealth = {
+                                        scope.launch {
+                                            mcpClient.checkConnectionHealth()
+                                        }
+                                    }
+                                )
+                                1 -> HistoryPane(
+                                    historyState = historyState,
+                                    onReplayExecution = { entry ->
+                                        scope.launch {
+                                            mcpClient.replayExecution(entry)
+                                        }
+                                    },
+                                    onClearHistory = {
+                                        mcpClient.clearHistory()
+                                    }
+                                )
+                                2 -> NotificationsPane(
+                                    notificationsState = notificationsState,
+                                    onClearNotifications = {
+                                        mcpClient.clearNotifications()
+                                    }
+                                )
+                            }
+                        }
                     }
                     
                     Spacer(modifier = Modifier.width(8.dp))
@@ -109,6 +208,9 @@ fun McpInspectorApp() {
                                 scope.launch {
                                     mcpClient.callTool(toolName, parameters)
                                 }
+                            },
+                            onToggleInputMode = {
+                                mcpClient.toggleInputMode()
                             }
                         )
                     }
