@@ -1,6 +1,6 @@
 # MCP Inspector Plugin
 
-A minimal IntelliJ/PyCharm plugin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
+IntelliJ/PyCharm plugin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
 
 ## Features
 
