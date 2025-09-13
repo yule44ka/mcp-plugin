@@ -2,23 +2,24 @@ package com.example.mcpinspector.mcp
 
 import com.example.mcpinspector.model.*
 import io.ktor.client.*
-import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
 import java.util.*
-import java.util.concurrent.atomic.AtomicLong
-import kotlin.system.measureTimeMillis
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
- * MCP Client for communicating with Model Context Protocol servers
+ * MCP Client for HTTP-based communication
+ * Simplified implementation for connecting to MCP servers
  */
 class McpClient {
     private val httpClient = HttpClient(CIO) {
@@ -30,435 +31,256 @@ class McpClient {
         }
     }
     
-    private val requestIdCounter = AtomicLong(0)
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
     
-    private val _connectionState = MutableStateFlow(ConnectionState.DISCONNECTED)
+    private val requestIdCounter = AtomicInteger(0)
+    
+    private val _connectionState = MutableStateFlow(ConnectionState())
     val connectionState: StateFlow<ConnectionState> = _connectionState.asStateFlow()
     
-    private val _tools = MutableStateFlow<List<McpTool>>(emptyList())
-    val tools: StateFlow<List<McpTool>> = _tools.asStateFlow()
+    private val _toolsState = MutableStateFlow(ToolsState())
+    val toolsState: StateFlow<ToolsState> = _toolsState.asStateFlow()
     
-    private val _lastError = MutableStateFlow<String?>(null)
-    val lastError: StateFlow<String?> = _lastError.asStateFlow()
-    
-    // History management
-    private val _toolHistory = MutableStateFlow<List<ToolInvocationHistory>>(emptyList())
-    val toolHistory: StateFlow<List<ToolInvocationHistory>> = _toolHistory.asStateFlow()
-    
-    // Notifications management
-    private val _notifications = MutableStateFlow<List<ServerNotification>>(emptyList())
-    val notifications: StateFlow<List<ServerNotification>> = _notifications.asStateFlow()
-    
-    private var currentServerConfig: McpServerConfig? = null
-    private var connectionJob: Job? = null
+    private val _executionState = MutableStateFlow(ExecutionState())
+    val executionState: StateFlow<ExecutionState> = _executionState.asStateFlow()
     
     /**
-     * Connect to an MCP server
+     * Connect to MCP server using HTTP
      */
-    suspend fun connect(serverConfig: McpServerConfig): Result<Unit> {
+    suspend fun connect(serverUrl: String): Result<Unit> {
         return try {
-            _connectionState.value = ConnectionState.CONNECTING
-            _lastError.value = null
-            currentServerConfig = serverConfig
+            _connectionState.value = _connectionState.value.copy(
+                status = "Connecting...",
+                serverUrl = serverUrl
+            )
             
-            // Test connection by calling tools/list
-            val tools = listTools()
-            if (tools.isSuccess) {
-                _connectionState.value = ConnectionState.CONNECTED
-                _tools.value = tools.getOrNull() ?: emptyList()
-                addNotification(
-                    NotificationType.INFO,
-                    "Connected",
-                    "Successfully connected to ${serverConfig.name}"
+            // Test connection by trying to initialize
+            val initResult = initialize(serverUrl)
+            if (initResult.isSuccess) {
+                _connectionState.value = _connectionState.value.copy(
+                    isConnected = true,
+                    status = "Connected",
+                    serverInfo = initResult.getOrNull()
                 )
+                
+                // Load available tools
+                loadTools()
+                
                 Result.success(Unit)
             } else {
-                _connectionState.value = ConnectionState.ERROR
-                _lastError.value = tools.exceptionOrNull()?.message ?: "Failed to connect"
-                addNotification(
-                    NotificationType.ERROR,
-                    "Connection Failed",
-                    "Failed to connect to ${serverConfig.name}: ${tools.exceptionOrNull()?.message}"
+                _connectionState.value = _connectionState.value.copy(
+                    status = "Connection failed: ${initResult.exceptionOrNull()?.message}",
+                    isConnected = false
                 )
-                Result.failure(tools.exceptionOrNull() ?: Exception("Connection failed"))
+                Result.failure(initResult.exceptionOrNull() ?: Exception("Failed to initialize"))
             }
         } catch (e: Exception) {
-            _connectionState.value = ConnectionState.ERROR
-            
-            // Enhanced error message based on exception type
-            val errorMessage = when {
-                e.message?.contains("timeout", ignoreCase = true) == true ||
-                e.message?.contains("timed out", ignoreCase = true) == true -> {
-                    "Connection timeout. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("connection", ignoreCase = true) == true ||
-                e.message?.contains("connect", ignoreCase = true) == true -> {
-                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("refused", ignoreCase = true) == true -> {
-                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server\n" +
-                    "💡 Check server status: ./dev-start.sh status"
-                }
-                e.message?.contains("host", ignoreCase = true) == true ||
-                e.message?.contains("resolve", ignoreCase = true) == true -> {
-                    "Cannot resolve host. Check the server URL: ${serverConfig.url}\n" +
-                    "💡 Default server URL should be: http://localhost:3000"
-                }
-                else -> {
-                    "Connection error: ${e.message}\n" +
-                    "💡 Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-            }
-            
-            _lastError.value = errorMessage
-            addNotification(
-                NotificationType.ERROR,
-                "Connection Error",
-                errorMessage
+            _connectionState.value = _connectionState.value.copy(
+                status = "Connection failed: ${e.message}",
+                isConnected = false
             )
             Result.failure(e)
         }
     }
     
     /**
-     * Disconnect from the MCP server
+     * Disconnect from MCP server
      */
-    fun disconnect() {
-        val serverName = currentServerConfig?.name ?: "Server"
-        connectionJob?.cancel()
-        _connectionState.value = ConnectionState.DISCONNECTED
-        _tools.value = emptyList()
-        _lastError.value = null
-        currentServerConfig = null
-        
-        addNotification(
-            NotificationType.INFO,
-            "Disconnected",
-            "Disconnected from $serverName"
+    suspend fun disconnect() {
+        _connectionState.value = ConnectionState(
+            isConnected = false,
+            status = "Disconnected",
+            serverUrl = _connectionState.value.serverUrl
         )
+        _toolsState.value = ToolsState()
+        _executionState.value = ExecutionState()
     }
     
     /**
-     * Restart connection to the current MCP server
+     * Initialize MCP session
      */
-    suspend fun restart(): Result<Unit> {
-        val serverConfig = currentServerConfig ?: return Result.failure(Exception("No server to restart"))
-        
-        addNotification(
-            NotificationType.INFO,
-            "Restarting",
-            "Restarting connection to ${serverConfig.name}..."
-        )
-        
-        // Disconnect first
-        disconnect()
-        
-        // Small delay to ensure clean disconnection
-        kotlinx.coroutines.delay(100)
-        
-        // Reconnect
-        return connect(serverConfig)
-    }
-    
-    /**
-     * List available tools from the MCP server
-     */
-    suspend fun listTools(): Result<List<McpTool>> {
-        val serverConfig = currentServerConfig ?: return Result.failure(Exception("Not connected"))
-        
+    private suspend fun initialize(serverUrl: String): Result<ServerInfo> {
         return try {
-            val request = JsonRpcRequest(
+            val request = McpRequest(
+                id = generateRequestId(),
+                method = "initialize",
+                params = json.encodeToJsonElement(InitializeRequest()).jsonObject
+            )
+            
+            val response = sendHttpRequest(serverUrl, request)
+            if (response.error != null) {
+                Result.failure(Exception("Initialize failed: ${response.error.message}"))
+            } else {
+                val result = json.decodeFromJsonElement<InitializeResult>(response.result!!)
+                Result.success(result.serverInfo)
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    /**
+     * Load available tools from server
+     */
+    suspend fun loadTools(): Result<List<Tool>> {
+        return try {
+            _toolsState.value = _toolsState.value.copy(isLoading = true, error = null)
+            
+            val request = McpRequest(
                 id = generateRequestId(),
                 method = "tools/list"
             )
             
-            val response: JsonRpcResponse = httpClient.post(serverConfig.url) {
-                contentType(ContentType.Application.Json)
-                setBody(request)
-            }.body()
-            
+            val response = sendHttpRequest(_connectionState.value.serverUrl, request)
             if (response.error != null) {
-                Result.failure(Exception("Server error: ${response.error.message}"))
-            } else {
-                val toolsResponse = Json.decodeFromJsonElement<McpToolsResponse>(
-                    response.result ?: JsonObject(emptyMap())
+                val error = "Failed to load tools: ${response.error.message}"
+                _toolsState.value = _toolsState.value.copy(
+                    isLoading = false,
+                    error = error
                 )
-                Result.success(toolsResponse.tools)
+                Result.failure(Exception(error))
+            } else {
+                val result = json.decodeFromJsonElement<ListToolsResult>(response.result!!)
+                _toolsState.value = _toolsState.value.copy(
+                    tools = result.tools,
+                    isLoading = false,
+                    error = null
+                )
+                Result.success(result.tools)
             }
         } catch (e: Exception) {
-            // Enhanced error message for tool listing failures
-            val enhancedMessage = when {
-                e.message?.contains("timeout", ignoreCase = true) == true ||
-                e.message?.contains("timed out", ignoreCase = true) == true -> {
-                    "Request timeout. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("connection", ignoreCase = true) == true ||
-                e.message?.contains("connect", ignoreCase = true) == true -> {
-                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("refused", ignoreCase = true) == true -> {
-                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                else -> e.message ?: "Unknown error"
-            }
-            Result.failure(Exception(enhancedMessage, e))
-        }
-    }
-    
-    /**
-     * Call a specific tool with parameters
-     */
-    suspend fun callTool(toolName: String, arguments: JsonElement?): Result<ToolInvocationHistory> {
-        val serverConfig = currentServerConfig ?: return Result.failure(Exception("Not connected"))
-        
-        val historyId = generateRequestId()
-        val startTime = System.currentTimeMillis()
-        
-        return try {
-            val toolCallRequest = McpToolCallRequest(
-                name = toolName,
-                arguments = arguments
+            val error = "Failed to load tools: ${e.message}"
+            _toolsState.value = _toolsState.value.copy(
+                isLoading = false,
+                error = error
             )
-            
-            val request = JsonRpcRequest(
-                id = generateRequestId(),
-                method = "tools/call",
-                params = Json.encodeToJsonElement(toolCallRequest)
-            )
-            
-            var result: ToolInvocationResult
-            
-            val duration = measureTimeMillis {
-                val response: JsonRpcResponse = httpClient.post(serverConfig.url) {
-                    contentType(ContentType.Application.Json)
-                    setBody(request)
-                }.body()
-                
-                result = if (response.error != null) {
-                    ToolInvocationResult.Error(
-                        message = response.error.message,
-                        code = response.error.code,
-                        details = response.error.data?.toString()
-                    )
-                } else {
-                    val toolCallResponse = Json.decodeFromJsonElement<McpToolCallResponse>(
-                        response.result ?: JsonObject(emptyMap())
-                    )
-                    
-                    if (toolCallResponse.isError == true) {
-                        ToolInvocationResult.Error(
-                            message = "Tool execution failed",
-                            details = toolCallResponse.content?.joinToString("\n") { it.text ?: it.data ?: "No content" }
-                        )
-                    } else {
-                        ToolInvocationResult.Success(
-                            content = toolCallResponse.content,
-                            message = if (toolCallResponse.content?.isNotEmpty() == true) {
-                                "Tool executed successfully"
-                            } else {
-                                "Tool executed successfully (no content returned)"
-                            }
-                        )
-                    }
-                }
-            }
-            
-            val historyEntry = ToolInvocationHistory(
-                id = historyId,
-                toolName = toolName,
-                parameters = arguments,
-                timestamp = startTime,
-                result = result,
-                duration = duration
-            )
-            
-            // Add to history
-            addToHistory(historyEntry)
-            
-            Result.success(historyEntry)
-        } catch (e: Exception) {
-            // Enhanced error message for tool invocation failures
-            val enhancedMessage = when {
-                e.message?.contains("timeout", ignoreCase = true) == true ||
-                e.message?.contains("timed out", ignoreCase = true) == true -> {
-                    "Request timeout. Check if your server is running at ${currentServerConfig?.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("connection", ignoreCase = true) == true ||
-                e.message?.contains("connect", ignoreCase = true) == true -> {
-                    "Cannot connect to server. Check if your server is running at ${currentServerConfig?.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("refused", ignoreCase = true) == true -> {
-                    "Connection refused. Check if your server is running at ${currentServerConfig?.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                else -> e.message ?: "Unknown error"
-            }
-            
-            val errorResult = ToolInvocationResult.Error(
-                message = enhancedMessage,
-                details = e.stackTraceToString()
-            )
-            
-            val historyEntry = ToolInvocationHistory(
-                id = historyId,
-                toolName = toolName,
-                parameters = arguments,
-                timestamp = startTime,
-                result = errorResult,
-                duration = System.currentTimeMillis() - startTime
-            )
-            
-            addToHistory(historyEntry)
             Result.failure(e)
         }
     }
     
     /**
-     * Get server capabilities (initialize handshake)
+     * Call a tool with parameters
      */
-    suspend fun initialize(): Result<JsonElement> {
-        val serverConfig = currentServerConfig ?: return Result.failure(Exception("Not connected"))
-        
+    suspend fun callTool(toolName: String, parameters: Map<String, Any>): Result<CallToolResult> {
         return try {
-            val request = JsonRpcRequest(
-                id = generateRequestId(),
-                method = "initialize",
-                params = buildJsonObject {
-                    put("protocolVersion", "2024-11-05")
-                    put("capabilities", buildJsonObject {
-                        put("tools", buildJsonObject {
-                            put("listChanged", true)
-                        })
-                    })
-                    put("clientInfo", buildJsonObject {
-                        put("name", "MCP Inspector Lite")
-                        put("version", "1.0.0")
-                    })
-                }
+            _executionState.value = _executionState.value.copy(
+                isExecuting = true,
+                error = null,
+                result = null
             )
             
-            val response: JsonRpcResponse = httpClient.post(serverConfig.url) {
-                contentType(ContentType.Application.Json)
-                setBody(request)
-            }.body()
+            val arguments = buildJsonObject {
+                parameters.forEach { (key, value) ->
+                    when (value) {
+                        is String -> put(key, value)
+                        is Int -> put(key, value)
+                        is Double -> put(key, value)
+                        is Boolean -> put(key, value)
+                        else -> put(key, value.toString())
+                    }
+                }
+            }
             
+            val request = McpRequest(
+                id = generateRequestId(),
+                method = "tools/call",
+                params = json.encodeToJsonElement(CallToolRequest(toolName, arguments)).jsonObject
+            )
+            
+            val response = sendHttpRequest(_connectionState.value.serverUrl, request)
             if (response.error != null) {
-                Result.failure(Exception("Server error: ${response.error.message}"))
+                val error = "Tool execution failed: ${response.error.message}"
+                _executionState.value = _executionState.value.copy(
+                    isExecuting = false,
+                    error = error
+                )
+                Result.failure(Exception(error))
             } else {
-                Result.success(response.result ?: JsonObject(emptyMap()))
+                val result = json.decodeFromJsonElement<CallToolResult>(response.result!!)
+                _executionState.value = _executionState.value.copy(
+                    isExecuting = false,
+                    result = result
+                )
+                Result.success(result)
             }
         } catch (e: Exception) {
-            // Enhanced error message for initialization failures
-            val enhancedMessage = when {
-                e.message?.contains("timeout", ignoreCase = true) == true ||
-                e.message?.contains("timed out", ignoreCase = true) == true -> {
-                    "Initialization timeout. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("connection", ignoreCase = true) == true ||
-                e.message?.contains("connect", ignoreCase = true) == true -> {
-                    "Cannot connect to server. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                e.message?.contains("refused", ignoreCase = true) == true -> {
-                    "Connection refused. Check if your server is running at ${serverConfig.url}\n" +
-                    "💡 To start the server: ./dev-start.sh server"
-                }
-                else -> e.message ?: "Unknown error"
-            }
-            Result.failure(Exception(enhancedMessage, e))
+            val error = "Tool execution failed: ${e.message}"
+            _executionState.value = _executionState.value.copy(
+                isExecuting = false,
+                error = error
+            )
+            Result.failure(e)
         }
     }
     
+    /**
+     * Send HTTP request to MCP server
+     */
+    private suspend fun sendHttpRequest(serverUrl: String, request: McpRequest): McpResponse {
+        return try {
+            // For now, we'll use a simple HTTP POST approach
+            // In a real implementation, this would need to handle the specific MCP transport
+            val baseUrl = serverUrl.replace("/sse", "")
+            val response = httpClient.post("$baseUrl/mcp") {
+                contentType(ContentType.Application.Json)
+                setBody(json.encodeToString(request))
+            }
+            
+            if (response.status == HttpStatusCode.OK) {
+                val responseText = response.bodyAsText()
+                json.decodeFromString<McpResponse>(responseText)
+            } else {
+                McpResponse(
+                    id = request.id,
+                    error = McpError(
+                        code = response.status.value,
+                        message = "HTTP ${response.status}: ${response.bodyAsText()}"
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            McpResponse(
+                id = request.id,
+                error = McpError(
+                    code = -1,
+                    message = "Request failed: ${e.message}"
+                )
+            )
+        }
+    }
+    
+    /**
+     * Generate unique request ID
+     */
     private fun generateRequestId(): String {
         return "req_${requestIdCounter.incrementAndGet()}_${UUID.randomUUID().toString().take(8)}"
     }
     
     /**
-     * Add entry to tool invocation history
+     * Select a tool for detailed view
      */
-    private fun addToHistory(entry: ToolInvocationHistory) {
-        val currentHistory = _toolHistory.value.toMutableList()
-        currentHistory.add(0, entry) // Add to beginning for chronological order
-        
-        // Keep only last 100 entries
-        if (currentHistory.size > 100) {
-            currentHistory.removeAt(currentHistory.size - 1)
-        }
-        
-        _toolHistory.value = currentHistory
+    fun selectTool(tool: Tool?) {
+        _toolsState.value = _toolsState.value.copy(selectedTool = tool)
+        _executionState.value = ExecutionState() // Reset execution state
     }
     
     /**
-     * Clear tool invocation history
+     * Update execution parameters
      */
-    fun clearHistory() {
-        _toolHistory.value = emptyList()
-    }
-    
-    /**
-     * Add server notification
-     */
-    fun addNotification(type: NotificationType, title: String, message: String) {
-        val notification = ServerNotification(
-            id = UUID.randomUUID().toString(),
-            timestamp = System.currentTimeMillis(),
-            type = type,
-            title = title,
-            message = message
-        )
-        
-        val currentNotifications = _notifications.value.toMutableList()
-        currentNotifications.add(0, notification) // Add to beginning
-        
-        // Keep only last 50 notifications
-        if (currentNotifications.size > 50) {
-            currentNotifications.removeAt(currentNotifications.size - 1)
-        }
-        
-        _notifications.value = currentNotifications
-    }
-    
-    /**
-     * Mark notification as read
-     */
-    fun markNotificationAsRead(notificationId: String) {
-        val currentNotifications = _notifications.value.toMutableList()
-        val index = currentNotifications.indexOfFirst { it.id == notificationId }
-        if (index != -1) {
-            currentNotifications[index] = currentNotifications[index].copy(isRead = true)
-            _notifications.value = currentNotifications
-        }
-    }
-    
-    /**
-     * Clear all notifications
-     */
-    fun clearNotifications() {
-        _notifications.value = emptyList()
-    }
-    
-    /**
-     * Get unread notifications count
-     */
-    fun getUnreadNotificationsCount(): Int {
-        return _notifications.value.count { !it.isRead }
+    fun updateParameters(parameters: Map<String, String>) {
+        _executionState.value = _executionState.value.copy(parameters = parameters)
     }
     
     /**
      * Clean up resources
      */
-    fun close() {
-        disconnect()
+    fun dispose() {
+        runBlocking {
+            disconnect()
+        }
         httpClient.close()
     }
 }

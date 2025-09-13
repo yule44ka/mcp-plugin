@@ -1,203 +1,200 @@
-# MCP Inspector 
+# MCP Inspector Lite
 
-A minimal IntelliJ/PyCharm plugin in Kotlin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
-
-## 🚀 Quick Start
-
-### Development Setup (Separate Terminals)
-```bash
-# Terminal 1: Start MCP server with auto-reload
-./dev-start.sh server
-
-# Terminal 2: Start IntelliJ plugin
-./dev-start.sh inspector
-```
-
-### Using the Plugin
-1. Open **View → Tool Windows → MCP Inspector Lite** in the launched IDE
-2. Connect to `http://localhost:3000`
-3. Try the available tools (echo, calculate, server_info, etc.)
+A minimal IntelliJ/PyCharm plugin that connects to Model Context Protocol (MCP) servers, lists available tools, and allows users to invoke tools with parameters.
 
 ## Features
 
-- **Connection Management**: Connect to and disconnect from MCP servers
-- **Tool Discovery**: Browse available tools from connected MCP servers
-- **Smart Parameter Input**: Two input modes for maximum convenience:
-  - **Simple Form Mode**: Auto-generated forms based on tool schema with proper field types
-  - **JSON Mode**: Direct JSON input for advanced users
-- **Tool Invocation**: Execute tools with custom parameters and view results
-- **History**: Check what tools were executed and what parameters used 
-- **Notifications**: List server messages
-- **Modern UI**: Built with Compose Multiplatform for a responsive interface
-- **Three-Pane Layout**: 
-  - Connection Pane: Server connection management
-  - Tools Pane: Available tools listing
-  - Details & Results Pane: Tool details, smart parameter input, and execution results
+- **Connect to MCP servers** - Support for HTTP-based MCP server connections
+- **Browse available tools** - View all tools provided by the connected MCP server
+- **Invoke tools with parameters** - Execute tools with custom parameters and view results
+- **Modern UI** - Built with Jetpack Compose for a responsive and intuitive interface
 
-## Architecture
+## Plugin Architecture
 
-The plugin is structured with the following components:
+The plugin consists of three main panes:
 
-- **MCP Client** (`McpClient.kt`): Handles JSON-RPC communication with MCP servers
-- **UI Components** (`McpInspectorApp.kt`): Main Compose-based user interface
-- **Parameter Input System**: Smart parameter handling with dual input modes
-  - **Schema Parser** (`ParameterInputHelper.kt`): Parses JSON schema to extract field definitions
-  - **Parameter Manager** (`ParameterInputHelper.kt`): Manages parameter values and JSON conversion
-  - **Input Components** (`ParameterInputComponents.kt`): Compose UI components for different field types
-- **Tool Window Factory** (`McpToolWindowFactory.kt`): IntelliJ plugin integration
-- **Data Models** (`McpModels.kt`): MCP protocol data structures
+1. **Connection Pane** (Top) - For connecting/disconnecting to an MCP server
+2. **Tools Pane** (Left) - Display a list of available tools from the server
+3. **Details & Results Pane** (Right) - Show tool details, parameter input, and execution results
 
-### Running the MCP Server
+## Prerequisites
 
-#### Option 1: Using Development Scripts (Recommended)
+- IntelliJ IDEA or PyCharm (2023.3.2 or later)
+- Java 17 or later
+- Python 3.8+ (for running the MCP server)
+
+## Setup Instructions
+
+### 1. Running the MCP Server
+
+The plugin includes a simple MCP server in the `simple-server-setup/` folder for testing.
+
+#### Install Dependencies
+
+First, install the required Python dependencies:
+
 ```bash
-# Start server with auto-reload (restarts when you edit server code)
-./dev-start.sh server
-
-# Or start without auto-reload
-./dev-start.sh server-no-watch
-
-# Check server status
-./start-mcp-server.sh --status
-
-# View server logs
-./start-mcp-server.sh --logs
-
-# Stop server
-./start-mcp-server.sh --stop
+cd simple-server-setup
+pip install mcp fastmcp python-dotenv
 ```
 
-#### Option 2: Manual Server Setup
-```bash
-# Install dependencies (optional - server uses only standard library)
-cd test-server
-pip install -r requirements.txt  # Only needed for test client
+#### Start the Server
 
-# Start server manually
-python3 mcp_server.py --port 3000 --host localhost
+Run the MCP server with SSE transport:
+
+```bash
+cd simple-server-setup
+python server.py
 ```
 
-#### Server Configuration
-- **Default URL**: `http://localhost:3000`
-- **Port**: `--port 3000` (customizable)
-- **Host**: `--host localhost` (customizable)
-- **Auto-reload**: Available with `./start-mcp-server.sh` (requires `fswatch`)
+The server will start on `http://localhost:8050` and provide a simple calculator tool (`add`) that adds two numbers.
 
-#### Prerequisites
-- **Python 3.7+** (server uses only standard library)
-- **fswatch** (optional, for auto-reload): `brew install fswatch`
-
-## 🔧 Building and Running the Plugin
-
-### Prerequisites
-- **IntelliJ IDEA 2023.3+** or **PyCharm 2023.3+**
-- **JDK 17 or higher**
-- **Python 3.7+** (for the MCP test server)
-
-### Available Build Commands
-```bash
-# Development commands
-./dev-start.sh server          # Start server with auto-reload
-./dev-start.sh inspector       # Start plugin
-./dev-start.sh both           # Start both (legacy)
-./dev-start.sh clean          # Clean build + start plugin
-
-# Individual scripts
-./start-mcp-server.sh         # Server management
-./start-inspector.sh          # Plugin launcher
-./run-plugin-with-server.sh   # Combined launcher
-
-# Gradle commands
-./gradlew buildPlugin         # Build plugin ZIP
-./gradlew runIde             # Run in development IDE
-./gradlew verifyPlugin       # Verify plugin compatibility
-./gradlew test               # Run tests
-./gradlew clean              # Clean build artifacts
+You should see output like:
 ```
+Running server with SSE transport
+Server running on http://0.0.0.0:8050
+```
+
+### 2. Building and Running the Plugin
+
+#### Build the Plugin
+
+```bash
+./gradlew build
+```
+
+#### Run the Plugin in Development Mode
+
+```bash
+./gradlew runIde
+```
+
+This will start a new instance of IntelliJ IDEA with the plugin loaded.
+
+#### Install the Plugin
+
+To install the plugin in your regular IDE:
+
+1. Build the plugin: `./gradlew buildPlugin`
+2. The plugin ZIP will be created in `build/distributions/`
+3. In IntelliJ IDEA/PyCharm, go to **Settings** → **Plugins** → **Install Plugin from Disk**
+4. Select the generated ZIP file
 
 ## Using the Plugin
 
-### 1. Open the MCP Inspector Lite Tool Window
+### 1. Open the Tool Window
 
-- Go to **View → Tool Windows → MCP Inspector Lite**
-- Or use the tool window tab (usually on the right side)
+Once the plugin is installed, you'll find the "MCP Inspector Lite" tool window in the right sidebar of your IDE.
 
-### 2. Connect to an MCP Server
+### 2. Connect to the MCP Server
 
-1. In the Connection Pane, enter the server URL (e.g., `http://localhost:3000`)
-2. Click **Connect**
-3. The status indicator will show the connection state
+1. In the Connection Pane (top), enter the server URL: `http://localhost:8050/sse`
+2. Click the "Connect" button
+3. If successful, you'll see "Connected" status and server information
 
-### 3. Browse and Invoke Tools
+### 3. Browse Available Tools
 
-1. Once connected, available tools will appear in the Tools Pane
-2. Click on a tool to see its details in the Details & Results Pane
-3. **Choose your input method**:
-   - **Simple Form Mode** (default): Use auto-generated forms with proper field types
-   - **JSON Mode**: Toggle the switch to enter parameters in JSON format
-4. **Simple Form Mode**:
-   - Fill out the form fields based on the tool's schema
-   - Required fields are marked with an asterisk (*)
-   - Different input types: text fields, numbers, dropdowns, switches for booleans
-   - Parameter summary shows your current inputs
-5. **JSON Mode**:
-   - Enter parameters in JSON format (e.g., `{"text": "Hello World"}`)
-   - Schema reference is shown for guidance
-6. Click **Invoke Tool** to execute the tool
-7. View the results in the same pane
+After connecting, the Tools Pane (left) will display all available tools from the server. Click on any tool to select it.
+
+### 4. Execute Tools
+
+1. Select a tool from the Tools Pane
+2. In the Details & Results Pane (right), enter the required parameters
+3. Click "Execute Tool" to run the tool
+4. View the results in the same pane
+
+## Example Usage
+
+With the included calculator server:
+
+1. Connect to `http://localhost:8050/sse`
+2. Select the "add" tool from the tools list
+3. Enter values for parameters `a` and `b` (e.g., 5 and 3)
+4. Click "Execute Tool"
+5. See the result: "8"
 
 ## Development
 
 ### Project Structure
 
 ```
-mcp-plugin/
-├── build.gradle.kts                    # Gradle build configuration
-├── dev-start.sh                        # Development quick start script
-├── start-mcp-server.sh                 # MCP server launcher with auto-reload
-├── start-inspector.sh                  # IntelliJ plugin launcher
-├── run-plugin-with-server.sh           # Legacy: combined launcher
-├── src/main/
-│   ├── kotlin/com/example/mcpinspector/
-│   │   ├── mcp/
-│   │   │   └── McpClient.kt      # MCP protocol client
-│   │   ├── model/
-│   │   │   └── McpModels.kt      # Data models
-│   │   └── ui/
-│   │       ├── McpInspectorApp.kt           # Main Compose UI
-│   │       ├── McpToolWindowFactory.kt      # Plugin integration
-│   │       ├── ParameterInputHelper.kt      # Schema parsing & parameter management
-│   │       └── ParameterInputComponents.kt  # Smart input UI components
-│   └── resources/
-│       ├── META-INF/plugin.xml   # Plugin configuration
-│       └── icons/mcp-icon.svg    # Plugin icon
-├── test-server/
-│   ├── mcp_server.py            # Enhanced MCP test server (7 tools)
-│   ├── test_mcp_server.py       # Server test client
-│   ├── start_server.sh          # Simple server startup script
-│   └── requirements.txt         # Python dependencies
-└── README.md
+src/main/kotlin/com/example/mcpinspector/
+├── model/
+│   └── McpModels.kt          # MCP protocol data models
+├── mcp/
+│   └── McpClient.kt          # MCP client for server communication
+└── ui/
+    ├── McpToolWindowFactory.kt  # Tool window factory
+    ├── McpInspectorApp.kt       # Main Compose application
+    ├── ConnectionPane.kt        # Connection management UI
+    ├── ToolsPane.kt            # Tools list UI
+    └── DetailsPane.kt          # Tool details and execution UI
 ```
 
-### Key Dependencies
+### Key Technologies
 
-- **Kotlin**: Primary development language
-- **Compose Multiplatform**: UI framework
-- **Ktor**: HTTP client for MCP communication
-- **Kotlinx Serialization**: JSON handling
-- **IntelliJ Platform SDK**: Plugin framework
+- **Kotlin** - Primary development language
+- **Jetpack Compose** - Modern UI framework
+- **Ktor Client** - HTTP client for MCP communication
+- **Kotlinx Serialization** - JSON serialization for MCP protocol
+- **IntelliJ Platform SDK** - Plugin development framework
 
-## MCP Protocol Support
+### MCP Protocol Support
 
-This plugin implements basic MCP (Model Context Protocol) support:
+The plugin implements core MCP protocol features:
 
-- **JSON-RPC 2.0**: Standard request/response protocol
-- **Tool Discovery**: `tools/list` method
-- **Tool Invocation**: `tools/call` method
-- **Initialization**: `initialize` handshake
+- **Initialize** - Establish connection with MCP server
+- **tools/list** - Retrieve available tools from server
+- **tools/call** - Execute tools with parameters
 
-### Supported MCP Methods
+### Extending the Plugin
 
-- `initialize`: Server capability negotiation
-- `tools/list`: Retrieve available tools
-- `tools/call`: Invoke a specific tool
+To add support for additional MCP features:
+
+1. Update `McpModels.kt` with new protocol models
+2. Add corresponding methods to `McpClient.kt`
+3. Update the UI components as needed
+
+## Troubleshooting
+
+### Connection Issues
+
+- Ensure the MCP server is running on the specified URL
+- Check that the server is configured for HTTP transport
+- Verify firewall settings allow connections to the server port
+
+### Build Issues
+
+- Ensure Java 17+ is installed and configured
+- Run `./gradlew clean build` to clean and rebuild
+- Check that all dependencies are properly resolved
+
+### Plugin Loading Issues
+
+- Verify the plugin is compatible with your IDE version
+- Check the IDE logs for any error messages
+- Try rebuilding and reinstalling the plugin
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## License
+
+This project is provided as an example implementation. Please refer to your organization's licensing requirements.
+
+## Support
+
+For issues and questions:
+
+1. Check the troubleshooting section above
+2. Review the MCP protocol documentation
+3. Create an issue in the project repository
+
+---
+
+**Note**: This is a minimal implementation focused on demonstrating MCP integration. Production use may require additional error handling, security considerations, and feature enhancements.
