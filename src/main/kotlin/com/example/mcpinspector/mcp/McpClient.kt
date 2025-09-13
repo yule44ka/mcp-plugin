@@ -207,10 +207,12 @@ class McpClient {
      */
     private suspend fun initialize(): Result<ServerInfo> {
         return try {
+            val initRequest = InitializeRequest()
             val request = McpRequest(
+                jsonrpc = "2.0",
                 id = generateRequestId(),
                 method = "initialize",
-                params = json.encodeToJsonElement(InitializeRequest()).jsonObject
+                params = json.encodeToJsonElement(initRequest).jsonObject
             )
             
             val response = sendRequest(request)
@@ -233,6 +235,7 @@ class McpClient {
             _toolsState.value = _toolsState.value.copy(isLoading = true, error = null)
             
             val request = McpRequest(
+                jsonrpc = "2.0",
                 id = generateRequestId(),
                 method = "tools/list"
             )
@@ -287,10 +290,12 @@ class McpClient {
                 }
             }
             
+            val callRequest = CallToolRequest(toolName, arguments)
             val request = McpRequest(
+                jsonrpc = "2.0",
                 id = generateRequestId(),
                 method = "tools/call",
-                params = json.encodeToJsonElement(CallToolRequest(toolName, arguments)).jsonObject
+                params = json.encodeToJsonElement(callRequest).jsonObject
             )
             
             val response = sendRequest(request)
