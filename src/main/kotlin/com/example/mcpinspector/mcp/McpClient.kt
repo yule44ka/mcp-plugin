@@ -129,6 +129,10 @@ class McpClient {
                                             // Next line should contain the messages endpoint
                                             continue
                                         }
+                                        chunk.startsWith("event: message") -> {
+                                            // Next line should contain the JSON response
+                                            continue
+                                        }
                                         chunk.startsWith("data: /messages/") -> {
                                             // Extract session info from endpoint
                                             val endpoint = chunk.substring(6).trim()
@@ -143,11 +147,16 @@ class McpClient {
                                         chunk.startsWith("data: ") -> {
                                             val data = chunk.substring(6).trim()
                                             if (data.isNotBlank() && !data.startsWith(":") && data != "[DONE]") {
-                                                try {
-                                                    processMessage(data)
-                                                } catch (e: Exception) {
-                                                    println("Failed to process SSE message: $data, error: ${e.message}")
+                                                // Check if it's a JSON response (starts with {)
+                                                if (data.startsWith("{")) {
+                                                    try {
+                                                        println("Received SSE data: $data")
+                                                        processMessage(data)
+                                                    } catch (e: Exception) {
+                                                        println("Failed to process SSE message: $data, error: ${e.message}")
+                                                    }
                                                 }
+                                                // Otherwise it might be an endpoint URL, ignore it here as it's handled above
                                             }
                                         }
                                         chunk.startsWith(": ping") -> {
@@ -381,9 +390,17 @@ class McpClient {
      */
     private fun processMessage(message: String) {
         try {
+            println("Processing SSE message: $message")
             val response = json.decodeFromString<McpResponse>(message)
+            println("Parsed response: id=${response.id}, error=${response.error}, result=${response.result}")
             response.id?.let { id ->
-                pendingRequests.remove(id)?.complete(response)
+                val deferred = pendingRequests.remove(id)
+                if (deferred != null) {
+                    println("Completing request $id")
+                    deferred.complete(response)
+                } else {
+                    println("No pending request found for id: $id")
+                }
             }
         } catch (e: Exception) {
             println("Failed to process message: $message, error: ${e.message}")
